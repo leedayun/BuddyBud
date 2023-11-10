@@ -38,8 +38,10 @@ public class WillowFragment extends Fragment implements View.OnClickListener {
         IncomingWillowData incominguser3 = new IncomingWillowData("testuser3","Software","male", R.drawable.profile);
         IncomingWillowData incominguser4 = new IncomingWillowData("testuser4","Chemistry","female",  R.drawable.profile);
         incomingWillows.add(incominguser3);
+        incomingWillows.add(incominguser3);
         incomingWillows.add(incominguser4);
-        Log.d("incomingWillows",incomingWillows.toString());
+        incomingWillows.add(incominguser4);
+//        Log.d("incomingWillows",incomingWillows.toString());
 
         if(incomingWillows.size()>3) {
             incomingWillowItems = new ArrayList<IncomingWillowData>();
@@ -49,12 +51,13 @@ public class WillowFragment extends Fragment implements View.OnClickListener {
         }
 
         myWillowsItems = new ArrayList<>();
-        MyWillowsData mu = new MyWillowsData("testuser2",LocalDateTime.now().minusMinutes(5),"ok", R.drawable.profile);
-        myWillowsItems.add(mu);
-        Log.d("MyWillows1",myWillowsItems.toString());
-        mu = new MyWillowsData("testuser1", LocalDateTime.now().minusHours(2),"hi", R.drawable.profile);
-        myWillowsItems.add(mu);
-        Log.d("MyWillows2",myWillowsItems.toString());
+        MyWillowsData dat1 = new MyWillowsData("testuser2",LocalDateTime.now().minusMinutes(5),"ok", R.drawable.profile);
+        MyWillowsData dat2 = new MyWillowsData("testuser1", LocalDateTime.now().minusHours(2),"hi", R.drawable.profile);
+        myWillowsItems.add(dat1);
+        myWillowsItems.add(dat1);
+        myWillowsItems.add(dat2);
+        myWillowsItems.add(dat2);
+//        Log.d("MyWillows2",myWillowsItems.toString());
     }
 
     @Override
@@ -94,7 +97,13 @@ public class WillowFragment extends Fragment implements View.OnClickListener {
             case R.id.seeall_text:{
                 incomingWillowItems = incomingWillows;
                 view.setVisibility(View.INVISIBLE);
-                incomingWillowAdapter.notifyDataSetChanged();
+                incomingWillowRcView.getAdapter().notifyDataSetChanged();
+                break;
+            }
+            case R.id.searchBtn:{
+                break;
+            }
+            case R.id.sentWillowBtn:{
                 break;
             }
         }

@@ -23,13 +23,6 @@ public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_
 
         public ViewHolder(View v) {
             super(v) ;
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("IncomingWillowAdapter","Element" + getAdapterPosition() + "clicked.");
-                }
-            });
-
             nameText = (TextView)v.findViewById(R.id.incoming_id_txt);
             infoText = (TextView)v.findViewById(R.id.incoming_info_txt);
             profileImage = (CircleImageView) v.findViewById(R.id.incoming_profile_img);

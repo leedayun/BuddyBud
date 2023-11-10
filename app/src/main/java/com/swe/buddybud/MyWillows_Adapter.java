@@ -1,5 +1,6 @@
 package com.swe.buddybud;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,28 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.ViewHolder>{
-
     private ArrayList<MyWillowsData> mData;
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        CircleImageView profileImage;
+        TextView nameText;
+        TextView lastMsgText;
+        TextView lastTimeText;
+
+        ViewHolder(View v) {
+            super(v) ;
+            nameText = (TextView) v.findViewById(R.id.willow_id_txt);
+            lastMsgText = (TextView)v.findViewById(R.id.willow_lastmsg_txt);
+            lastTimeText = (TextView)v.findViewById(R.id.willow_lastmsg_time);
+            profileImage = (CircleImageView) v.findViewById(R.id.willow_profile_img);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("MyWillows_Adapter","Element " + getAdapterPosition() + " clicked.");
+                }
+            });
+        }
+    }
 
     MyWillows_Adapter(ArrayList<MyWillowsData> list){
         mData = list;
@@ -32,7 +53,7 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         //MyWillowsData data = mData.get(position);
         holder.nameText.setText(mData.get(position).getUserId());
         holder.profileImage.setImageResource(mData.get(position).getImgResId());
@@ -43,20 +64,5 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
     @Override
     public int getItemCount() {
         return mData.size() ;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView profileImage;
-        TextView nameText;
-        TextView lastMsgText;
-        TextView lastTimeText;
-
-        ViewHolder(View itemView) {
-            super(itemView) ;
-            nameText = (TextView) itemView.findViewById(R.id.willow_id_txt);
-            lastMsgText = (TextView)itemView.findViewById(R.id.willow_lastmsg_txt);
-            lastTimeText = (TextView)itemView.findViewById(R.id.willow_lastmsg_time);
-            profileImage = (CircleImageView) itemView.findViewById(R.id.willow_profile_img);
-        }
     }
 }
