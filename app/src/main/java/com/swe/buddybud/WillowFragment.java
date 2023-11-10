@@ -2,63 +2,101 @@ package com.swe.buddybud;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WillowFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class WillowFragment extends Fragment {
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class WillowFragment extends Fragment implements View.OnClickListener {
+    public TextView seeAllText;
+    public RecyclerView incomingWillowRcView;
+    public RecyclerView myWillowsRcView;
+    public RecyclerView.Adapter incomingWillowAdapter;
+    public RecyclerView.Adapter myWillowsAdapter;
+    public ArrayList<IncomingWillowData> incomingWillows = new ArrayList<>();
+    public ArrayList<IncomingWillowData> incomingWillowItems = new ArrayList<>();
+    public ArrayList<MyWillowsData> myWillowsItems = new ArrayList<>();
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    protected RecyclerView.LayoutManager iclayoutManager;
+    protected RecyclerView.LayoutManager mwlayoutManager;
 
-    public WillowFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PeopleFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static WillowFragment newInstance(String param1, String param2) {
-        WillowFragment fragment = new WillowFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        incomingWillows = new ArrayList<>();
+        IncomingWillowData incominguser3 = new IncomingWillowData("testuser3","Software","male", R.drawable.profile);
+        IncomingWillowData incominguser4 = new IncomingWillowData("testuser4","Chemistry","female",  R.drawable.profile);
+        incomingWillows.add(incominguser3);
+        incomingWillows.add(incominguser4);
+        Log.d("incomingWillows",incomingWillows.toString());
+
+        if(incomingWillows.size()>3) {
+            incomingWillowItems = new ArrayList<IncomingWillowData>();
+            incomingWillowItems.add(incomingWillows.get(0));
+        } else {
+            incomingWillowItems = incomingWillows;
         }
+
+        myWillowsItems = new ArrayList<>();
+        MyWillowsData mu = new MyWillowsData("testuser2",LocalDateTime.now().minusMinutes(5),"ok", R.drawable.profile);
+        myWillowsItems.add(mu);
+        Log.d("MyWillows1",myWillowsItems.toString());
+        mu = new MyWillowsData("testuser1", LocalDateTime.now().minusHours(2),"hi", R.drawable.profile);
+        myWillowsItems.add(mu);
+        Log.d("MyWillows2",myWillowsItems.toString());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_willow, container, false);
+        View view = inflater.inflate(R.layout.fragment_willow, container,false);
+        incomingWillowRcView = view.findViewById(R.id.incoming_willow_view);
+        myWillowsRcView = view.findViewById(R.id.my_willows_view);
+        //incomingWillowRcView.setHasFixedSize(false);
+        //myWillowsRcView.setHasFixedSize(false);
+        seeAllText = view.findViewById(R.id.seeall_text);
+        seeAllText.setOnClickListener(this);
+
+        iclayoutManager = new LinearLayoutManager(getActivity());
+        mwlayoutManager = new LinearLayoutManager(getActivity());
+
+        incomingWillowAdapter = new IncomingWillow_Adapter(incomingWillowItems);
+        myWillowsAdapter = new MyWillows_Adapter(myWillowsItems);
+
+        incomingWillowRcView.setLayoutManager(iclayoutManager);
+        myWillowsRcView.setLayoutManager(mwlayoutManager);
+
+        incomingWillowRcView.setAdapter(incomingWillowAdapter);
+        myWillowsRcView.setAdapter(myWillowsAdapter);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if(incomingWillows.size()>1)  seeAllText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.seeall_text:{
+                incomingWillowItems = incomingWillows;
+                view.setVisibility(View.INVISIBLE);
+                incomingWillowAdapter.notifyDataSetChanged();
+                break;
+            }
+        }
     }
 }
