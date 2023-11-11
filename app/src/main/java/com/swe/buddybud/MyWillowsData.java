@@ -12,10 +12,10 @@ public class MyWillowsData {
         this.imgResId = imgResId;
     }
 
-    public String userId;
-    public LocalDateTime lastMsgTime;
-    public String lastMsg;
-    public int imgResId;
+    private String userId;
+    private LocalDateTime lastMsgTime;
+    private String lastMsg;
+    private int imgResId;
 
     public String getUserId() {
         return userId;

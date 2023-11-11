@@ -7,7 +7,7 @@
     android:layout_marginBottom="24dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/incoming_profile_img"
+        android:id="@+id/receiving_profile_img"
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_marginStart="32dp"
@@ -26,8 +26,8 @@
         android:text="Name"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/incoming_profile_img"
-        app:layout_constraintTop_toTopOf="@+id/incoming_profile_img" />
+        app:layout_constraintStart_toEndOf="@+id/receiving_profile_img"
+        app:layout_constraintTop_toTopOf="@+id/receiving_profile_img" />
 
     <Button
         android:id="@+id/request_accept_btn"
@@ -44,7 +44,7 @@
         android:textAllCaps="false"
         android:textSize="16sp"
         app:cornerRadius="100dp"
-        app:layout_constraintStart_toEndOf="@+id/incoming_profile_img"
+        app:layout_constraintStart_toEndOf="@+id/receiving_profile_img"
         app:layout_constraintTop_toBottomOf="@+id/incoming_id_txt" />
 
     <Button
@@ -78,8 +78,8 @@
         android:text="dept\ngender"
         android:textAlignment="textEnd"
         android:textColor="#C4C4C4"
-        app:layout_constraintBottom_toBottomOf="@+id/incoming_profile_img"
+        app:layout_constraintBottom_toBottomOf="@+id/receiving_profile_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/request_reject_btn"
-        app:layout_constraintTop_toTopOf="@+id/incoming_profile_img" />
+        app:layout_constraintTop_toTopOf="@+id/receiving_profile_img" />
 </androidx.constraintlayout.widget.ConstraintLayout>

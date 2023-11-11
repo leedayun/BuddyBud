@@ -66,8 +66,6 @@ public class WillowFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_willow, container,false);
         incomingWillowRcView = view.findViewById(R.id.incoming_willow_view);
         myWillowsRcView = view.findViewById(R.id.my_willows_view);
-        //incomingWillowRcView.setHasFixedSize(false);
-        //myWillowsRcView.setHasFixedSize(false);
         seeAllText = view.findViewById(R.id.seeall_text);
         seeAllText.setOnClickListener(this);
 

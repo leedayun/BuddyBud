@@ -1,6 +1,5 @@
 package com.swe.buddybud;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_
             super(v) ;
             nameText = (TextView)v.findViewById(R.id.incoming_id_txt);
             infoText = (TextView)v.findViewById(R.id.incoming_info_txt);
-            profileImage = (CircleImageView) v.findViewById(R.id.incoming_profile_img);
+            profileImage = (CircleImageView) v.findViewById(R.id.receiving_profile_img);
         }
     }
 

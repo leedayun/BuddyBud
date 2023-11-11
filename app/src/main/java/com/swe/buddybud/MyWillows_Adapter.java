@@ -1,5 +1,7 @@
 package com.swe.buddybud;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +25,11 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
         TextView lastMsgText;
         TextView lastTimeText;
 
+        Context context;
+
         ViewHolder(View v) {
-            super(v) ;
+            super(v);
+            context = v.getContext();
             nameText = (TextView) v.findViewById(R.id.willow_id_txt);
             lastMsgText = (TextView)v.findViewById(R.id.willow_lastmsg_txt);
             lastTimeText = (TextView)v.findViewById(R.id.willow_lastmsg_time);
@@ -33,6 +38,8 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
                 @Override
                 public void onClick(View view) {
                     Log.d("MyWillows_Adapter","Element " + getAdapterPosition() + " clicked.");
+                    Intent intent = new Intent(context, WillowChatActivity.class);
+                    context.startActivity(intent);
                 }
             });
         }

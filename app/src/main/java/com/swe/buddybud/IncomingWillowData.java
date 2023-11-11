@@ -9,10 +9,10 @@ public class IncomingWillowData {
         this.gender = gender;
         this.imgResId = imgResId;
     }
-    public String userId;
-    public String dept;
-    public String gender;
-    public int imgResId;
+    private String userId;
+    private String dept;
+    private String gender;
+    private int imgResId;
 
     public String getUserId() {
         return userId;
