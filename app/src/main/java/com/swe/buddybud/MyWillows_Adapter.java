@@ -17,6 +17,12 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.ViewHolder>{
+    public int addData(MyWillowsData data) {
+        if(this.mData.add(data))
+            return mData.size()-1;
+        else return 0;
+    }
+
     private ArrayList<MyWillowsData> mData;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -64,8 +70,14 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
         //MyWillowsData data = mData.get(position);
         holder.nameText.setText(mData.get(position).getUserId());
         holder.profileImage.setImageResource(mData.get(position).getImgResId());
-        holder.lastMsgText.setText(mData.get(position).getLastMsg());
-        holder.lastTimeText.setText(mData.get(position).getLastMsgTime().format(DateTimeFormatter.ofPattern("yy/MM-dd HH:mm")));
+        if(mData.get(position).getLastMsgTime()!=null){
+            holder.lastTimeText.setText(mData.get(position).getLastMsgTime().format(DateTimeFormatter.ofPattern("yy/MM-dd HH:mm")));
+            holder.lastMsgText.setText(mData.get(position).getLastMsg());
+        } else {
+            holder.lastTimeText.setText("");
+            holder.lastMsgText.setText("");
+        }
+
     }
 
     @Override

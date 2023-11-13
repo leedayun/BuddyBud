@@ -17,12 +17,13 @@ import android.widget.TextView;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class WillowFragment extends Fragment implements View.OnClickListener {
+
+public class WillowFragment extends Fragment implements View.OnClickListener, WillowManageInterface {
     public TextView seeAllText;
     public RecyclerView incomingWillowRcView;
     public RecyclerView myWillowsRcView;
-    public RecyclerView.Adapter incomingWillowAdapter;
-    public RecyclerView.Adapter myWillowsAdapter;
+    public IncomingWillow_Adapter incomingWillowAdapter;
+    public MyWillows_Adapter myWillowsAdapter;
     public ArrayList<IncomingWillowData> incomingWillows = new ArrayList<>();
     public ArrayList<IncomingWillowData> incomingWillowItems = new ArrayList<>();
     public ArrayList<MyWillowsData> myWillowsItems = new ArrayList<>();
@@ -43,7 +44,7 @@ public class WillowFragment extends Fragment implements View.OnClickListener {
         incomingWillows.add(incominguser4);
 //        Log.d("incomingWillows",incomingWillows.toString());
 
-        if(incomingWillows.size()>3) {
+        if(incomingWillows.size()>1) {
             incomingWillowItems = new ArrayList<IncomingWillowData>();
             incomingWillowItems.add(incomingWillows.get(0));
         } else {
@@ -72,7 +73,7 @@ public class WillowFragment extends Fragment implements View.OnClickListener {
         iclayoutManager = new LinearLayoutManager(getActivity());
         mwlayoutManager = new LinearLayoutManager(getActivity());
 
-        incomingWillowAdapter = new IncomingWillow_Adapter(incomingWillowItems);
+        incomingWillowAdapter = new IncomingWillow_Adapter(incomingWillowItems, this);
         myWillowsAdapter = new MyWillows_Adapter(myWillowsItems);
 
         incomingWillowRcView.setLayoutManager(iclayoutManager);
@@ -94,8 +95,10 @@ public class WillowFragment extends Fragment implements View.OnClickListener {
         switch(view.getId()){
             case R.id.seeall_text:{
                 incomingWillowItems = incomingWillows;
+                incomingWillowAdapter.setmData(incomingWillowItems);
                 view.setVisibility(View.INVISIBLE);
-                incomingWillowRcView.getAdapter().notifyDataSetChanged();
+                incomingWillowRcView.invalidate();
+                incomingWillowAdapter.notifyDataSetChanged();
                 break;
             }
             case R.id.searchBtn:{
@@ -105,5 +108,14 @@ public class WillowFragment extends Fragment implements View.OnClickListener {
                 break;
             }
         }
+    }
+
+    @Override
+    public void onAddWillow(MyWillowsData newWillow) {
+        myWillowsRcView.invalidate();
+        int res = myWillowsAdapter.addData(newWillow);
+        if(res>0) myWillowsAdapter.notifyItemInserted(res);
+        incomingWillowRcView.invalidate();
+        incomingWillowAdapter.notifyDataSetChanged();
     }
 }

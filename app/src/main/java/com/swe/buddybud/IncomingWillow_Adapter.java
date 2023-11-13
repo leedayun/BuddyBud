@@ -3,11 +3,13 @@ package com.swe.buddybud;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -15,21 +17,53 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_Adapter.ViewHolder>{
     private ArrayList<IncomingWillowData> mData;
 
+    private WillowManageInterface parentfrag;
+
+    public void setmData(ArrayList<IncomingWillowData> mData) {
+        this.mData = mData;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView profileImage;
         TextView nameText;
         TextView infoText;
+        Button acceptBtn;
+        Button rejectBtn;
 
         public ViewHolder(View v) {
             super(v) ;
             nameText = (TextView)v.findViewById(R.id.incoming_id_txt);
             infoText = (TextView)v.findViewById(R.id.incoming_info_txt);
             profileImage = (CircleImageView) v.findViewById(R.id.receiving_profile_img);
+            acceptBtn = (Button) v.findViewById(R.id.request_accept_btn);
+            rejectBtn = (Button) v.findViewById(R.id.request_reject_btn);
+            acceptBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int idx = getAdapterPosition();
+                    MyWillowsData newWillow = new MyWillowsData(nameText.getText().toString(), null,"", R.drawable.profile);
+                    parentfrag.onAddWillow(newWillow);
+                    if(idx>=0) {
+                        mData.remove(idx);
+                        notifyItemRemoved(idx);
+                    }
+                }
+            });
+
+            rejectBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int idx = getAdapterPosition();
+                    mData.remove(idx);
+                    notifyItemRemoved(idx);
+                }
+            });
         }
     }
 
-    IncomingWillow_Adapter(ArrayList<IncomingWillowData> list){
+    IncomingWillow_Adapter(ArrayList<IncomingWillowData> list, WillowManageInterface parentfrag){
         this.mData = list;
+        this.parentfrag = parentfrag;
     }
 
     @NonNull
