@@ -5,25 +5,59 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class WillowChatActivity extends AppCompatActivity {
 
+    ArrayList<ChatData> data = new ArrayList<>();
+    RecyclerView chatRecyclerView;
+    WillowChat_Adapter chatAdapter;
+    ImageButton backBtn;
+    ImageButton addImgBtn;
+    ImageButton sendChatBtn;
+    EditText chatEditText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_willow_chat);
 
-        RecyclerView chatRecyclerView = findViewById(R.id.chat_recyclerView);
+        chatRecyclerView = findViewById(R.id.chat_recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+
         chatRecyclerView.setLayoutManager(layoutManager);
-        chatRecyclerView.setAdapter(new WillowChat_Adapter(getData(), "user1"));
+        chatAdapter = new WillowChat_Adapter(getData(), "user1");
+        chatRecyclerView.setAdapter(chatAdapter);
+
+        backBtn = findViewById(R.id.chat_back_btn);
+        addImgBtn = findViewById(R.id.add_image_btn);
+        sendChatBtn = findViewById(R.id.send_chat_btn);
+        chatEditText = findViewById(R.id.chat_edittext);
+
+        backBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {finish();}
+        });
+
+        sendChatBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                data.add(new ChatData(LocalTime.now(), chatEditText.getText().toString(),"user1",R.drawable.profile));
+                chatEditText.setText("");
+                chatAdapter.notifyItemInserted(data.size() - 1);
+                chatRecyclerView.scrollToPosition(data.size() - 1);
+            }
+        });
+
     }
 
     private ArrayList<ChatData> getData(){
-        ArrayList<ChatData> data = new ArrayList<>();
+        data = new ArrayList<>();
         data.add(new ChatData(LocalTime.of(7, 25), "안녕하세요 전 빈지노에요","realisshoman",R.drawable.profile));
         data.add(new ChatData(LocalTime.of(9, 30), "축제 와주셔서 감사합니다 노래 잘 듣고 있습니다 ㅎㅎ","user1",R.drawable.profile));
         data.add(new ChatData(LocalTime.of(13, 01), "안녕하세요 전 빈지노에요","realisshoman",R.drawable.profile));

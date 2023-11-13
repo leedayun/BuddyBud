@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Swe"
         tools:targetApi="31">
         <activity
+            android:name=".SentWillowActivity"
+            android:exported="false" />
+        <activity
             android:name=".WillowChatActivity"
             android:exported="false" />
         <activity
