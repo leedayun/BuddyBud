@@ -41,12 +41,10 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         incomingWillows = new ArrayList<>();
-        IncomingWillowData incominguser3 = new IncomingWillowData("testuser3","Software","male", R.drawable.profile);
-        IncomingWillowData incominguser4 = new IncomingWillowData("testuser4","Chemistry","female",  R.drawable.profile);
-        incomingWillows.add(incominguser3);
-        incomingWillows.add(incominguser3);
-        incomingWillows.add(incominguser4);
-        incomingWillows.add(incominguser4);
+        IncomingWillowData woosik = new IncomingWillowData("Woosik12","software","male", R.drawable.woosik);
+        IncomingWillowData marvelyvly = new IncomingWillowData("marvelyvly","Chemistry","female",  R.drawable.marvelyvly);
+        incomingWillows.add(woosik);
+        incomingWillows.add(marvelyvly);
 
         if(incomingWillows.size()>1) {
             incomingWillowItems = new ArrayList<IncomingWillowData>();
@@ -56,13 +54,12 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
         }
 
         myWillowsItems = new ArrayList<>();
-        MyWillowsData dat1 = new MyWillowsData("testuser2",LocalDateTime.now().minusMinutes(5),"ok", R.drawable.profile);
-        MyWillowsData dat2 = new MyWillowsData("testuser1", LocalDateTime.now().minusHours(2),"hi", R.drawable.profile);
-        myWillowsItems.add(dat1);
-        myWillowsItems.add(dat1);
-        myWillowsItems.add(dat2);
-        myWillowsItems.add(dat2);
-//        Log.d("MyWillows2",myWillowsItems.toString());
+        MyWillowsData realisshoman = new MyWillowsData("realisshoman",LocalDateTime.of(2023, 1, 23, 07, 18),"옙 감사합니다 좋은 하루 보내세요", R.drawable.realisshoman);
+        MyWillowsData nakedbibi = new MyWillowsData("nakedbibi", LocalDateTime.of(2022, 12, 25, 11, 24),"well, thank you have a nice day", R.drawable.nakedbibi);
+        MyWillowsData calmdownman = new MyWillowsData("calmdownman", LocalDateTime.of(2022, 9, 3, 1, 11),"Wow! thank you for your support", R.drawable.calmdownman);
+        myWillowsItems.add(realisshoman);
+        myWillowsItems.add(nakedbibi);
+        myWillowsItems.add(calmdownman);
     }
 
     @Override

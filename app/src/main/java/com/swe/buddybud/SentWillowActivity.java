@@ -30,10 +30,10 @@ public class SentWillowActivity extends AppCompatActivity {
 
     private ArrayList<SentWillowData> getData(){
         ArrayList<SentWillowData> sentWillowItems = new ArrayList<>();
-        SentWillowData sentwillow1 = new SentWillowData("spideyTom",R.drawable.profile);
-        SentWillowData sentwillow2 = new SentWillowData("superSon",R.drawable.profile);
-        sentWillowItems.add(sentwillow1);
-        sentWillowItems.add(sentwillow2);
+        SentWillowData spideytom = new SentWillowData("spideyTom",R.drawable.spideytom);
+        SentWillowData superson = new SentWillowData("superSon",R.drawable.superson);
+        sentWillowItems.add(spideytom);
+        sentWillowItems.add(superson);
         return sentWillowItems;
     }
 }

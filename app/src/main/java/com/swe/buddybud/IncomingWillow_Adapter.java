@@ -1,5 +1,7 @@
 package com.swe.buddybud;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +42,11 @@ public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_
                 @Override
                 public void onClick(View view) {
                     int idx = getAdapterPosition();
-                    MyWillowsData newWillow = new MyWillowsData(nameText.getText().toString(), null,"", R.drawable.profile);
+                    Context context = v.getContext();
+                    Resources resources = context.getResources();
+                    int resourceId = resources.getIdentifier(nameText.getText().toString().toLowerCase(), "drawable",  context.getPackageName());
+                    if(resourceId <= 0) resourceId = R.drawable.profile;
+                    MyWillowsData newWillow = new MyWillowsData(nameText.getText().toString(), null,"", resourceId);
                     parentfrag.onAddWillow(newWillow);
                     if(idx>=0) {
                         mData.remove(idx);
