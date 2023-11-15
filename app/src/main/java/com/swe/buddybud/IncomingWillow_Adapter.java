@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -32,11 +31,11 @@ public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_
 
         public ViewHolder(View v) {
             super(v) ;
-            nameText = (TextView)v.findViewById(R.id.incoming_id_txt);
+            nameText = (TextView)v.findViewById(R.id.sent_willow_id_txt);
             infoText = (TextView)v.findViewById(R.id.incoming_info_txt);
-            profileImage = (CircleImageView) v.findViewById(R.id.receiving_profile_img);
+            profileImage = (CircleImageView) v.findViewById(R.id.sent_willow_profile_img);
             acceptBtn = (Button) v.findViewById(R.id.request_accept_btn);
-            rejectBtn = (Button) v.findViewById(R.id.request_reject_btn);
+            rejectBtn = (Button) v.findViewById(R.id.request_cancel_btn);
             acceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

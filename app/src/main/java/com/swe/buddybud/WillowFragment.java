@@ -1,5 +1,7 @@
 package com.swe.buddybud;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.time.LocalDateTime;
@@ -20,6 +23,8 @@ import java.util.ArrayList;
 
 public class WillowFragment extends Fragment implements View.OnClickListener, WillowManageInterface {
     public TextView seeAllText;
+    public ImageButton searchBtn;
+    public ImageButton sentWillowBtn;
     public RecyclerView incomingWillowRcView;
     public RecyclerView myWillowsRcView;
     public IncomingWillow_Adapter incomingWillowAdapter;
@@ -42,7 +47,6 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
         incomingWillows.add(incominguser3);
         incomingWillows.add(incominguser4);
         incomingWillows.add(incominguser4);
-//        Log.d("incomingWillows",incomingWillows.toString());
 
         if(incomingWillows.size()>1) {
             incomingWillowItems = new ArrayList<IncomingWillowData>();
@@ -68,7 +72,12 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
         incomingWillowRcView = view.findViewById(R.id.incoming_willow_view);
         myWillowsRcView = view.findViewById(R.id.my_willows_view);
         seeAllText = view.findViewById(R.id.seeall_text);
+        sentWillowBtn = view.findViewById(R.id.sent_willow_btn);
+        searchBtn = view.findViewById(R.id.search_btn);
         seeAllText.setOnClickListener(this);
+        sentWillowBtn.setOnClickListener(this);
+        searchBtn.setOnClickListener(this);
+
 
         iclayoutManager = new LinearLayoutManager(getActivity());
         mwlayoutManager = new LinearLayoutManager(getActivity());
@@ -92,6 +101,7 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
 
     @Override
     public void onClick(View view) {
+        Log.w("test","click " + view.getId());
         switch(view.getId()){
             case R.id.seeall_text:{
                 incomingWillowItems = incomingWillows;
@@ -101,12 +111,24 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
                 incomingWillowAdapter.notifyDataSetChanged();
                 break;
             }
-            case R.id.searchBtn:{
+            case R.id.sent_willow_btn:{
+
+                Context context = view.getContext();
+                Intent intent = new Intent(context, SentWillowActivity.class);
+                /*
+                TODO: get global login data
+                private SharedPreferences preferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+                intent.putExtra("userID",preferences.getString("userid","user1"));
+                 */
+                intent.putExtra("userID","user1");
+                context.startActivity(intent);
                 break;
             }
-            case R.id.sentWillowBtn:{
+
+            case R.id.search_btn:{
                 break;
             }
+
         }
     }
 

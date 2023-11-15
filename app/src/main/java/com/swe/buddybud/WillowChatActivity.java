@@ -13,7 +13,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class WillowChatActivity extends AppCompatActivity {
-
+    private String userID = null;
     ArrayList<ChatData> data = new ArrayList<>();
     RecyclerView chatRecyclerView;
     WillowChat_Adapter chatAdapter;
@@ -27,11 +27,14 @@ public class WillowChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_willow_chat);
 
+        userID = getIntent().getStringExtra("USER_ID");
+        if(userID == null) userID = "user1";
+
         chatRecyclerView = findViewById(R.id.chat_recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
 
         chatRecyclerView.setLayoutManager(layoutManager);
-        chatAdapter = new WillowChat_Adapter(getData(), "user1");
+        chatAdapter = new WillowChat_Adapter(getData(), userID);
         chatRecyclerView.setAdapter(chatAdapter);
 
         backBtn = findViewById(R.id.chat_back_btn);

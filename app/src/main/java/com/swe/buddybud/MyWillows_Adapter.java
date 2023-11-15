@@ -23,6 +23,10 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
         else return 0;
     }
 
+    public void setmData(ArrayList<MyWillowsData> mData) {
+        this.mData = mData;
+    }
+
     private ArrayList<MyWillowsData> mData;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -43,8 +47,13 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("MyWillows_Adapter","Element " + getAdapterPosition() + " clicked.");
                     Intent intent = new Intent(context, WillowChatActivity.class);
+                    /*
+                    TODO: get global login data
+                    private SharedPreferences preferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+                    intent.putExtra("USER_ID",preferences.getString("userid","user1"));
+                     */
+                    intent.putExtra("USER_ID","user1");
                     context.startActivity(intent);
                 }
             });

@@ -8,7 +8,7 @@
     android:layout_marginBottom="12dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/receiving_profile_img"
+        android:id="@+id/sent_willow_profile_img"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="24dp"
@@ -28,7 +28,7 @@
         android:fontFamily="@font/noto_sans"
         android:text="ChatSender"
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/receiving_profile_img"
+        app:layout_constraintStart_toEndOf="@+id/sent_willow_profile_img"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -40,7 +40,7 @@
         android:fontFamily="@font/noto_sans"
         android:maxWidth="230dp"
         android:text="ChatMessage"
-        app:layout_constraintStart_toEndOf="@+id/receiving_profile_img"
+        app:layout_constraintStart_toEndOf="@+id/sent_willow_profile_img"
         app:layout_constraintTop_toBottomOf="@+id/receiving_sender_txt" />
 
     <TextView
@@ -54,11 +54,12 @@
         app:layout_constraintStart_toEndOf="@+id/receiving_sender_txt"
         app:layout_constraintTop_toTopOf="@+id/receiving_sender_txt" />
 
-    <ImageView
-        android:id="@+id/receiving_translate_img"
+    <ImageButton
+        android:id="@+id/receiving_translate_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:background="#00FFFFFF"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="@+id/receiving_message_txt"
         app:layout_constraintStart_toEndOf="@+id/receiving_message_txt"

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,12 +32,25 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView name;
         TextView message;
         TextView sendTime;
+        ImageButton translateBtn;
+
         ReceivingViewHolder(View v) {
             super(v);
-            profileImg = v.findViewById(R.id.receiving_profile_img);
+            profileImg = v.findViewById(R.id.sent_willow_profile_img);
             name = v.findViewById(R.id.receiving_sender_txt);
             message = v.findViewById(R.id.receiving_message_txt);
             sendTime = v.findViewById(R.id.receiving_time_text);
+            translateBtn = v.findViewById(R.id.receiving_translate_btn);
+            translateBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    /*
+                        TODO : Translation API
+                        implementation "com.deepl.api:deepl-java:1.4.0"
+                     */
+                    message.setText("translated text");
+                }
+            });
         }
     }
 
