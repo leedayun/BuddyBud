@@ -1,26 +1,44 @@
 package com.swe.buddybud;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ClipData;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class WillowChatActivity extends AppCompatActivity {
     private String userID = null;
-    ArrayList<ChatData> data = new ArrayList<>();
-    RecyclerView chatRecyclerView;
-    WillowChat_Adapter chatAdapter;
-    ImageButton backBtn;
-    ImageButton addImgBtn;
-    ImageButton sendChatBtn;
-    EditText chatEditText;
+    private static final int REQUEST_CODE_PICK_IMAGE = 1;
+    private ArrayList<ChatData> data = new ArrayList<>();
+    private RecyclerView chatRecyclerView;
+    private RecyclerView imageRecyclerView;
+    private WillowChat_Adapter chatAdapter;
+    private ImageButton backBtn;
+    private ImageButton addImgBtn;
+    private ImageButton sendChatBtn;
+    private EditText chatEditText;
+    private ArrayList<Uri> selectedImageUris = new ArrayList<>();
+    private ImageUploadAdapter imageUploadAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +49,15 @@ public class WillowChatActivity extends AppCompatActivity {
         if(userID == null) userID = "user1";
 
         chatRecyclerView = findViewById(R.id.chat_recyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        imageRecyclerView = findViewById(R.id.chat_image_recycler_view);
 
-        chatRecyclerView.setLayoutManager(layoutManager);
         chatAdapter = new WillowChat_Adapter(getData(), userID);
+        chatRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
         chatRecyclerView.setAdapter(chatAdapter);
+
+        imageUploadAdapter = new ImageUploadAdapter(selectedImageUris);
+        imageRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        imageRecyclerView.setAdapter(imageUploadAdapter);
 
         backBtn = findViewById(R.id.chat_back_btn);
         addImgBtn = findViewById(R.id.add_image_btn);
@@ -47,9 +69,20 @@ public class WillowChatActivity extends AppCompatActivity {
             public void onClick(View view) {finish();}
         });
 
+        addImgBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+            }
+        });
+
         sendChatBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                if(chatEditText.getText().length()<1) return;
                 data.add(new ChatData(LocalTime.now(), chatEditText.getText().toString(),"user1",R.drawable.profile));
                 chatEditText.setText("");
                 chatAdapter.notifyItemInserted(data.size() - 1);
@@ -57,6 +90,80 @@ public class WillowChatActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == RESULT_OK) {
+            if (data != null) {
+                ClipData clipData = data.getClipData();
+                if (clipData != null) {
+                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                        Uri imageUri = clipData.getItemAt(i).getUri();
+
+                        try {
+                            // 내부 저장소에 파일 복사
+                            File file = createImageFile();
+                            copyUriToFile(imageUri, file);
+
+                            // 내부 저장소 URI를 사용
+                            Uri internalUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", file);
+                            selectedImageUris.add(internalUri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else if (data.getData() != null) {
+                    Uri imageUri = data.getData();
+
+                    try {
+                        // 내부 저장소에 파일 복사
+                        File file = createImageFile();
+                        copyUriToFile(imageUri, file);
+
+                        // 내부 저장소 URI를 사용
+                        Uri internalUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", file);
+                        selectedImageUris.add(internalUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                imageUploadAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        return File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+    }
+
+    private void copyUriToFile(Uri uri, File destFile) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = getContentResolver().openInputStream(uri);
+            os = new FileOutputStream(destFile);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+            if (os != null) {
+                os.close();
+            }
+        }
     }
 
     private ArrayList<ChatData> getData(){
