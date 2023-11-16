@@ -21,6 +21,9 @@
             android:name=".WillowChatActivity"
             android:exported="false" />
         <activity
+            android:name=".AccountEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".SignUpSndActivity"
             android:exported="false" />
         <activity
@@ -32,6 +35,13 @@
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
+        <activity
+            android:name=".FeedDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WritePostActivity"
+            android:exported="false"
+            />
         <activity
             android:name=".MainActivity"
             android:exported="true">

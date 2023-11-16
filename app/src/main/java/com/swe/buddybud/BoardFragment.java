@@ -1,12 +1,20 @@
 package com.swe.buddybud;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +67,222 @@ public class BoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_board, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_board, container, false);
+
+        ImageButton scrap_1_Button = rootView.findViewById(R.id.scrap_1_Button);
+        final TextView[] scrap_1_Count = {rootView.findViewById(R.id.scrap_1_Count)};
+
+        String scrap_1_Count_Text = scrap_1_Count[0].getText().toString();
+        final int[] scrap_1_Count_int = {Integer.parseInt(scrap_1_Count_Text)};
+
+        final boolean[] isScrapped_1 = { true };
+        scrap_1_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isScrapped_1[0]) {
+                    scrap_1_Button.setImageResource(R.drawable.scrapping);
+                    scrap_1_Count_int[0]--;
+                    scrap_1_Count[0].setText(String.valueOf(scrap_1_Count_int[0]));
+                    isScrapped_1[0] = false;
+                } else {
+                    scrap_1_Button.setImageResource(R.drawable.scrapped);
+                    scrap_1_Count_int[0]++;
+                    scrap_1_Count[0].setText(String.valueOf(scrap_1_Count_int[0]));
+                    isScrapped_1[0] = true;
+                }
+            }
+        });
+
+        ImageButton like_1_Button = rootView.findViewById(R.id.like_1_Button);
+        final TextView[] like_1_Count = {rootView.findViewById(R.id.like_1_Count)};
+
+        String like_1_Count_Text = like_1_Count[0].getText().toString();
+        final int[] like_1_Count_int = {Integer.parseInt(like_1_Count_Text)};
+
+        final boolean[] isLiked_1 = { true };
+        like_1_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isLiked_1[0]) {
+                    like_1_Button.setImageResource(R.drawable.liking);
+                    like_1_Count_int[0]--;
+                    like_1_Count[0].setText(String.valueOf(like_1_Count_int[0]));
+                    isLiked_1[0] = false;
+                } else {
+                    like_1_Button.setImageResource(R.drawable.liked);
+                    like_1_Count_int[0]++;
+                    like_1_Count[0].setText(String.valueOf(like_1_Count_int[0]));
+                    isLiked_1[0] = true;
+                }
+            }
+        });
+
+        ImageButton translate_1_Button = rootView.findViewById(R.id.translate_1_Button);
+        TextView post_1_Title = rootView.findViewById(R.id.post_1_Title);
+
+        final boolean[] isTranslated_1 = { false };
+        translate_1_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTranslated_1[0]) {
+                    post_1_Title.setText("[채용/모집] [연장] 성균관대학교 SW융합대학...");
+                    isTranslated_1[0] = false;
+                } else {
+                    post_1_Title.setText("[Recruit] [Extended] SKKU College of SW...");
+                    isTranslated_1[0] = true;
+                }
+            }
+        });
+
+        ImageButton scrap_2_Button = rootView.findViewById(R.id.scrap_2_Button);
+        final TextView[] scrap_2_Count = {rootView.findViewById(R.id.scrap_2_Count)};
+
+        String scrap_2_Count_Text = scrap_2_Count[0].getText().toString();
+        final int[] scrap_2_Count_int = {Integer.parseInt(scrap_2_Count_Text)};
+
+        final boolean[] isScrapped_2 = { false };
+        scrap_2_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isScrapped_2[0]) {
+                    scrap_2_Button.setImageResource(R.drawable.scrapping);
+                    scrap_2_Count_int[0]--;
+                    scrap_2_Count[0].setText(String.valueOf(scrap_2_Count_int[0]));
+                    isScrapped_2[0] = false;
+                } else {
+                    scrap_2_Button.setImageResource(R.drawable.scrapped);
+                    scrap_2_Count_int[0]++;
+                    scrap_2_Count[0].setText(String.valueOf(scrap_2_Count_int[0]));
+                    isScrapped_2[0] = true;
+                }
+            }
+        });
+
+        ImageButton like_2_Button = rootView.findViewById(R.id.like_2_Button);
+        final TextView[] like_2_Count = {rootView.findViewById(R.id.like_2_Count)};
+
+        String like_2_Count_Text = like_2_Count[0].getText().toString();
+        final int[] like_2_Count_int = {Integer.parseInt(like_2_Count_Text)};
+
+        final boolean[] isLiked_2 = { true };
+        like_2_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isLiked_2[0]) {
+                    like_2_Button.setImageResource(R.drawable.liking);
+                    like_2_Count_int[0]--;
+                    like_2_Count[0].setText(String.valueOf(like_2_Count_int[0]));
+                    isLiked_2[0] = false;
+                } else {
+                    like_2_Button.setImageResource(R.drawable.liked);
+                    like_2_Count_int[0]++;
+                    like_2_Count[0].setText(String.valueOf(like_2_Count_int[0]));
+                    isLiked_2[0] = true;
+                }
+            }
+        });
+
+        ImageButton translate_2_Button = rootView.findViewById(R.id.translate_2_Button);
+        TextView post_2_Title = rootView.findViewById(R.id.post_2_Title);
+
+        final boolean[] isTranslated_2 = { false };
+        translate_2_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTranslated_2[0]) {
+                    post_2_Title.setText("\uD83D\uDE4B일대일 그룹 대학생 영어회화");
+                    isTranslated_2[0] = false;
+                } else {
+                    post_2_Title.setText("\uD83D\uDE4BOne-on-One Group College Student Eng...");
+                    isTranslated_2[0] = true;
+                }
+            }
+        });
+
+        ImageButton scrap_3_Button = rootView.findViewById(R.id.scrap_3_Button);
+        final TextView[] scrap_3_Count = {rootView.findViewById(R.id.scrap_3_Count)};
+
+        String scrap_3_Count_Text = scrap_3_Count[0].getText().toString();
+        final int[] scrap_3_Count_int = {Integer.parseInt(scrap_3_Count_Text)};
+
+        final boolean[] isScrapped_3 = { false };
+        scrap_3_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isScrapped_3[0]) {
+                    scrap_3_Button.setImageResource(R.drawable.scrapping);
+                    scrap_3_Count_int[0]--;
+                    scrap_3_Count[0].setText(String.valueOf(scrap_3_Count_int[0]));
+                    isScrapped_3[0] = false;
+                } else {
+                    scrap_3_Button.setImageResource(R.drawable.scrapped);
+                    scrap_3_Count_int[0]++;
+                    scrap_3_Count[0].setText(String.valueOf(scrap_3_Count_int[0]));
+                    isScrapped_3[0] = true;
+                }
+            }
+        });
+
+        ImageButton like_3_Button = rootView.findViewById(R.id.like_3_Button);
+        final TextView[] like_3_Count = {rootView.findViewById(R.id.like_3_Count)};
+
+        String like_3_Count_Text = like_3_Count[0].getText().toString();
+        final int[] like_3_Count_int = {Integer.parseInt(like_3_Count_Text)};
+
+        final boolean[] isLiked_3 = { false };
+        like_3_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isLiked_3[0]) {
+                    like_3_Button.setImageResource(R.drawable.liking);
+                    like_3_Count_int[0]--;
+                    like_3_Count[0].setText(String.valueOf(like_3_Count_int[0]));
+                    isLiked_3[0] = false;
+                } else {
+                    like_3_Button.setImageResource(R.drawable.liked);
+                    like_3_Count_int[0]++;
+                    like_3_Count[0].setText(String.valueOf(like_3_Count_int[0]));
+                    isLiked_3[0] = true;
+                }
+            }
+        });
+
+        ImageButton translate_3_Button = rootView.findViewById(R.id.translate_3_Button);
+        TextView post_3_Title = rootView.findViewById(R.id.post_3_Title);
+
+        final boolean[] isTranslated_3 = { false };
+        translate_3_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTranslated_3[0]) {
+                    post_3_Title.setText("(상시모집)\uD83D\uDC9A\uD83D\uDE4F성균관대학교 천주교 중앙동...");
+                    isTranslated_3[0] = false;
+                } else {
+                    post_3_Title.setText("(常年招生)\uD83D\uDC9A\uD83D\uDE4F 成均齐大学天主教中央...");
+                    isTranslated_3[0] = true;
+                }
+            }
+        });
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ImageView frame_1 = view.findViewById(R.id.frame_1_Shadow);
+        frame_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new BoardDetailFragment();
+
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.board_container, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
 }
