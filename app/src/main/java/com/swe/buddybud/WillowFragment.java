@@ -1,64 +1,140 @@
 package com.swe.buddybud;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WillowFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class WillowFragment extends Fragment {
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class WillowFragment extends Fragment implements View.OnClickListener, WillowManageInterface {
+    public TextView seeAllText;
+    public ImageButton searchBtn;
+    public ImageButton sentWillowBtn;
+    public RecyclerView incomingWillowRcView;
+    public RecyclerView myWillowsRcView;
+    public IncomingWillow_Adapter incomingWillowAdapter;
+    public MyWillows_Adapter myWillowsAdapter;
+    public ArrayList<IncomingWillowData> incomingWillows = new ArrayList<>();
+    public ArrayList<IncomingWillowData> incomingWillowItems = new ArrayList<>();
+    public ArrayList<MyWillowsData> myWillowsItems = new ArrayList<>();
 
-    public WillowFragment() {
-        // Required empty public constructor
-    }
+    protected RecyclerView.LayoutManager iclayoutManager;
+    protected RecyclerView.LayoutManager mwlayoutManager;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PeopleFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static WillowFragment newInstance(String param1, String param2) {
-        WillowFragment fragment = new WillowFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        incomingWillows = new ArrayList<>();
+        IncomingWillowData woosik = new IncomingWillowData("Woosik12","software","male", R.drawable.woosik);
+        IncomingWillowData marvelyvly = new IncomingWillowData("marvelyvly","Chemistry","female",  R.drawable.marvelyvly);
+        incomingWillows.add(woosik);
+        incomingWillows.add(marvelyvly);
+
+        if(incomingWillows.size()>1) {
+            incomingWillowItems = new ArrayList<IncomingWillowData>();
+            incomingWillowItems.add(incomingWillows.get(0));
+        } else {
+            incomingWillowItems = incomingWillows;
         }
+
+        myWillowsItems = new ArrayList<>();
+        MyWillowsData realisshoman = new MyWillowsData("realisshoman",LocalDateTime.of(2023, 1, 23, 07, 18),"옙 감사합니다 좋은 하루 보내세요", R.drawable.realisshoman);
+        MyWillowsData nakedbibi = new MyWillowsData("nakedbibi", LocalDateTime.of(2022, 12, 25, 11, 24),"well, thank you have a nice day", R.drawable.nakedbibi);
+        MyWillowsData calmdownman = new MyWillowsData("calmdownman", LocalDateTime.of(2022, 9, 3, 1, 11),"Wow! thank you for your support", R.drawable.calmdownman);
+        myWillowsItems.add(realisshoman);
+        myWillowsItems.add(nakedbibi);
+        myWillowsItems.add(calmdownman);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_willow, container, false);
+        View view = inflater.inflate(R.layout.fragment_willow, container,false);
+        incomingWillowRcView = view.findViewById(R.id.incoming_willow_view);
+        myWillowsRcView = view.findViewById(R.id.my_willows_view);
+        seeAllText = view.findViewById(R.id.seeall_text);
+        sentWillowBtn = view.findViewById(R.id.sent_willow_btn);
+        searchBtn = view.findViewById(R.id.search_btn);
+        seeAllText.setOnClickListener(this);
+        sentWillowBtn.setOnClickListener(this);
+        searchBtn.setOnClickListener(this);
+
+
+        iclayoutManager = new LinearLayoutManager(getActivity());
+        mwlayoutManager = new LinearLayoutManager(getActivity());
+
+        incomingWillowAdapter = new IncomingWillow_Adapter(incomingWillowItems, this);
+        myWillowsAdapter = new MyWillows_Adapter(myWillowsItems);
+
+        incomingWillowRcView.setLayoutManager(iclayoutManager);
+        myWillowsRcView.setLayoutManager(mwlayoutManager);
+
+        incomingWillowRcView.setAdapter(incomingWillowAdapter);
+        myWillowsRcView.setAdapter(myWillowsAdapter);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if(incomingWillows.size()>1)  seeAllText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Log.w("test","click " + view.getId());
+        switch(view.getId()){
+            case R.id.seeall_text:{
+                incomingWillowItems = incomingWillows;
+                incomingWillowAdapter.setmData(incomingWillowItems);
+                view.setVisibility(View.INVISIBLE);
+                incomingWillowRcView.invalidate();
+                incomingWillowAdapter.notifyDataSetChanged();
+                break;
+            }
+            case R.id.sent_willow_btn:{
+
+                Context context = view.getContext();
+                Intent intent = new Intent(context, SentWillowActivity.class);
+                /*
+                TODO: get global login data
+                private SharedPreferences preferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+                intent.putExtra("userID",preferences.getString("userid","user1"));
+                 */
+                intent.putExtra("userID","user1");
+                context.startActivity(intent);
+                break;
+            }
+
+            case R.id.search_btn:{
+                break;
+            }
+
+        }
+    }
+
+    @Override
+    public void onAddWillow(MyWillowsData newWillow) {
+        myWillowsRcView.invalidate();
+        int res = myWillowsAdapter.addData(newWillow);
+        if(res>0) myWillowsAdapter.notifyItemInserted(res);
+        incomingWillowRcView.invalidate();
+        incomingWillowAdapter.notifyDataSetChanged();
     }
 }
