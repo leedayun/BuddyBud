@@ -1,16 +1,399 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AccountFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <!-- Profile section with image and name -->
+    <LinearLayout
+        android:id="@+id/profile_section"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Account Fragment" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingTop="16dp">
+
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/profile" /> <!-- Replace with actual image resource -->
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="miliili"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"/>
+    </LinearLayout>
+
+    <!-- Post and Scrap Toggle Buttons -->
+    <LinearLayout
+        android:id="@+id/toggle_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_section"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/my_posts_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="My Posts" />
+
+        <Button
+            android:id="@+id/my_scraps_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="My Scraps" />
+    </LinearLayout>
+
+    <!-- Post ScrollView -->
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/posts_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toggle_buttons"
+        android:fillViewport="true"> <!-- fillViewport를 true로 설정하여 높이가 match_parent일 때 스크롤뷰의 내용이 전체 높이를 채우도록 함 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"> <!-- 이 LinearLayout 안에 여러 개의 LinearLayout을 넣음 -->
+
+            <!-- 첫 번째 게시물 LinearLayout -->
+            <LinearLayout
+                android:id="@+id/post1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:elevation="8dp"
+                android:layout_margin="16dp">
+
+                <!-- 게시물 상단의 프로필 이미지와 사용자 이름 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/post1_profile_image"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/profile"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:id="@+id/post1_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/post1_profile_image"
+                        android:text="miliili"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/post1_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/post1_profile_image"
+                        android:layout_below="@id/post1_username"
+                        android:text="23/01/23 17:13"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@android:color/darker_gray" />
+                </RelativeLayout>
+
+                <!-- 게시글 제목 -->
+                <TextView
+                    android:id="@+id/post1_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Anyone who wants to play tennis?"
+                    android:textStyle="bold"
+                    android:padding="8dp" />
+
+                <!-- 게시물 본문 -->
+                <TextView
+                    android:id="@+id/post1_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="any tennis newbies around? I'm looking to hit the court around campus. DM me if you're up for smashing fun."
+                    android:padding="8dp" />
+
+                <!-- 좋아요, 댓글, 번역 버튼 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end"
+                    android:padding="5dp">
+
+                    <!-- 좋아요 버튼 -->
+                    <ImageButton
+                        android:id="@+id/post1_like_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/like_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp" />
+
+                    <!-- 댓글 버튼 -->
+                    <ImageButton
+                        android:id="@+id/post1_comment_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/comment_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_marginStart="3dp" />
+
+                    <!-- 번역 버튼 -->
+                    <ImageButton
+                        android:id="@+id/post1_translate_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/translate_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_marginStart="3dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 두 번째 게시물 LinearLayout -->
+            <LinearLayout
+                android:id="@+id/post2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:elevation="8dp"
+                android:layout_margin="16dp">
+
+                <!-- 게시물 상단의 프로필 이미지와 사용자 이름 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/post2_profile_image"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/profile"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:id="@+id/post2_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/post2_profile_image"
+                        android:text="miliili"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/post2_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/post2_profile_image"
+                        android:layout_below="@id/post2_username"
+                        android:text="22/11/07 18:05"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@android:color/darker_gray" />
+                </RelativeLayout>
+
+                <!-- 게시글 제목 -->
+                <TextView
+                    android:id="@+id/post2_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="The night we've all been waiting for..."
+                    android:textStyle="bold"
+                    android:padding="8dp" />
+
+                <!-- 게시물 본문 -->
+                <TextView
+                    android:id="@+id/post2_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="OMG, you guys #Homecoming2022 wat lit. I even got a tattoo his name across my chest! Sometimes I cut my self to see how much it bleeds it's like adrenaline, the pain is such a sudden rush for me, you see everything you say is real Slim!!"
+                    android:padding="8dp" />
+
+                <!-- 좋아요, 댓글, 번역 버튼 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end"
+                    android:padding="5dp">
+
+                    <!-- 좋아요 버튼 -->
+                    <ImageButton
+                        android:id="@+id/post2_like_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/like_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp" />
+
+                    <!-- 댓글 버튼 -->
+                    <ImageButton
+                        android:id="@+id/post2_comment_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/comment_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_marginStart="3dp" />
+
+                    <!-- 번역 버튼 -->
+                    <ImageButton
+                        android:id="@+id/post2_translate_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/translate_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_marginStart="3dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Scraps ScrollView - initially hidden -->
+    <ScrollView
+        android:id="@+id/scraps_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toggle_buttons"
+        android:fillViewport="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Scraps Feed Placeholder -->
+            <LinearLayout
+                android:id="@+id/scrap1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:elevation="8dp"
+                android:layout_margin="16dp">
+
+                <!-- 게시물 상단의 프로필 이미지와 사용자 이름 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/scrap1_profile_image"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/profile"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:id="@+id/scrap1_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/scrap1_profile_image"
+                        android:text="Jaejoon"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/scrap1_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/scrap1_profile_image"
+                        android:layout_below="@id/scrap1_username"
+                        android:text="23/01/23 17:13"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@android:color/darker_gray" />
+                </RelativeLayout>
+
+                <!-- 게시글 제목 -->
+                <TextView
+                    android:id="@+id/scrap1_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Anyone who wants to play LOL?"
+                    android:textStyle="bold"
+                    android:padding="8dp" />
+
+                <!-- 게시물 본문 -->
+                <TextView
+                    android:id="@+id/scrap1_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="any lol newbies around?DM me if you're up for smashing fun."
+                    android:padding="8dp" />
+
+                <!-- 좋아요, 댓글, 번역 버튼 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end"
+                    android:padding="5dp">
+
+                    <!-- 좋아요 버튼 -->
+                    <ImageButton
+                        android:id="@+id/scrap1_like_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/like_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp" />
+
+                    <!-- 댓글 버튼 -->
+                    <ImageButton
+                        android:id="@+id/scrap1_comment_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/comment_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_marginStart="3dp" />
+
+                    <!-- 번역 버튼 -->
+                    <ImageButton
+                        android:id="@+id/scrap1_translate_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/translate_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_marginStart="3dp" />
+                </LinearLayout>
+            </LinearLayout>
 
 
-</FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Additional layout and functionality like list view or recycler view for the posts and scraps will be needed -->
+
+</RelativeLayout>
