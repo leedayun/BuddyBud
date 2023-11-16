@@ -31,17 +31,31 @@
         app:layout_constraintStart_toEndOf="@+id/sent_willow_profile_img"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/receiving_message_txt"
-        android:layout_width="0dp"
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:background="@drawable/incoming_chat_textbox"
-        android:fontFamily="@font/noto_sans"
         android:maxWidth="230dp"
-        android:text="ChatMessage"
         app:layout_constraintStart_toEndOf="@+id/sent_willow_profile_img"
-        app:layout_constraintTop_toBottomOf="@+id/receiving_sender_txt" />
+        app:layout_constraintTop_toBottomOf="@+id/receiving_sender_txt">
+
+        <TextView
+            android:id="@+id/receiving_message_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans"
+            android:maxWidth="230dp" />
+
+        <ImageView
+            android:id="@+id/receiving_message_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:maxWidth="230dp"
+            android:scaleType="fitCenter" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/receiving_time_text"
@@ -61,8 +75,8 @@
         android:layout_marginStart="10dp"
         android:background="#00FFFFFF"
         android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/receiving_message_txt"
-        app:layout_constraintStart_toEndOf="@+id/receiving_message_txt"
+        app:layout_constraintBottom_toBottomOf="@id/frameLayout"
+        app:layout_constraintStart_toEndOf="@id/frameLayout"
         app:srcCompat="@drawable/translate_icon"
         app:tint="#A4A4A4" />
 

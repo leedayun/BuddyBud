@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,7 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView message;
         TextView sendTime;
         ImageButton translateBtn;
+        ImageView image;
 
         ReceivingViewHolder(View v) {
             super(v);
@@ -41,9 +43,11 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             message = v.findViewById(R.id.receiving_message_txt);
             sendTime = v.findViewById(R.id.receiving_time_text);
             translateBtn = v.findViewById(R.id.receiving_translate_btn);
+            image = v.findViewById(R.id.receiving_message_img);
             translateBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(message.getText()==null || message.getText().length()<1) return;
                     /*
                         TODO : Translation API
                         implementation "com.deepl.api:deepl-java:1.4.0"
@@ -57,10 +61,12 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public class SendingViewHolder extends RecyclerView.ViewHolder {
         TextView message;
         TextView sendTime;
+        ImageView image;
         SendingViewHolder(View v) {
             super(v) ;
             message = v.findViewById(R.id.sending_message_txt);
             sendTime = v.findViewById(R.id.sending_time_text);
+            image = v.findViewById(R.id.sending_message_img);
         }
     }
 
@@ -95,13 +101,22 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof ReceivingViewHolder){
-            ((ReceivingViewHolder) holder).message.setText(mData.get(position).getMessage());
+            if(mData.get(position).getMessage() == null || mData.get(position).getMessage().length()<1)
+                ((ReceivingViewHolder) holder).message.setText("");
+            else ((ReceivingViewHolder) holder).message.setText(mData.get(position).getMessage());
             ((ReceivingViewHolder) holder).name.setText(mData.get(position).getName());
             ((ReceivingViewHolder) holder).sendTime.setText(mData.get(position).getTimestamp().format(DateTimeFormatter.ofPattern("HH:mm")));
             ((ReceivingViewHolder) holder).profileImg.setImageResource(mData.get(position).getImgResId());
+            if(mData.get(position).getImageURI() != null) {
+                ((ReceivingViewHolder) holder).image.setImageURI(mData.get(position).getImageURI());
+                ((ReceivingViewHolder) holder).translateBtn.setVisibility(View.INVISIBLE);
+            }
         } else if(holder instanceof SendingViewHolder){
-            ((SendingViewHolder) holder).message.setText(mData.get(position).getMessage());
+            if(mData.get(position).getMessage() == null || mData.get(position).getMessage().length()<1)
+                ((SendingViewHolder) holder).message.setText("");
+            else ((SendingViewHolder) holder).message.setText(mData.get(position).getMessage());
             ((SendingViewHolder) holder).sendTime.setText(mData.get(position).getTimestamp().format(DateTimeFormatter.ofPattern("HH:mm")));
+            if(mData.get(position).getImageURI() != null) ((SendingViewHolder) holder).image.setImageURI(mData.get(position).getImageURI());
         }
     }
 
