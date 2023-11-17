@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
+import com.swe.buddybud.account.AccountFragment;
+import com.swe.buddybud.board.BoardFragment;
+import com.swe.buddybud.home.HomeFragment;
+import com.swe.buddybud.willow.WillowFragment;
 
 public class ContentActivity extends AppCompatActivity {
     ChipNavigationBar chipNavigationBar;

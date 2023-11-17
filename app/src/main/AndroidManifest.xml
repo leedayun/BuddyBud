@@ -15,34 +15,6 @@
         android:theme="@style/Theme.Swe"
         tools:targetApi="31">
         <activity
-            android:name=".SentWillowActivity"
-            android:exported="false" />
-        <activity
-            android:name=".WillowChatActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AccountEditActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SignUpSndActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ContentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SignUpFstActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".FeedDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".WritePostActivity"
-            android:exported="false"
-            />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -51,6 +23,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".user.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.SignUpFstActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.SignUpSndActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".willow.SentWillowActivity"
+            android:exported="false" />
+        <activity
+            android:name=".willow.WillowChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".account.AccountEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.FeedDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.WritePostActivity"
+            android:exported="false"
+            />
 
         <provider
             android:name="androidx.core.content.FileProvider"

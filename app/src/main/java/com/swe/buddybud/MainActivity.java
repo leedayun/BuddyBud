@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.swe.buddybud.user.LoginActivity;
+
 public class MainActivity extends AppCompatActivity {
     private static int SPLASH_DELAY = 2000;
 
