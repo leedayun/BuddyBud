@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.swe.buddybud.Mapper.UserMapper">
+
+    <!-- 로그인 비밀번호 체크 -->
+    <select id="userLogin" resultType="String">
+        SELECT
+            pw
+        FROM
+            M_USER
+        WHERE
+            email = #{email}
+    </select>
+
+    <!-- 이메일 중복 체크 -->
+    <select id="userEmailDuplCheck" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            M_USER
+        WHERE
+            email = #{email}
+    </select>
+
+    <!-- ID 중복 체크 -->
+    <select id="userIdDuplCheck" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            M_USER
+        WHERE
+            id = #{id}
+    </select>
+
+    <!-- 회원 가입 -->
+    <insert id="insertUserInfo">
+        INSERT INTO
+            M_USER (
+                email,
+                pw,
+	            id,
+                school,
+                dob,
+                lang,
+                gender
+            )
+        VALUES (
+                #{email},
+                #{password},
+                #{id},
+                #{school},
+                str_to_date(#{dob}, '%Y%m%d'),
+                #{lang},
+                #{gender}
+            )
+    </insert>
+
+</mapper>
