@@ -1,8 +1,7 @@
 ################## FE #####################
 /FE/app/src/main/java/com/swe/buddybud/common/ServerConfig.java
 /FE/*.iml
-/FE/.gradle
-/FE//local.properties
+/FE/local.properties
 /FE/.idea/caches
 /FE/.idea/libraries
 /FE/.idea/modules.xml
