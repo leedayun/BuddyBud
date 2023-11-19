@@ -17,7 +17,7 @@
 /FE/local.properties
 
 ################## BE #####################
-/BE/main/resources/application.properties
+/BE/src/main/resources/application.properties
 
 /BE/HELP.md
 /BE/.gradle
