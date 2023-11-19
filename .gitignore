@@ -18,6 +18,7 @@
 ################## BE #####################
 /BE/src/main/resources/application.properties
 
+/BE/local.properties
 /BE/HELP.md
 /BE/.gradle
 /BE/build/
