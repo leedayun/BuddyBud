@@ -4,4 +4,73 @@
 
 <mapper namespace="com.swe.buddybud.Mapper.HomeMapper">
 
+    <!--  게시글 작성  -->
+    <insert id="insertSNS">
+        INSERT INTO
+            B_POST (
+            title,
+            content,
+            url,
+            user_no,
+            board_type,
+            created_at,
+            state
+        )
+        VALUES (
+                   #{title},
+                   #{content},
+                   #{url},
+                   #{user_no},
+                   #{board_type},
+                   str_to_date(#{created_at}, "%Y%m%d%H%i%S"),
+                   #{state}
+               )
+    </insert>
+
+    <!--  게시글 목록 조회  -->
+    <select id="getSNSsList" resultType="java.util.Map">
+        SELECT
+            title, content, url, created_at
+        FROM
+            B_POST
+        WHERE
+            board_type = 'SNS'
+        ORDER BY
+            created_at DESC;
+    </select>
+
+    <!--  게시글 상세 조회  -->
+    <select id="getSNS" resultType="java.util.Map">
+        SELECT
+            *
+        FROM
+            B_POST
+        WHERE
+            seq = #{snsId}
+    </select>
+
+    <!--  게시글 수정  -->
+    <update id="updateSNS">
+        UPDATE
+            B_POST
+        SET
+            title = #{title},
+            content = #{content},
+            url = #{url},
+            user_no = #{user_no},
+            board_type = #{board_type},
+            str_to_date(#{last_modified_at}, "%Y%m%d%H%i%S"),
+            state = #{state}
+        WHERE
+            seq = #{snsId};
+    </update>
+
+    <!--  게시글 삭제  -->
+    <delete id="deleteSNS">
+        DELETE
+        FROM
+            B_POST
+        WHERE
+            seq = #{snsId};
+    </delete>
 </mapper>

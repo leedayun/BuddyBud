@@ -5,6 +5,7 @@ import com.swe.buddybud.Service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -14,4 +15,18 @@ public class AccountServiceImpl implements AccountService {
     AccountMapper accountMapper;
 
 
+    @Override
+    public Map<String, String> getUserInfo(Integer userId) {
+        return accountMapper.getNotice(userId);
+    }
+
+    @Override
+    public List<Map<String, String>> getUserPostsList(Integer userId) {
+        return accountMapper.getUserPostsList(userId);
+    }
+
+    @Override
+    public List<Map<String, String>> getUserScrapsList(Integer userId) {
+        return accountMapper.getUserScrapsList(userId);
+    }
 }
