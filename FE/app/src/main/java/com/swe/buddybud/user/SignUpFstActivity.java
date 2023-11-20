@@ -7,10 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -35,7 +33,7 @@ public class SignUpFstActivity extends AppCompatActivity {
         EditText editTextEmail = findViewById(R.id.editTextEmail);
         EditText editTextPassword = findViewById(R.id.editTextPassword);
         EditText editTextSchool = findViewById(R.id.editTextSchool);
-        EditText editTextStudentIdCard = findViewById(R.id.editTextStudentIdCard);
+        EditText editTextStudentIdCard = findViewById(R.id.editTextProfilePicture);
         Button btnNext = findViewById(R.id.buttonNext);
         UserApiService userApiService = RetrofitClient.getService(UserApiService.class);
         
@@ -129,7 +127,7 @@ public class SignUpFstActivity extends AppCompatActivity {
         EditText editTextEmail = findViewById(R.id.editTextEmail);
         EditText editTextPassword = findViewById(R.id.editTextPassword);
         EditText editTextSchool = findViewById(R.id.editTextSchool);
-        EditText editTextStudentIdCard = findViewById(R.id.editTextStudentIdCard);
+        EditText editTextStudentIdCard = findViewById(R.id.editTextProfilePicture);
         Button btnNext = findViewById(R.id.buttonNext);
 
         editTextEmail.setEnabled(bool);
@@ -147,7 +145,7 @@ public class SignUpFstActivity extends AppCompatActivity {
             selectedImageUri = data.getData();
 
             // 선택한 이미지 파일 이름을 EditText에 표시
-            EditText editTextStudentIdCard = findViewById(R.id.editTextStudentIdCard);
+            EditText editTextStudentIdCard = findViewById(R.id.editTextProfilePicture);
             String imageName = getRealPathFromURI(selectedImageUri);
             String[] imageNameArray = imageName.split("/");
             editTextStudentIdCard.setText(imageNameArray[imageNameArray.length - 1]);
