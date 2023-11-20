@@ -15,33 +15,33 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
-    @PostMapping("/notice")
-    public String insertNotice(@RequestBody Map<String, String> fields) {
+    @PostMapping("/board")
+    public String insertBoard(@RequestBody Map<String, String> fields) {
         JsonObject jsonObject = new JsonObject();
         String result = "fail";
 
         try {
-            boardService.insertNotice(fields);
+            boardService.insertBoard(fields);
             result = "succeed";
         }
         catch (Exception e) {
             result = "fail";
         }
 
-        jsonObject.addProperty("createNoticeResult", result);
+        jsonObject.addProperty("createBoardResult", result);
 
         return jsonObject.toString();
     }
 
-    @GetMapping("/notice")
-    public String getNoticesList() {
+    @GetMapping("/board")
+    public String getBoardsList() {
         JsonArray jsonArray = new JsonArray();
-        List<Map<String, String>> result = boardService.getNoticesList();
+        List<Map<String, String>> result = boardService.getBoardsList();
 
-        for (Map<String, String> notice : result) {
+        for (Map<String, String> board : result) {
             JsonObject jsonObject = new JsonObject();
 
-            for (Map.Entry<String, String> entry : notice.entrySet()) {
+            for (Map.Entry<String, String> entry : board.entrySet()) {
                 jsonObject.addProperty(entry.getKey(), entry.getValue());
             }
             jsonArray.add(jsonObject);
@@ -50,11 +50,11 @@ public class BoardController {
         return jsonArray.toString();
     }
 
-    @GetMapping("/notice/{noticeId}")
-    public String getNotice(@PathVariable Integer noticeId) {
+    @GetMapping("/board/{boardId}")
+    public String getBoard(@PathVariable Integer boardId) {
         JsonObject jsonObject = new JsonObject();
 
-        Map<String, String> result = boardService.getNotice(noticeId);
+        Map<String, String> result = boardService.getBoard(boardId);
 
         for (Map.Entry<String, String> entry : result.entrySet()) {
             jsonObject.addProperty(entry.getKey(), entry.getValue());
@@ -63,30 +63,30 @@ public class BoardController {
         return jsonObject.toString();
     }
 
-    @PutMapping("/notice/{noticeId}")
-    public String updateNotice(@PathVariable Integer noticeId, @RequestBody Map<String, String> fields) {
+    @PutMapping("/board/{boardId}")
+    public String updateBoard(@PathVariable Integer boardId, @RequestBody Map<String, String> fields) {
         JsonObject jsonObject = new JsonObject();
         String result = "fail";
 
         try {
-            boardService.updateNotice(noticeId, fields);
+            boardService.updateBoard(boardId, fields);
             result = "succeed";
         }
         catch (Exception e) {
             result = "fail";
         }
 
-        jsonObject.addProperty("updateNoticeResult", result);
+        jsonObject.addProperty("updateBoardResult", result);
 
         return jsonObject.toString();
     }
 
-    @DeleteMapping("/notice/{noticeId}")
-    public String deleteNotice(@PathVariable Integer noticeId) {
+    @DeleteMapping("/board/{boardId}")
+    public String deleteBoard(@PathVariable Integer boardId) {
         JsonObject jsonObject = new JsonObject();
-        boolean result = boardService.deleteNotice(noticeId);
+        boolean result = boardService.deleteBoard(boardId);
 
-        jsonObject.addProperty("deleteNoticeResult", result);
+        jsonObject.addProperty("deleteBoardResult", result);
 
         return jsonObject.toString();
     }

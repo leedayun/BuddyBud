@@ -5,52 +5,48 @@
 <mapper namespace="com.swe.buddybud.Mapper.BoardMapper">
 
     <!--  게시글 작성  -->
-    <insert id="insertNotice">
+    <insert id="insertBoard">
         INSERT INTO
             B_POST (
                 title,
                 content,
-                url,
+                url,    
                 user_no,
-                board_type,
-                created_at,
-                state
+                board_type
             )
         VALUES (
                #{title},
                #{content},
                #{url},
                #{user_no},
-               #{board_type},
-               str_to_date(#{created_at}, "%Y%m%d%H%i%S"),
-               #{state}
+               #{board_type}
            )
     </insert>
 
     <!--  게시글 목록 조회  -->
-    <select id="getNoticesList" resultType="java.util.Map">
+    <select id="getBoardsList" resultType="java.util.Map">
         SELECT
             title, content, url, created_at
         FROM
             B_POST
         WHERE
-            board_type = 'Notice'
+            board_type = 'Board'
         ORDER BY
             created_at DESC;
     </select>
 
     <!--  게시글 상세 조회  -->
-    <select id="getNotice" resultType="java.util.Map">
+    <select id="getBoard" resultType="java.util.Map">
         SELECT
             *
         FROM
             B_POST
         WHERE
-            seq = #{noticeId}
+            seq = #{boardId}
     </select>
 
     <!--  게시글 수정  -->
-    <update id="updateNotice">
+    <update id="updateBoard">
         UPDATE
             B_POST
         SET
@@ -62,16 +58,16 @@
             str_to_date(#{last_modified_at}, "%Y%m%d%H%i%S"),
             state = #{state}
         WHERE
-            seq = #{noticeId};
+            seq = #{boardId};
     </update>
 
     <!--  게시글 삭제  -->
-    <delete id="deleteNotice">
+    <delete id="deleteBoard">
         DELETE
         FROM
             B_POST
         WHERE
-            seq = #{noticeId};
+            seq = #{boardId};
     </delete>
 
 </mapper>

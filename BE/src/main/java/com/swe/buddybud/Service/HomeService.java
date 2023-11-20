@@ -8,13 +8,13 @@ import java.util.Map;
 
 @Service
 public interface HomeService {
-    void insertSNS(Map<String, String> fields);
+    void insertHome(Map<String, String> fields);
 
-    List<Map<String, String>> getSNSsList();
+    List<Map<String, String>> getHomesList();
 
-    Map<String, String> getSNS(Integer snsId);
+    Map<String, String> getHome(Integer homeId);
 
-    void updateSNS(Integer snsId, Map<String, String> fields);
+    void updateHome(Integer homeId, Map<String, String> fields);
 
-    boolean deleteSNS(Integer snsId);
+    boolean deleteHome(Integer homeId);
 }

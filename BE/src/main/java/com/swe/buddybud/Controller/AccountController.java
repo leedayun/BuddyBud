@@ -17,7 +17,7 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-    @GetMapping("/profile/{userId}")
+    @GetMapping("/accountant/{userId}")
     public String getUserInfo(@PathVariable Integer userId) {
         JsonObject jsonObject = new JsonObject();
 
@@ -30,7 +30,7 @@ public class AccountController {
         return jsonObject.toString();
     }
 
-    @GetMapping("/profile/{userId}/post")
+    @GetMapping("/accountant/{userId}/post")
     public String getUserPostsList(@PathVariable Integer userId) {
         JsonArray jsonArray = new JsonArray();
         List<Map<String, String>> result = accountService.getUserPostsList(userId);
@@ -47,7 +47,7 @@ public class AccountController {
         return jsonArray.toString();
     }
 
-    @GetMapping("/profile/{userId}/scrap")
+    @GetMapping("/accountant/{userId}/scrap")
     public String getUserScrapsList(@PathVariable Integer userId) {
         JsonArray jsonArray = new JsonArray();
         List<Map<String, String>> result = accountService.getUserScrapsList(userId);

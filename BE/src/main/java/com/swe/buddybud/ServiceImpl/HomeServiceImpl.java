@@ -16,28 +16,28 @@ public class HomeServiceImpl implements HomeService {
 
 
     @Override
-    public void insertSNS(Map<String, String> fields) {
-        homeMapper.insertSNS(fields);
+    public void insertHome(Map<String, String> fields) {
+        homeMapper.insertHome(fields);
     }
 
     @Override
-    public List<Map<String, String>> getSNSsList() {
-        return homeMapper.getSNSsList();
+    public List<Map<String, String>> getHomesList() {
+        return homeMapper.getHomesList();
     }
 
     @Override
-    public Map<String, String> getSNS(Integer snsId) {
-        return homeMapper.getSNS(snsId);
+    public Map<String, String> getHome(Integer homeId) {
+        return homeMapper.getHome(homeId);
     }
 
     @Override
-    public void updateSNS(Integer snsId, Map<String, String> fields) {
-        homeMapper.updateSNS(snsId, fields);
+    public void updateHome(Integer homeId, Map<String, String> fields) {
+        homeMapper.updateHome(homeId, fields);
     }
 
     @Override
-    public boolean deleteSNS(Integer snsId) {
-        int rowsAffected = homeMapper.deleteSNS(snsId);
+    public boolean deleteHome(Integer homeId) {
+        int rowsAffected = homeMapper.deleteHome(homeId);
 
         return rowsAffected > 0;
     }

@@ -5,7 +5,7 @@
 <mapper namespace="com.swe.buddybud.Mapper.HomeMapper">
 
     <!--  게시글 작성  -->
-    <insert id="insertSNS">
+    <insert id="insertHome">
         INSERT INTO
             B_POST (
             title,
@@ -28,29 +28,29 @@
     </insert>
 
     <!--  게시글 목록 조회  -->
-    <select id="getSNSsList" resultType="java.util.Map">
+    <select id="getHomesList" resultType="java.util.Map">
         SELECT
             title, content, url, created_at
         FROM
             B_POST
         WHERE
-            board_type = 'SNS'
+            board_type = 'Home'
         ORDER BY
             created_at DESC;
     </select>
 
     <!--  게시글 상세 조회  -->
-    <select id="getSNS" resultType="java.util.Map">
+    <select id="getHome" resultType="java.util.Map">
         SELECT
             *
         FROM
             B_POST
         WHERE
-            seq = #{snsId}
+            seq = #{homeId}
     </select>
 
     <!--  게시글 수정  -->
-    <update id="updateSNS">
+    <update id="updateHome">
         UPDATE
             B_POST
         SET
@@ -62,15 +62,15 @@
             str_to_date(#{last_modified_at}, "%Y%m%d%H%i%S"),
             state = #{state}
         WHERE
-            seq = #{snsId};
+            seq = #{homeId};
     </update>
 
     <!--  게시글 삭제  -->
-    <delete id="deleteSNS">
+    <delete id="deleteHome">
         DELETE
         FROM
             B_POST
         WHERE
-            seq = #{snsId};
+            seq = #{homeId};
     </delete>
 </mapper>
