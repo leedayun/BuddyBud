@@ -8,7 +8,6 @@ import java.util.Map;
 
 @Service
 public interface BoardService {
-
     void insertNotice(Map<String, String> fields);
 
     List<Map<String, String>> getNoticesList();
