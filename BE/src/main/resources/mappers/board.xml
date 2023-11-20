@@ -4,4 +4,27 @@
 
 <mapper namespace="com.swe.buddybud.Mapper.BoardMapper">
 
+    <!--  게시글 작성  -->
+    <insert id="createPost">
+        INSERT INTO
+            B_POST (
+                title,
+                content,
+                url,
+                user_no,
+                board_type,
+                created_at,
+                state
+            )
+        VALUES (
+               #{title},
+               #{content},
+               #{url},
+               #{user_no},
+               #{board_type},
+               str_to_date(#{created_at}, "%Y%m%d"),
+               #{state}
+           )
+    </insert>
+
 </mapper>
