@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,10 +18,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.swe.buddybud.R;
 import com.swe.buddybud.common.RetrofitClient;
-import com.swe.buddybud.user.LoginActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

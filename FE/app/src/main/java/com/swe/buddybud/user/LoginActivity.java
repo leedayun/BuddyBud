@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,7 +82,8 @@ public class LoginActivity extends AppCompatActivity {
                 String passwordText = editTextPassword.getText().toString();
 
                 if (TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText)) {
-                    makeText(getApplicationContext(), "Please fill the forms", Toast.LENGTH_SHORT);
+                    enableObjects(true);
+                    Toast.makeText(getApplicationContext(), "Please fill the forms", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     /********** 231119 로그인 체크기능 ************/
@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
 //                        }
 //                    });
 
-
+                    enableObjects(true);
                     Intent intent = new Intent(getApplicationContext(), ContentActivity.class);
                     startActivity(intent);
                 }
