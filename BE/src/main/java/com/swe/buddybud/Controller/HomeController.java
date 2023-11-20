@@ -15,33 +15,33 @@ public class HomeController {
     @Autowired
     HomeService homeService;
 
-    @PostMapping("/sns")
-    public String insertSNS(@RequestBody Map<String, String> fields) {
+    @PostMapping("/home")
+    public String insertHome(@RequestBody Map<String, String> fields) {
         JsonObject jsonObject = new JsonObject();
         String result = "fail";
 
         try {
-            homeService.insertSNS(fields);
+            homeService.insertHome(fields);
             result = "succeed";
         }
         catch (Exception e) {
             result = "fail";
         }
 
-        jsonObject.addProperty("createSNSResult", result);
+        jsonObject.addProperty("createHomeResult", result);
 
         return jsonObject.toString();
     }
 
-    @GetMapping("/sns")
-    public String getSNSsList() {
+    @GetMapping("/home")
+    public String getHomesList() {
         JsonArray jsonArray = new JsonArray();
-        List<Map<String, String>> result = homeService.getSNSsList();
+        List<Map<String, String>> result = homeService.getHomesList();
 
-        for (Map<String, String> sns : result) {
+        for (Map<String, String> home : result) {
             JsonObject jsonObject = new JsonObject();
 
-            for (Map.Entry<String, String> entry : sns.entrySet()) {
+            for (Map.Entry<String, String> entry : home.entrySet()) {
                 jsonObject.addProperty(entry.getKey(), entry.getValue());
             }
             jsonArray.add(jsonObject);
@@ -50,11 +50,11 @@ public class HomeController {
         return jsonArray.toString();
     }
 
-    @GetMapping("/sns/{snsId}")
-    public String getSNS(@PathVariable Integer snsId) {
+    @GetMapping("/home/{homeId}")
+    public String getHome(@PathVariable Integer homeId) {
         JsonObject jsonObject = new JsonObject();
 
-        Map<String, String> result = homeService.getSNS(snsId);
+        Map<String, String> result = homeService.getHome(homeId);
 
         for (Map.Entry<String, String> entry : result.entrySet()) {
             jsonObject.addProperty(entry.getKey(), entry.getValue());
@@ -63,30 +63,30 @@ public class HomeController {
         return jsonObject.toString();
     }
 
-    @PutMapping("/sns/{snsId}")
-    public String updateSNS(@PathVariable Integer snsId, @RequestBody Map<String, String> fields) {
+    @PutMapping("/home/{homeId}")
+    public String updateHome(@PathVariable Integer homeId, @RequestBody Map<String, String> fields) {
         JsonObject jsonObject = new JsonObject();
         String result = "fail";
 
         try {
-            homeService.updateSNS(snsId, fields);
+            homeService.updateHome(homeId, fields);
             result = "succeed";
         }
         catch (Exception e) {
             result = "fail";
         }
 
-        jsonObject.addProperty("updateSNSResult", result);
+        jsonObject.addProperty("updateHomeResult", result);
 
         return jsonObject.toString();
     }
 
-    @DeleteMapping("/sns/{snsId}")
-    public String deleteSNS(@PathVariable Integer snsId) {
+    @DeleteMapping("/home/{homeId}")
+    public String deleteHome(@PathVariable Integer homeId) {
         JsonObject jsonObject = new JsonObject();
-        boolean result = homeService.deleteSNS(snsId);
+        boolean result = homeService.deleteHome(homeId);
 
-        jsonObject.addProperty("deleteSNSResult", result);
+        jsonObject.addProperty("deleteHomeResult", result);
 
         return jsonObject.toString();
     }
