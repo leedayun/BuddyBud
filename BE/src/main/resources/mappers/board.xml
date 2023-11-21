@@ -12,14 +12,18 @@
                 content,
                 url,    
                 user_no,
-                board_type
+                board_type,
+                created_at,
+                last_modified_at
             )
         VALUES (
                #{title},
                #{content},
                #{url},
                #{user_no},
-               #{board_type}
+               #{board_type},
+               sysdate(),
+               sysdate()
            )
     </insert>
 
