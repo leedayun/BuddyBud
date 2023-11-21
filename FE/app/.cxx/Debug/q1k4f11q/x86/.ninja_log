@@ -1,4 +1,3 @@
 # ninja log v5
-0	148	7220793536297391	CMakeFiles/buddybud.dir/buddybud.cpp.o	54df8d921f3a132
-150	348	7220793538307797	C:/dev/BuddyBud/FE/app/build/intermediates/cxx/Debug/q1k4f11q/obj/x86/libbuddybud.so	8a2f01a58a9a6628
-1	16	0	clean	26dfed95600cbe39
+1	297	7221864546924199	CMakeFiles/buddybud.dir/buddybud.cpp.o	98390cef5cacf31c
+299	439	7221864548444190	C:/AndroidProject/BuddyBud/FE/app/build/intermediates/cxx/Debug/q1k4f11q/obj/x86/libbuddybud.so	919c923009619873

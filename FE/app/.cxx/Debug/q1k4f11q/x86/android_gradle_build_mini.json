@@ -1,26 +1,26 @@
 {
   "buildFiles": [
-    "C:\\dev\\BuddyBud\\FE\\app\\src\\main\\cpp\\CMakeLists.txt"
+    "C:\\AndroidProject\\BuddyBud\\FE\\app\\src\\main\\cpp\\CMakeLists.txt"
   ],
   "cleanCommandsComponents": [
     [
-      "C:\\Users\\jihn0\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "C:\\Users\\YooUkcheol\\AndroidSDK\\cmake\\3.22.1\\bin\\ninja.exe",
       "-C",
-      "C:\\dev\\BuddyBud\\FE\\app\\.cxx\\Debug\\q1k4f11q\\x86",
+      "C:\\AndroidProject\\BuddyBud\\FE\\app\\.cxx\\Debug\\q1k4f11q\\x86",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
-    "C:\\Users\\jihn0\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "C:\\Users\\YooUkcheol\\AndroidSDK\\cmake\\3.22.1\\bin\\ninja.exe",
     "-C",
-    "C:\\dev\\BuddyBud\\FE\\app\\.cxx\\Debug\\q1k4f11q\\x86",
+    "C:\\AndroidProject\\BuddyBud\\FE\\app\\.cxx\\Debug\\q1k4f11q\\x86",
     "{LIST_OF_TARGETS_TO_BUILD}"
   ],
   "libraries": {
     "buddybud::@6890427a1f51a3e7e1df": {
       "artifactName": "buddybud",
       "abi": "x86",
-      "output": "C:\\dev\\BuddyBud\\FE\\app\\build\\intermediates\\cxx\\Debug\\q1k4f11q\\obj\\x86\\libbuddybud.so",
+      "output": "C:\\AndroidProject\\BuddyBud\\FE\\app\\build\\intermediates\\cxx\\Debug\\q1k4f11q\\obj\\x86\\libbuddybud.so",
       "runtimeFiles": []
     }
   }

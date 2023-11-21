@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "C:/dev/BuddyBud/FE/app/build/intermediates/cxx/Debug/q1k4f11q/obj/x86/libbuddybud.so"
+			"path" : "C:/AndroidProject/BuddyBud/FE/app/build/intermediates/cxx/Debug/q1k4f11q/obj/x86/libbuddybud.so"
 		}
 	],
 	"backtrace" : 1,
@@ -58,7 +58,7 @@
 			],
 			"sysroot" : 
 			{
-				"path" : "C:/Users/jihn0/AppData/Local/Android/Sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
+				"path" : "C:/Users/YooUkcheol/AndroidSDK/ndk/23.1.7779620/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
 			}
 		}
 	],
@@ -89,7 +89,7 @@
 		"language" : "CXX",
 		"sysroot" : 
 		{
-			"path" : "C:/Users/jihn0/AppData/Local/Android/Sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
+			"path" : "C:/Users/YooUkcheol/AndroidSDK/ndk/23.1.7779620/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
 		}
 	},
 	"name" : "buddybud",

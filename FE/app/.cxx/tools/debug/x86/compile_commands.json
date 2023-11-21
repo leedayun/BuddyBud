@@ -1,7 +1,7 @@
 [
 {
-  "directory": "C:/dev/BuddyBud/FE/app/.cxx/Debug/q1k4f11q/x86",
-  "command": "C:\\Users\\jihn0\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=i686-none-linux-android28 --sysroot=C:/Users/jihn0/AppData/Local/Android/Sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dbuddybud_EXPORTS -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fexceptions -frtti -stdlib=libc++ -g  -fno-limit-debug-info -fPIC -o CMakeFiles\\buddybud.dir\\buddybud.cpp.o -c C:\\dev\\BuddyBud\\FE\\app\\src\\main\\cpp\\buddybud.cpp",
-  "file": "C:\\dev\\BuddyBud\\FE\\app\\src\\main\\cpp\\buddybud.cpp"
+  "directory": "C:/AndroidProject/BuddyBud/FE/app/.cxx/Debug/q1k4f11q/x86",
+  "command": "C:\\Users\\YooUkcheol\\AndroidSDK\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=i686-none-linux-android28 --sysroot=C:/Users/YooUkcheol/AndroidSDK/ndk/23.1.7779620/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dbuddybud_EXPORTS -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fexceptions -frtti -stdlib=libc++ -g  -fno-limit-debug-info -fPIC -o CMakeFiles\\buddybud.dir\\buddybud.cpp.o -c C:\\AndroidProject\\BuddyBud\\FE\\app\\src\\main\\cpp\\buddybud.cpp",
+  "file": "C:\\AndroidProject\\BuddyBud\\FE\\app\\src\\main\\cpp\\buddybud.cpp"
 }
 ]

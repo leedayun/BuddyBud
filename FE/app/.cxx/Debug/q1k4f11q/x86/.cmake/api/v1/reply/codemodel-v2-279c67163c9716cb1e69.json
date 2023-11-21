@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "buddybud::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-buddybud-Debug-571d5127311b432772ca.json",
+					"jsonFile" : "target-buddybud-Debug-8af7bb7118fa2b6b89ec.json",
 					"name" : "buddybud",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/dev/BuddyBud/FE/app/.cxx/Debug/q1k4f11q/x86",
-		"source" : "C:/dev/BuddyBud/FE/app/src/main/cpp"
+		"build" : "C:/AndroidProject/BuddyBud/FE/app/.cxx/Debug/q1k4f11q/x86",
+		"source" : "C:/AndroidProject/BuddyBud/FE/app/src/main/cpp"
 	},
 	"version" : 
 	{
