@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/scrapped"
+                    android:src="@drawable/scrapping"
                     android:translationX="290sp"
                     android:translationY="28sp" />
 
@@ -128,7 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/liked"
+                    android:src="@drawable/liking"
                     android:translationX="40sp"
                     android:translationY="710sp" />
 
