@@ -1,13 +1,6 @@
 package com.swe.buddybud.board;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +8,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.swe.buddybud.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BoardFragment#newInstance} factory method to
+ * Use the {@link BoardFilteredFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BoardFragment extends Fragment {
+public class BoardFilteredFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,7 +32,7 @@ public class BoardFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public BoardFragment() {
+    public BoardFilteredFragment() {
         // Required empty public constructor
     }
 
@@ -46,8 +45,8 @@ public class BoardFragment extends Fragment {
      * @return A new instance of fragment ArticleFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BoardFragment newInstance(String param1, String param2) {
-        BoardFragment fragment = new BoardFragment();
+    public static BoardFilteredFragment newInstance(String param1, String param2) {
+        BoardFilteredFragment fragment = new BoardFilteredFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -68,7 +67,7 @@ public class BoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_board, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_board_filtered, container, false);
 
         ImageButton scrap_1_Button = rootView.findViewById(R.id.scrap_1_Button);
         final TextView[] scrap_1_Count = {rootView.findViewById(R.id.scrap_1_Count)};
@@ -200,71 +199,6 @@ public class BoardFragment extends Fragment {
             }
         });
 
-        ImageButton scrap_3_Button = rootView.findViewById(R.id.scrap_3_Button);
-        final TextView[] scrap_3_Count = {rootView.findViewById(R.id.scrap_3_Count)};
-
-        String scrap_3_Count_Text = scrap_3_Count[0].getText().toString();
-        final int[] scrap_3_Count_int = {Integer.parseInt(scrap_3_Count_Text)};
-
-        final boolean[] isScrapped_3 = { false };
-        scrap_3_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isScrapped_3[0]) {
-                    scrap_3_Button.setImageResource(R.drawable.scrapping);
-                    scrap_3_Count_int[0]--;
-                    scrap_3_Count[0].setText(String.valueOf(scrap_3_Count_int[0]));
-                    isScrapped_3[0] = false;
-                } else {
-                    scrap_3_Button.setImageResource(R.drawable.scrapped);
-                    scrap_3_Count_int[0]++;
-                    scrap_3_Count[0].setText(String.valueOf(scrap_3_Count_int[0]));
-                    isScrapped_3[0] = true;
-                }
-            }
-        });
-
-        ImageButton like_3_Button = rootView.findViewById(R.id.like_3_Button);
-        final TextView[] like_3_Count = {rootView.findViewById(R.id.like_3_Count)};
-
-        String like_3_Count_Text = like_3_Count[0].getText().toString();
-        final int[] like_3_Count_int = {Integer.parseInt(like_3_Count_Text)};
-
-        final boolean[] isLiked_3 = { false };
-        like_3_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isLiked_3[0]) {
-                    like_3_Button.setImageResource(R.drawable.liking);
-                    like_3_Count_int[0]--;
-                    like_3_Count[0].setText(String.valueOf(like_3_Count_int[0]));
-                    isLiked_3[0] = false;
-                } else {
-                    like_3_Button.setImageResource(R.drawable.liked);
-                    like_3_Count_int[0]++;
-                    like_3_Count[0].setText(String.valueOf(like_3_Count_int[0]));
-                    isLiked_3[0] = true;
-                }
-            }
-        });
-
-        ImageButton translate_3_Button = rootView.findViewById(R.id.translate_3_Button);
-        TextView post_3_Title = rootView.findViewById(R.id.post_3_Title);
-
-        final boolean[] isTranslated_3 = { false };
-        translate_3_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isTranslated_3[0]) {
-                    post_3_Title.setText("(상시모집)\uD83D\uDC9A\uD83D\uDE4F성균관대학교 천주교 중앙동...");
-                    isTranslated_3[0] = false;
-                } else {
-                    post_3_Title.setText("(常年招生)\uD83D\uDC9A\uD83D\uDE4F 成均齐大学天主教中央...");
-                    isTranslated_3[0] = true;
-                }
-            }
-        });
-
         return rootView;
     }
 
@@ -290,7 +224,7 @@ public class BoardFragment extends Fragment {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new BoardFilterFragment();
+                Fragment fragment = new BoardDetailFragment();
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
