@@ -152,8 +152,8 @@ public class FeedDetailActivity extends AppCompatActivity {
                 if (!commentText.isEmpty()) {
                     // 현재 피드에 달린 댓글 수를 기준으로 commentId 생성
                     int commentId = feedData.getComments().size();
-                    int profileImageId = R.drawable.test; // 예시 이미지
-                    String nickname = "MyNick";
+                    int profileImageId = R.drawable.mili; // 예시 이미지
+                    String nickname = "jinwoo";
                     SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm", Locale.getDefault());
                     sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
                     String currentDate = sdf.format(new Date());
