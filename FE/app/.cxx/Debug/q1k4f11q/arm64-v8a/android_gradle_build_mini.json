@@ -1,0 +1,27 @@
+{
+  "buildFiles": [
+    "/Users/sngjuni/code/ISE/BuddyBud/FE/app/src/main/cpp/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/sngjuni/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/sngjuni/code/ISE/BuddyBud/FE/app/.cxx/Debug/q1k4f11q/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/sngjuni/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/sngjuni/code/ISE/BuddyBud/FE/app/.cxx/Debug/q1k4f11q/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "buddybud::@6890427a1f51a3e7e1df": {
+      "artifactName": "buddybud",
+      "abi": "arm64-v8a",
+      "output": "/Users/sngjuni/code/ISE/BuddyBud/FE/app/build/intermediates/cxx/Debug/q1k4f11q/obj/arm64-v8a/libbuddybud.so",
+      "runtimeFiles": []
+    }
+  }
+}

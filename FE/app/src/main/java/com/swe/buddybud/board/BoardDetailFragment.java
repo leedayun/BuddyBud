@@ -76,7 +76,7 @@ public class BoardDetailFragment extends Fragment {
         String scrap_1_Count_Text = scrap_1_Count[0].getText().toString();
         final int[] scrap_1_Count_int = {Integer.parseInt(scrap_1_Count_Text)};
 
-        final boolean[] isScrapped_1 = { true };
+        final boolean[] isScrapped_1 = { false };
         scrap_1_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +100,7 @@ public class BoardDetailFragment extends Fragment {
         String like_1_Count_Text = like_1_Count[0].getText().toString();
         final int[] like_1_Count_int = {Integer.parseInt(like_1_Count_Text)};
 
-        final boolean[] isLiked_1 = { true };
+        final boolean[] isLiked_1 = { false };
         like_1_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
