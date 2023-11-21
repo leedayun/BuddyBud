@@ -49,7 +49,120 @@
             </SearchView>
 
             <FrameLayout
-                android:id="@+id/post_1_detail"
+                android:id="@+id/post_4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:translationX="22sp">
+
+                <ImageView
+                    android:id="@+id/frame_4_Shadow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:minWidth="348sp"
+                    android:minHeight="270sp"
+                    android:src="@drawable/edittext_shadow" />
+
+                <ImageView
+                    android:id="@+id/skkuIcon2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/skku"
+                    android:translationX="25sp"
+                    android:translationY="25sp" />
+
+                <TextView
+                    android:id="@+id/post_4_Author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="성균관대학교 공지사항"
+                    android:translationX="80sp"
+                    android:translationY="30sp" />
+
+                <TextView
+                    android:id="@+id/post_4_Time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2023/11/21 18:32"
+                    android:textSize="12sp"
+                    android:translationX="81sp"
+                    android:translationY="50sp" />
+
+                <ImageButton
+                    android:id="@+id/scrap_4_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/scrapped"
+                    android:translationX="290sp"
+                    android:translationY="28sp" />
+
+                <TextView
+                    android:id="@+id/scrap_4_Count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="37"
+                    android:textSize="10sp"
+                    android:translationX="296sp"
+                    android:translationY="57sp" />
+
+                <TextView
+                    android:id="@+id/post_4_Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[행사/세미나](기간연장) 제2회 한국철학·문화..."
+                    android:textStyle="bold"
+                    android:translationX="37sp"
+                    android:translationY="80sp" />
+
+                <TextView
+                    android:id="@+id/post_4_Content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:width="275sp"
+                    android:text="(제2회 한국철학·문화 디지털융합 인재 공모전)  성균관대학교 유학대학 유학·동양학과에서는 디지털 방법론을 활용한 한국철학 연구 및 한국문화 콘텐츠에 대한 관심과 도전 의식을 제고..."
+                    android:translationX="37sp"
+                    android:translationY="110sp" />
+
+                <ImageButton
+                    android:id="@+id/like_4_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/liking"
+                    android:translationX="40sp"
+                    android:translationY="205sp" />
+
+                <TextView
+                    android:id="@+id/like_4_Count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="26"
+                    android:textSize="10sp"
+                    android:translationX="43sp"
+                    android:translationY="225sp" />
+
+                <ImageButton
+                    android:id="@+id/link_4_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/link"
+                    android:translationX="92sp"
+                    android:translationY="206sp" />
+
+                <ImageButton
+                    android:id="@+id/translate_4_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/translate"
+                    android:translationX="140sp"
+                    android:translationY="205sp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/post_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:translationX="22sp">
