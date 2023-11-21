@@ -308,7 +308,7 @@
                         android:id="@+id/scrap1_profile_image"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/profile"
+                        android:src="@drawable/skku"
                         android:layout_alignParentStart="true"
                         android:layout_marginEnd="8dp" />
 
@@ -317,7 +317,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@id/scrap1_profile_image"
-                        android:text="Jaejoon"
+                        android:text="성균관대학교 공지게시판"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <TextView
@@ -326,7 +326,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@id/scrap1_profile_image"
                         android:layout_below="@id/scrap1_username"
-                        android:text="23/01/23 17:13"
+                        android:text="2023.11.21 18:32"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@android:color/darker_gray" />
                 </RelativeLayout>
@@ -336,7 +336,7 @@
                     android:id="@+id/scrap1_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Anyone who wants to play LOL?"
+                    android:text="[행사/세미나](기간연장) 제2회 한국철학·문화 디지털 융합 인재 공모전 개최"
                     android:textStyle="bold"
                     android:padding="8dp" />
 
@@ -345,7 +345,67 @@
                     android:id="@+id/scrap1_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="any lol newbies around?DM me if you're up for smashing fun."
+                    android:text="제2회 한국철학·문화 디지털 융합 인재 공모전
+
+성균관대학교 유학대학 유학·동양학과에서는 디지털 방법론을 활용한 한국철학 연구 및 한국문화 콘텐츠에 대한 관심과 도전 의식을 제고하고자 다음과 같이 ‘제2회 한국철학·문화 디지털 융합 인재 공모전’을 개최합니다.
+
+[공모목적]
+
+- 디지털 방법론을 활용하여 기획·개발된 한국철학과 문화 관련 연구 및 콘텐츠를 공모함으로써 ‘한국적인 것’에서 출발해 새로운 의미와 가치를 창출할 수 있는 융합 프로젝트를 발굴하고자 함
+- 우리 학교 학부생에게 한국철학과 디지털 인문학에 대한 관심을 고취하고 디지털 방법론 활용 역량을 키우며 한국철학과 문화를 주제로 한 학생 주도적 팀 프로젝트의 기회를 제공함
+
+[참가자격]
+
+성균관대학교 학부 재학생 신분으로 최소 2인 이상 포함한 4인 내외로 구성한 팀
+※ 2023학년도 2학기 재학생 (직전학기 이수학점이 12학점(최종학기 직전학기: 9학점) 이상 이수하고 평점 평균이 2.0 이상인 자)
+※ 개인 단위의 참가도 가능하나, 공모전 취지상 팀 단위 참가를 권장함
+
+[주요일정]
+
+- 1차 참가신청서 및 제안서 공모 후 선정된 제안서를 대상으로 2차 본선 결과물 제작이 이루어지는 방식
+
+1. 참가신청서 및 제안서 공모 마감: 11월 30일(목)
+2. 본선 진출작 발표: 12월 4일(월)
+3. 본선 결과물 제출 마감: 12월 28일(목)
+4. 본선 결과물 발표회: 12월 29일(금) 오전 ZOOM 온라인 미팅
+※ 시상식은 2024년 1월 5일(금) 오전 오프라인으로 진행 예정
+
+[부문별 응모기준]
+
+1. 연구 부문
+한국철학·문화를 주제로 디지털 방법론을 활용한 연구 기획
+논문 초록 제출 (일반 논문초록보다 상세한 내용을 기술하되 참고문헌을 포함하여 5페이지 내외로 작성)
+
+2. 콘텐츠 부문
+한국 철학·문화를 주제로 디지털 방법론을 활용한 콘텐츠 개발
+자유 형식 제출 (앱, 게임, 챗봇 등)
+
+[시상 내역]
+
+[연구] 연구논문 초록
+대상 1팀: 상장 및 상금 50만원
+최우수상 1팀: 상장 및 상금 30만원
+
+[콘텐츠] 자유형식 콘텐츠
+대상 1팀: 상장 및 상금 50만원
+최우수상 1팀: 상장 및 상금 30만원
+
+※ 최종심사 결과 출품작이 심사기준에 적합하지 않은 경우, 시상 종류 및 인원은 조정될 수 있음
+
+[제출서류 및 유의사항]
+
+1. 제출서류
+가. 참가신청서 및 제안서
+나. 윤리서약서
+
+2. 제출방법
+- 온라인 접수: 이메일(skkuhumanity@gmail.com)
+
+3. 유의사항
+- 타인의 저작권·초상권을 침해하지 않아야 함
+- 타 공모전·대회에서 입상한 프로젝트를 중복제출한 경우 심사대상에서 제외함
+- 기타 자세한 사항은 접수처 이메일(skkuhumanity@gmail.com)로 문의
+"
                     android:padding="8dp" />
 
                 <!-- 좋아요, 댓글, 번역 버튼 -->
@@ -380,6 +440,129 @@
                     <!-- 번역 버튼 -->
                     <ImageButton
                         android:id="@+id/scrap1_translate_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/translate_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_marginStart="3dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/scrap2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:elevation="8dp"
+                android:layout_margin="16dp">
+
+                <!-- 게시물 상단의 프로필 이미지와 사용자 이름 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/scrap2_profile_image"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/skku"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:id="@+id/scrap2_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/scrap2_profile_image"
+                        android:text="에브리타임 동아리/학회 게시판"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/scrap2_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/scrap2_profile_image"
+                        android:layout_below="@id/scrap2_username"
+                        android:text="2023.11.21 15:45"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@android:color/darker_gray" />
+                </RelativeLayout>
+
+                <!-- 게시글 제목 -->
+                <TextView
+                    android:id="@+id/scrap2_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="(🚨11/25 마감) 현직인 광고 트레이닝 그룹 [오프 더 광고쟁이] 24기 모집!"
+                    android:textStyle="bold"
+                    android:padding="8dp" />
+
+                <!-- 게시물 본문 -->
+                <TextView
+                    android:id="@+id/scrap2_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="안녕하세요, ✨현직 광고인 멘토링+경쟁PT 경험+끈끈한 네트워킹✨이 똘똘 뭉친 광고 동아리 '오프더광고쟁이'입니다!💛
+
+광고를 하고 싶지만, 학교에서는 배울 수 없었던 실무 경험과 더불어 현업에서 일하는 광고쟁이분들과 함께 생생한 광고 이야기를 나누고 싶다면 다들 팔로팔로미!👌
+(이노션, TBWA, 농심기획, 오리콤, 키스미 등 다양한 현직에 계신 든든한 멘토진🥰)
+
+지금 당장 지원하고 싶은데 더 자세한 정보와 오프더광고쟁이 23기 수료자들의 생생한 후기를 듣고 싶다면? (활어보다 생생함 주의)
+
+아래 링크를 클릭해주세요!
+
+
+https://www.notion.so/24-2a5678ce4f284ff086a7891548468967
+
+
+⭐추가모집기간
+2023년 10월 30일(월) ~ 2023년 11월 25일(토) pm 6시까지
+
+
+⭐활동기간
+2024년 1월 ~ 12월 (1년간)
+
+
+⭐주요활동
+👉광고교육 : 매월 커리큘럼에 맞는 광고 이론 및 최신 광고 캠페인 스터디 진행 (교수님 강의보다 유익
+"
+                    android:padding="8dp" />
+
+                <!-- 좋아요, 댓글, 번역 버튼 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end"
+                    android:padding="5dp">
+
+                    <!-- 좋아요 버튼 -->
+                    <ImageButton
+                        android:id="@+id/scrap2_like_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/like_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp" />
+
+                    <!-- 댓글 버튼 -->
+                    <ImageButton
+                        android:id="@+id/scrap2_comment_button"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/comment_jaejoon"
+                        android:scaleType="centerInside"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:padding="8dp"
+                        android:layout_marginStart="3dp" />
+
+                    <!-- 번역 버튼 -->
+                    <ImageButton
+                        android:id="@+id/scrap2_translate_button"
                         android:layout_width="50dp"
                         android:layout_height="40dp"
                         android:src="@drawable/translate_jaejoon"
