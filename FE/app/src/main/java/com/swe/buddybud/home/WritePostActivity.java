@@ -92,8 +92,8 @@ public class WritePostActivity extends AppCompatActivity {
                 if (!title.isEmpty() && !content.isEmpty()) {
                     // FeedData 객체 생성
                     int feedId = DataManager.getInstance().getFeedList().size() + 1;
-                    int profileImageId = R.drawable.test; // 예시 이미지
-                    String nickname = "MyNick";
+                    int profileImageId = R.drawable.mili; // 예시 이미지
+                    String nickname = "jinwoo";
                     SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm", Locale.getDefault());
                     sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
                     String currentDate = sdf.format(new Date());
