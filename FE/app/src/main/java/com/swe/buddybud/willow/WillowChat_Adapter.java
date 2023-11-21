@@ -37,6 +37,7 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView sendTime;
         ImageButton translateBtn;
         ImageView image;
+        String translatedString;
 
         ReceivingViewHolder(View v) {
             super(v);
@@ -54,7 +55,7 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         TODO : Translation API
                         implementation "com.deepl.api:deepl-java:1.4.0"
                      */
-                    message.setText("translated text");
+                    message.setText(translatedString);
                 }
             });
         }
@@ -103,9 +104,14 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof ReceivingViewHolder){
-            if(mData.get(position).getMessage() == null || mData.get(position).getMessage().length()<1)
+            if(mData.get(position).getMessage() == null || mData.get(position).getMessage().length()<1) {
                 ((ReceivingViewHolder) holder).message.setText("");
-            else ((ReceivingViewHolder) holder).message.setText(mData.get(position).getMessage());
+                ((ReceivingViewHolder) holder).translatedString = "";
+            }
+            else {
+                ((ReceivingViewHolder) holder).message.setText(mData.get(position).getMessage());
+                ((ReceivingViewHolder) holder).translatedString = mData.get(position).getTranslatedString();
+            }
             ((ReceivingViewHolder) holder).name.setText(mData.get(position).getName());
             ((ReceivingViewHolder) holder).sendTime.setText(mData.get(position).getTimestamp().format(DateTimeFormatter.ofPattern("HH:mm")));
             ((ReceivingViewHolder) holder).profileImg.setImageResource(mData.get(position).getImgResId());

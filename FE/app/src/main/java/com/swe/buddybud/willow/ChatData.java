@@ -10,8 +10,9 @@ public class ChatData {
     private String name;
     private int imgResId;
     private Uri imageURI;
+    private String translatedString;
 
-    public ChatData(LocalTime timestamp, String message, String name, int imgResId, Uri imageURI) {
+    public ChatData(LocalTime timestamp, String message, String name, int imgResId, Uri imageURI, String translatedString) {
         this.timestamp = timestamp;
         if(imageURI!=null) {
             this.message = "";
@@ -23,7 +24,7 @@ public class ChatData {
         }
         this.name = name;
         this.imgResId = imgResId;
-
+        this.translatedString = translatedString;
     }
 
     public LocalTime getTimestamp() {
@@ -42,5 +43,8 @@ public class ChatData {
     }
     public Uri getImageURI() {
         return imageURI;
+    }
+    public String getTranslatedString() {
+        return translatedString;
     }
 }
