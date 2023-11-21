@@ -49,7 +49,232 @@
             </SearchView>
 
             <FrameLayout
-                android:id="@+id/post_1_detail"
+                android:id="@+id/post_4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:translationX="22sp">
+
+                <ImageView
+                    android:id="@+id/frame_4_Shadow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:minWidth="348sp"
+                    android:minHeight="270sp"
+                    android:src="@drawable/edittext_shadow" />
+
+                <ImageView
+                    android:id="@+id/skkuIcon2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/skku"
+                    android:translationX="25sp"
+                    android:translationY="25sp" />
+
+                <TextView
+                    android:id="@+id/post_4_Author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="성균관대학교 공지사항"
+                    android:translationX="80sp"
+                    android:translationY="30sp" />
+
+                <TextView
+                    android:id="@+id/post_4_Time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2023/11/21 18:32"
+                    android:textSize="12sp"
+                    android:translationX="81sp"
+                    android:translationY="50sp" />
+
+                <ImageButton
+                    android:id="@+id/scrap_4_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/scrapped"
+                    android:translationX="290sp"
+                    android:translationY="28sp" />
+
+                <TextView
+                    android:id="@+id/scrap_4_Count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="37"
+                    android:textSize="10sp"
+                    android:translationX="296sp"
+                    android:translationY="57sp" />
+
+                <TextView
+                    android:id="@+id/post_4_Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[행사/세미나](기간연장) 제2회 한국철학·문화..."
+                    android:textStyle="bold"
+                    android:translationX="37sp"
+                    android:translationY="80sp" />
+
+                <TextView
+                    android:id="@+id/post_4_Content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:width="275sp"
+                    android:text="(제2회 한국철학·문화 디지털융합 인재 공모전)  성균관대학교 유학대학 유학·동양학과에서는 디지털 방법론을 활용한 한국철학 연구 및 한국문화 콘텐츠에 대한 관심과 도전 의식을 제고..."
+                    android:translationX="37sp"
+                    android:translationY="110sp" />
+
+                <ImageButton
+                    android:id="@+id/like_4_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/liking"
+                    android:translationX="40sp"
+                    android:translationY="205sp" />
+
+                <TextView
+                    android:id="@+id/like_4_Count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="26"
+                    android:textSize="10sp"
+                    android:translationX="43sp"
+                    android:translationY="225sp" />
+
+                <ImageButton
+                    android:id="@+id/link_4_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/link"
+                    android:translationX="92sp"
+                    android:translationY="206sp" />
+
+                <ImageButton
+                    android:id="@+id/translate_4_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/translate"
+                    android:translationX="140sp"
+                    android:translationY="205sp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/post_5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:translationX="22sp">
+
+                <ImageView
+                    android:id="@+id/frame_5_Shadow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="348sp"
+                    android:minHeight="260sp"
+                    android:src="@drawable/edittext_shadow" />
+
+                <ImageView
+                    android:id="@+id/eveytimeIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/everytime"
+                    android:translationX="25sp"
+                    android:translationY="25sp" />
+
+                <TextView
+                    android:id="@+id/post_5_Author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="에브리타임 동아리/학회 게시판"
+                    android:translationX="80sp"
+                    android:translationY="30sp" />
+
+                <TextView
+                    android:id="@+id/post_5_Time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="23/11/21 15:45"
+                    android:textSize="12sp"
+                    android:translationX="81sp"
+                    android:translationY="50sp" />
+
+                <ImageButton
+                    android:id="@+id/scrap_5_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/scrapped"
+                    android:translationX="290sp"
+                    android:translationY="28sp" />
+
+                <TextView
+                    android:id="@+id/scrap_5_Count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6"
+                    android:textSize="10sp"
+                    android:translationX="299sp"
+                    android:translationY="57sp" />
+
+                <TextView
+                    android:id="@+id/post_5_Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(🚨11/25 마감) 현직인 광고 트레이닝 그룹..."
+                    android:textStyle="bold"
+                    android:translationX="37sp"
+                    android:translationY="80sp" />
+
+                <TextView
+                    android:id="@+id/post_5_Content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:width="270sp"
+                    android:text="안녕하세요, ✨현직 광고인 멘토링+경쟁PT 경험+끈끈한 네트워킹✨이 똘똘 뭉친 광고 동아리 '오프더광고쟁이'입니다!💛  광고를 하고 싶지만, 학교에서는 배울 수 없었던 실무 경험..."
+                    android:translationX="37sp"
+                    android:translationY="110sp" />
+
+                <ImageButton
+                    android:id="@+id/like_5_Button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/liking"
+                    android:translationX="40sp"
+                    android:translationY="200sp" />
+
+                <TextView
+                    android:id="@+id/like_5_Count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3"
+                    android:textSize="10sp"
+                    android:translationX="46sp"
+                    android:translationY="220sp" />
+
+                <ImageButton
+                    android:id="@+id/link_5_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/link"
+                    android:translationX="92sp"
+                    android:translationY="201sp" />
+
+                <ImageButton
+                    android:id="@+id/translate_5_Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/translate"
+                    android:translationX="140sp"
+                    android:translationY="200sp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/post_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:translationX="22sp">
