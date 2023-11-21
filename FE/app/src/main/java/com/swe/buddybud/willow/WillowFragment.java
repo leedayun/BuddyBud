@@ -56,7 +56,7 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
         }
 
         myWillowsItems = new ArrayList<>();
-        MyWillowsData realisshoman = new MyWillowsData("realisshoman",LocalDateTime.of(2023, 1, 23, 07, 18),"옙 감사합니다 좋은 하루 보내세요", R.drawable.realisshoman);
+        MyWillowsData realisshoman = new MyWillowsData("realisshoman",LocalDateTime.of(2023, 1, 23, 07, 18),"살바도르 달리, 반고흐 같이 Picasso in my body. Man I'm freakin artist", R.drawable.realisshoman);
         MyWillowsData nakedbibi = new MyWillowsData("nakedbibi", LocalDateTime.of(2022, 12, 25, 11, 24),"well, thank you have a nice day", R.drawable.nakedbibi);
         MyWillowsData calmdownman = new MyWillowsData("calmdownman", LocalDateTime.of(2022, 9, 3, 1, 11),"Wow! thank you for your support", R.drawable.calmdownman);
         myWillowsItems.add(realisshoman);

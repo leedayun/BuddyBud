@@ -86,13 +86,13 @@ public class WillowChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(selectedImageUris.size() > 1) {
                     for(Uri imageUri : selectedImageUris){
-                        data.add(new ChatData(LocalTime.now(), "","user1",R.drawable.profile, imageUri));
+                        data.add(new ChatData(LocalTime.now(), "","user1",R.drawable.profile, imageUri, ""));
                     }
                     selectedImageUris.clear();
                     imageUploadAdapter.notifyDataSetChanged();
                 }
                 if(chatEditText.getText().length()<1) return;
-                data.add(new ChatData(LocalTime.now(), chatEditText.getText().toString(),"user1",R.drawable.profile, null));
+                data.add(new ChatData(LocalTime.now(), chatEditText.getText().toString(),"user1",R.drawable.profile, null, ""));
                 chatEditText.setText("");
                 chatAdapter.notifyItemInserted(data.size() - 1);
                 chatRecyclerView.scrollToPosition(data.size() - 1);
@@ -177,11 +177,18 @@ public class WillowChatActivity extends AppCompatActivity {
 
     private ArrayList<ChatData> getData(){
         data = new ArrayList<>();
-        data.add(new ChatData(LocalTime.of(7, 25), "안녕하세요 전 빈지노에요","realisshoman",R.drawable.realisshoman, null));
-        data.add(new ChatData(LocalTime.of(9, 30), "축제 와주셔서 감사합니다 노래 잘 듣고 있습니다 ㅎㅎ","user1",R.drawable.profile, null));
-        data.add(new ChatData(LocalTime.of(13, 01), "안녕하세요 전 빈지노에요","realisshoman",R.drawable.realisshoman, null));
-        data.add(new ChatData(LocalTime.of(15, 22), "윌로우 받아주셔서 감사합니다","user1",R.drawable.profile, null));
-        data.add(new ChatData(LocalTime.of(23, 11), "살바도르 달리, 반고흐 같이 Picasso in my body. Man I'm freakin artist \n달리 반 피카소를 보며 난 자랐어 \n나도 물감을 짰고 난 여기까지 왔어 And you can tell me nothing","realisshoman",R.drawable.realisshoman, null));
+        data.add(new ChatData(LocalTime.of(7, 25), "안녕하세요 전 빈지노에요","realisshoman",R.drawable.realisshoman, null, "Hello, I'm Beenzino."));
+        data.add(new ChatData(LocalTime.of(9, 30), "축제 와주셔서 감사합니다 노래 잘 듣고 있습니다 ㅎㅎ","user1",R.drawable.profile, null, "Thank you for coming to the festival. I’m enjoying the song haha."));
+        data.add(new ChatData(LocalTime.of(13, 01), "안녕하세요 전 빈지노에요","realisshoman",R.drawable.realisshoman, null, "Hello, I'm Beenzino."));
+        data.add(new ChatData(LocalTime.of(15, 22), "윌로우 받아주셔서 감사합니다","user1",R.drawable.profile, null, "Thank you for accepting Willow."));
+        data.add(new ChatData(LocalTime.of(23, 11),
+                "살바도르 달리, 반고흐 같이 Picasso in my body. Man I'm freakin artist \n"+
+                        "달리 반 피카소를 보며 난 자랐어 \n"+
+                        "나도 물감을 짰고 난 여기까지 왔어 And you can tell me nothing",
+                "realisshoman", R.drawable.realisshoman, null,
+                "Like Salvador Dali and Van Gogh, Picasso in my body. Man I'm freakin artist\n" +
+                "I grew up watching Dali and Picasso\n" +
+                "I also applied paint and I came this far And you can tell me nothing"));
         return data;
     }
 }
