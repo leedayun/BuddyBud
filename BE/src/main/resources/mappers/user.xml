@@ -5,9 +5,13 @@
 <mapper namespace="com.swe.buddybud.Mapper.UserMapper">
 
     <!-- 로그인 비밀번호 체크 -->
-    <select id="userLogin" resultType="String">
+    <select id="userLogin" resultType="java.util.Map">
         SELECT
-            pw
+            seq,
+            id,
+            pw,
+            lang,
+            gender
         FROM
             M_USER
         WHERE
@@ -57,4 +61,21 @@
             )
     </insert>
 
+    <!-- 회원 정보 수정 -->
+    <update id="updateUserInfo">
+        UPDATE
+            M_USER
+        SET
+            <if test='id != null and id != ""'>
+                id = #{id},
+            </if>
+            <if test='lang != null and lang != ""'>
+                lang = #{lang},
+            </if>
+            <if test='gender != null and gender != ""'>
+                gender = #{gender}
+            </if>
+        WHERE
+            seq = #{seq}
+    </update>
 </mapper>

@@ -4,28 +4,54 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserApiData {
 
-    @SerializedName("userLoginResult")
-    private boolean userLoginResult;
-    @SerializedName("userEmailDuplCheck")
-    private boolean userEmailDuplCheck;
+    @SerializedName("isUserLoginSucceed")
+    private boolean isUserLoginSucceed;
 
-    @SerializedName("userIdDuplCheck")
-    private boolean userIdDuplCheck;
+    @SerializedName("loginUserNo")
+    private Integer loginUserNo;
+
+    @SerializedName("loginUserId")
+    private String loginUserId;
+
+    @SerializedName("loginUserLang")
+    private String loginUserLang;
+
+    @SerializedName("loginUserGender")
+    private String loginUserGender;
+
+    @SerializedName("isUserEmailDupl")
+    private boolean isUserEmailDupl;
+
+    @SerializedName("isUserIdDupl")
+    private boolean isUserIdDupl;
 
     @SerializedName("inserUserInfoResult")
-    private String inserUserInfoResult;
+    private boolean inserUserInfoResult;
 
-    public boolean getUserLoginResult() { return userLoginResult; }
+    @SerializedName("updateUserInfoResult")
+    private boolean updateUserInfoResult;
 
-    public boolean getUserEmailDuplCheck(){
-        return userEmailDuplCheck;
+    public boolean getIsUserLoginSucceed() { return isUserLoginSucceed; }
+
+    public Integer getLoginUserNo() { return loginUserNo; }
+
+    public String getLoginUserId() { return loginUserId; }
+
+    public String getLoginUserLang() { return loginUserLang; }
+
+    public String getLoginUserGender() { return loginUserGender; }
+
+    public boolean getIsUserEmailDupl(){ return isUserEmailDupl; }
+
+    public boolean getIsUserIdDupl(){
+        return isUserIdDupl;
     }
 
-    public boolean getUserIdDuplCheck(){
-        return userIdDuplCheck;
-    }
-
-    public String getInserUserInfoResult(){
+    public boolean getInsertUserInfoResult(){
         return inserUserInfoResult;
+    }
+
+    public boolean getUpdateUserInfoResult(){
+        return updateUserInfoResult;
     }
 }

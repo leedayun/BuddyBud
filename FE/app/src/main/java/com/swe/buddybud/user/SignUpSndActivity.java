@@ -52,77 +52,74 @@ public class SignUpSndActivity extends AppCompatActivity {
 
         // SignUp 버튼 클릭 시
         Button btnSignUp = findViewById(R.id.buttonSignUp);
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enableObjects(false);
+        btnSignUp.setOnClickListener(v -> {
+            enableObjects(false);
 
-                String idText = editTextId.getText().toString();
-                String dobText = editTextDob.getText().toString();
-                String languageText = spinnerLanguage.getSelectedItem().toString();
-                String genderText = spinnerGender.getSelectedItem().toString();
+            String idText = editTextId.getText().toString();
+            String dobText = editTextDob.getText().toString();
+            String languageText = spinnerLanguage.getSelectedItem().toString();
+            String genderText = spinnerGender.getSelectedItem().toString();
 
-                // ID 비어 있는 경우
-                if (TextUtils.isEmpty(idText) || TextUtils.isEmpty(dobText) || languageText.equals("Language") || genderText.equals("Gender")) {
-                    enableObjects(true);
-                    Toast.makeText(getApplicationContext(), "Please fill the forms", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            // ID 비어 있는 경우
+            if (TextUtils.isEmpty(idText) || TextUtils.isEmpty(dobText) || languageText.equals("Language") || genderText.equals("Gender")) {
+                enableObjects(true);
+                Toast.makeText(getApplicationContext(), "Please fill the forms", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                // 날짜 유효성 검사
-                if(!isValidDate(dobText)){
-                    enableObjects(true);
-                    Toast.makeText(getApplicationContext(), "Not a valid DOB", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            // 날짜 유효성 검사
+            if(!isValidDate(dobText)){
+                enableObjects(true);
+                Toast.makeText(getApplicationContext(), "Not a valid DOB", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                // ID 중복 확인
-                Call<UserApiData> call = userApiService.userIdDuplCheck(idText);
-                call.enqueue(new Callback<UserApiData>() {
-                    @Override
-                    public void onResponse(Call<UserApiData> call, Response<UserApiData> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            UserApiData userResponse = response.body();
+            // ID 중복 확인
+            Call<UserApiData> call = userApiService.userIdDuplCheck(idText);
+            call.enqueue(new Callback<UserApiData>() {
+                @Override
+                public void onResponse(Call<UserApiData> call, Response<UserApiData> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        UserApiData userResponse = response.body();
 
-                            // 아이디 중복시
-                            if(userResponse.getUserIdDuplCheck()){
-                                enableObjects(true);
-                                Toast.makeText(getApplicationContext(),"Duplicated ID", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            // 아이디 중복 아닐시
-                            else{
-                                Intent prevIntent = getIntent();
-
-                                Map<String, String> fields = new HashMap<>();
-                                Gson gson = new Gson();
-
-                                fields.put("email", prevIntent.getStringExtra("email"));
-                                fields.put("password", prevIntent.getStringExtra("password"));
-                                fields.put("school", prevIntent.getStringExtra("school"));
-                                fields.put("id", idText);
-                                fields.put("dob", dobText);
-                                fields.put("lang", languageText);
-                                fields.put("gender", genderText);
-
-                                insertUserData(gson.toJson(fields));
-                            }
-                        }
-                        else {
+                        // 아이디 중복시
+                        if(userResponse.getIsUserIdDupl()){
                             enableObjects(true);
-                            Toast.makeText(getApplicationContext(),"Network Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"Duplicated ID", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                    }
+                        // 아이디 중복 아닐시
+                        else{
+                            Intent prevIntent = getIntent();
 
-                    @Override
-                    public void onFailure(Call<UserApiData> call, Throwable t) {
+                            Map<String, String> fields = new HashMap<>();
+                            Gson gson = new Gson();
+
+                            fields.put("email", prevIntent.getStringExtra("email"));
+                            fields.put("password", prevIntent.getStringExtra("password"));
+                            fields.put("school", prevIntent.getStringExtra("school"));
+                            fields.put("id", idText);
+                            fields.put("dob", dobText);
+                            fields.put("lang", languageText);
+                            fields.put("gender", genderText);
+
+                            insertUserData(gson.toJson(fields));
+                        }
+                    }
+                    else {
                         enableObjects(true);
                         Toast.makeText(getApplicationContext(),"Network Error", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                });
-            }
+                }
+
+                @Override
+                public void onFailure(Call<UserApiData> call, Throwable t) {
+                    enableObjects(true);
+                    Toast.makeText(getApplicationContext(),"Network Error", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            });
         });
     }
 
@@ -139,7 +136,7 @@ public class SignUpSndActivity extends AppCompatActivity {
                 enableObjects(true);
 
                 // User Info Insert 성공시
-                if(userResponse.getInserUserInfoResult().equals("succeed")){
+                if(userResponse.getInsertUserInfoResult()){
                     Toast.makeText(getApplicationContext(),"Join Succeeded", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);

@@ -8,11 +8,13 @@ import java.util.Map;
 @Service
 public interface UserService {
 
-    boolean userLogin(Map<String, String> fields);
+    Map<String, Object> userLogin(Map<String, String> fields);
 
     boolean userEmailDuplCheck(String email);
 
     boolean userIdDuplCheck(String id);
 
     void insertUserInfo(Map<String, String> fields);
+
+    void updateUserInfo(Map<String, String> fields);
 }
