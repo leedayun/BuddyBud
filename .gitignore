@@ -15,6 +15,7 @@
 /FE/.cxx
 /FE/local.properties
 /FE/.gradle
+/FE/app/.cxx/
 
 ################## BE #####################
 /BE/src/main/resources/application.properties
