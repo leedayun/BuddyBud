@@ -33,12 +33,12 @@ public class SignUpFstActivity extends AppCompatActivity {
         EditText editTextEmail = findViewById(R.id.editTextEmail);
         EditText editTextPassword = findViewById(R.id.editTextPassword);
         EditText editTextSchool = findViewById(R.id.editTextSchool);
-        EditText editTextStudentIdCard = findViewById(R.id.editTextProfilePicture);
+        EditText editTextProfilePicture = findViewById(R.id.editTextProfilePicture);
         Button btnNext = findViewById(R.id.buttonNext);
         UserApiService userApiService = RetrofitClient.getService(UserApiService.class);
         
-        // 학생증 업로드
-        editTextStudentIdCard.setOnClickListener(v -> {
+        // 프로필 사진 업로드
+        editTextProfilePicture.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -46,68 +46,63 @@ public class SignUpFstActivity extends AppCompatActivity {
         });
 
         // Next 버튼 클릭 시 : SignUpSndActivity
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enablebOjects(false);
-                String emailText = editTextEmail.getText().toString();
-                String passwordText = editTextPassword.getText().toString();
-                String schoolText = editTextSchool.getText().toString();
-                String studentIdCardText = editTextStudentIdCard.getText().toString();
+        btnNext.setOnClickListener(v -> {
+            enablebOjects(false);
+            String emailText = editTextEmail.getText().toString();
+            String passwordText = editTextPassword.getText().toString();
+            String schoolText = editTextSchool.getText().toString();
 
-                // 이메일, 비밀번호, 학교정보 비어 있는 경우
-                if (TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText) || TextUtils.isEmpty(schoolText)) {
-                    enablebOjects(true);
-                    Toast.makeText(getApplicationContext(), "Please fill the forms", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            // 이메일, 비밀번호, 학교정보 비어 있는 경우
+            if (TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText) || TextUtils.isEmpty(schoolText)) {
+                enablebOjects(true);
+                Toast.makeText(getApplicationContext(), "Please fill the forms", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                // Email 유효성 확인
-                if (!isValidEmail(emailText)) {
-                    enablebOjects(true);
-                    Toast.makeText(getApplicationContext(), "Not a valid Email address", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            // Email 유효성 확인
+            if (!isValidEmail(emailText)) {
+                enablebOjects(true);
+                Toast.makeText(getApplicationContext(), "Not a valid Email address", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                // Email 중복 확인
-                Call<UserApiData> call = userApiService.userEmailDuplCheck(emailText);
-                call.enqueue(new Callback<UserApiData>() {
-                    @Override
-                    public void onResponse(Call<UserApiData> call, Response<UserApiData> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            enablebOjects(true);
-                            UserApiData userResponse = response.body();
+            // Email 중복 확인
+            Call<UserApiData> call = userApiService.userEmailDuplCheck(emailText);
+            call.enqueue(new Callback<UserApiData>() {
+                @Override
+                public void onResponse(Call<UserApiData> call, Response<UserApiData> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        enablebOjects(true);
+                        UserApiData userResponse = response.body();
 
-                            // 이메일 중복시
-                            if(userResponse.getUserEmailDuplCheck()){
-                                Toast.makeText(getApplicationContext(),"Duplicated Email", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            // 이메일 중복 아닐시
-                            else{
-                                Intent intent = new Intent(getApplicationContext(), SignUpSndActivity.class);
-                                intent.putExtra("email", emailText);
-                                intent.putExtra("password", passwordText);
-                                intent.putExtra("school", schoolText);
-                                intent.putExtra("studentIdCard", studentIdCardText);
-                                startActivity(intent);
-                            }
-                        }
-                        else {
-                            enablebOjects(true);
-                            Toast.makeText(getApplicationContext(),"Network Error", Toast.LENGTH_SHORT).show();
+                        // 이메일 중복시
+                        if(userResponse.getIsUserEmailDupl()){
+                            Toast.makeText(getApplicationContext(),"Duplicated Email", Toast.LENGTH_SHORT).show();
                             return;
                         }
+                        // 이메일 중복 아닐시
+                        else{
+                            Intent intent = new Intent(getApplicationContext(), SignUpSndActivity.class);
+                            intent.putExtra("email", emailText);
+                            intent.putExtra("password", passwordText);
+                            intent.putExtra("school", schoolText);
+                            startActivity(intent);
+                        }
                     }
-
-                    @Override
-                    public void onFailure(Call<UserApiData> call, Throwable t) {
+                    else {
                         enablebOjects(true);
                         Toast.makeText(getApplicationContext(),"Network Error", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                });
-            }
+                }
+
+                @Override
+                public void onFailure(Call<UserApiData> call, Throwable t) {
+                    enablebOjects(true);
+                    Toast.makeText(getApplicationContext(),"Network Error", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            });
         });
     }
 

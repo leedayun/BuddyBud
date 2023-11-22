@@ -28,4 +28,8 @@ public interface UserApiService {
     // 회원가입 성공 여부
     @POST("/user/insertUserInfo")
     Call<UserApiData> insertUserInfo(@Body RequestBody requestBody);
+
+    // 회원정보수정 성공 여부
+    @POST("/user/updateUserInfo")
+    Call<UserApiData> updateUserInfo(@Body RequestBody requestBody);
 }

@@ -15,10 +15,26 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public boolean userLogin(Map<String, String> fields){
-        String password = userMapper.userLogin(fields);
+    public Map<String, Object> userLogin(Map<String, String> fields){
 
-        return password.equals(fields.get("password"));
+        Map<String, Object> loginInfo = userMapper.userLogin(fields);
+        
+        // 유저 정보가 있는 경우
+        if(loginInfo != null){
+            String loginPW = fields.get("password");
+            String dbPW = loginInfo.get("pw").toString();
+            
+            // 비번 맞은 경우
+            if (loginPW.equals(dbPW)) {
+                loginInfo.put("isUserLoginSucceed", true);
+            }
+            // 비번 틀린 경우
+            else {
+                loginInfo.put("isUserLoginSucceed", false);
+            }
+        }
+
+        return loginInfo;
     }
 
     @Override
@@ -37,6 +53,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void insertUserInfo(Map<String, String> fields){
+        userMapper.insertUserInfo(fields);
+    }
+
+    @Override
+    public void updateUserInfo(Map<String, String> fields){
         userMapper.insertUserInfo(fields);
     }
 }
