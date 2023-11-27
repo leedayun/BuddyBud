@@ -7,13 +7,14 @@ import java.util.Map;
 
 @Mapper
 public interface BoardMapper {
-    void insertBoard(Map<String, String> fields);
 
     List<Map<String, String>> getBoardsList();
 
     Map<String, String> getBoard(Integer boardId);
 
-    void updateBoard(Integer boardId, Map<String, String> fields);
+    void insertBoard(Map<String, String> fields);
 
-    int deleteBoard(Integer boardId);
+    void updateBoard(Map<String, String> fields);
+
+    void deleteBoard(Integer boardId);
 }

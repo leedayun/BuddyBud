@@ -8,14 +8,15 @@ import java.util.Map;
 
 @Service
 public interface BoardService {
-    void insertBoard(Map<String, String> fields);
 
     List<Map<String, String>> getBoardsList();
 
     Map<String, String> getBoard(Integer boardId);
 
-    void updateBoard(Integer boardId, Map<String, String> fields);
+    void insertBoard(Map<String, String> fields);
 
-    boolean deleteBoard(Integer boardId);
+    void updateBoard(Map<String, String> fields);
+
+    void deleteBoard(Integer boardId);
 }
 
