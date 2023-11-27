@@ -17,7 +17,8 @@
     <!--  사용자 작성글 목록 조회  -->
     <select id="getUserPostsList" resultType="java.util.Map">
         SELECT
-            title, content, url, created_at, last_modified_at
+            title, content, url, DATE_FORMAT(created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
+            DATE_FORMAT(last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
             B_POST
         WHERE
@@ -33,8 +34,8 @@
             B_POST.title AS title,
             B_POST.content AS content,
             B_POST.url AS url,
-            B_POST.created_at AS created_at
-            B_POST.last_modified_at AS last_modified_at
+            DATE_FORMAT(B_POST.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
+            DATE_FORMAT(B_POST.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
             B_SCRAP
                 INNER JOIN
