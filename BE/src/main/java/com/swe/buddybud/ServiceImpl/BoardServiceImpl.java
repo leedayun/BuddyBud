@@ -16,11 +16,6 @@ public class BoardServiceImpl implements BoardService {
     BoardMapper boardMapper;
 
     @Override
-    public void insertBoard(Map<String, String> fields) {
-        boardMapper.insertBoard(fields);
-    }
-
-    @Override
     public List<Map<String, String>> getBoardsList() {
         return boardMapper.getBoardsList();
     }
@@ -31,14 +26,17 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void updateBoard(Integer boardId, Map<String, String> fields) {
-        boardMapper.updateBoard(boardId, fields);
+    public void insertBoard(Map<String, String> fields) {
+        boardMapper.insertBoard(fields);
     }
 
     @Override
-    public boolean deleteBoard(Integer boardId) {
-        int rowsAffected = boardMapper.deleteBoard(boardId);
+    public void updateBoard(Map<String, String> fields) {
+        boardMapper.updateBoard(fields);
+    }
 
-        return rowsAffected > 0;
+    @Override
+    public void deleteBoard(Integer boardId) {
+        boardMapper.deleteBoard(boardId);
     }
 }
