@@ -30,11 +30,11 @@
     <!--  게시글 목록 조회  -->
     <select id="getBoardsList" resultType="java.util.Map">
         SELECT
-            title, content, url, created_at
+            title, content, url, created_at, last_modified_at
         FROM
             B_POST
         WHERE
-            board_type = 'Board'
+            board_type = 'Notice'
         ORDER BY
             created_at DESC;
     </select>
@@ -59,7 +59,7 @@
             url = #{url},
             user_no = #{user_no},
             board_type = #{board_type},
-            str_to_date(#{last_modified_at}, "%Y%m%d%H%i%S"),
+            last_modified_at = sysdate(),
             state = #{state}
         WHERE
             seq = #{boardId};
