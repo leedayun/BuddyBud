@@ -19,6 +19,7 @@
 ################## BE #####################
 /BE/src/main/resources/application.properties
 
+.DS_Store
 /BE/local.properties
 /BE/HELP.md
 /BE/.gradle
