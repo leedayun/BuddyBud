@@ -10,7 +10,6 @@
             B_POST (
             title,
             content,
-            url,
             user_no,
             board_type,
             created_at,
@@ -19,7 +18,6 @@
         VALUES (
                    #{title},
                    #{content},
-                   #{url},
                    #{user_no},
                    #{board_type},
                    sysdate(),
@@ -30,7 +28,9 @@
     <!--  게시글 목록 조회  -->
     <select id="getHomesList" resultType="java.util.Map">
         SELECT
-            title, content, url, created_at, last_modified_at
+            title, content, DATE_FORMAT(created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
+            DATE_FORMAT(last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at,
+            CAST(seq AS CHAR) AS seq
         FROM
             B_POST
         WHERE
@@ -42,7 +42,11 @@
     <!--  게시글 상세 조회  -->
     <select id="getHome" resultType="java.util.Map">
         SELECT
-            *
+            title, content, state, DATE_FORMAT(created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
+            DATE_FORMAT(last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at,
+            CAST(seq AS CHAR) AS seq,
+            CAST(user_no AS CHAR) AS user_no,
+            CAST(board_type AS CHAR) AS board_type
         FROM
             B_POST
         WHERE
@@ -56,11 +60,7 @@
         SET
             title = #{title},
             content = #{content},
-            url = #{url},
-            user_no = #{user_no},
-            board_type = #{board_type},
-            last_modified_at = sysdate(),
-            state = #{state}
+            last_modified_at = sysdate()
         WHERE
             seq = #{homeId};
     </update>
