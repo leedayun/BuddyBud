@@ -15,5 +15,7 @@ public interface WillowService {
 
     List<Map<String, String>> getReceivedWillowList(Integer userId);
 
-    void acceptWillow(Integer userId);
+    void acceptWillow(Map<String, String> fields);
+
+    void deleteWillow(Map<String, String> fields);
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 @Service
 public interface BoardService {
 
-    List<Map<String, String>> getBoardsList();
+    List<Map<String, String>> getBoardsList(Map<String, String> fields);
 
     Map<String, String> getBoard(Integer boardId);
 

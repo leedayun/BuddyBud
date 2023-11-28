@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Mapper
 public interface AccountMapper {
-    Map<String, String> getNotice(Integer userId);
+    Map<String, String> getUserInfo(Integer userId);
 
     List<Map<String, String>> getUserPostsList(Integer userId);
 

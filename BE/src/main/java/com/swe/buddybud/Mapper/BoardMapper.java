@@ -8,7 +8,7 @@ import java.util.Map;
 @Mapper
 public interface BoardMapper {
 
-    List<Map<String, String>> getBoardsList();
+    List<Map<String, String>> getBoardsList(Map<String, String> fields);
 
     Map<String, String> getBoard(Integer boardId);
 

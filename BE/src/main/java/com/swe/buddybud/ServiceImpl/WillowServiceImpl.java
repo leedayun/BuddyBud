@@ -14,7 +14,6 @@ public class WillowServiceImpl implements WillowService {
     @Autowired
     WillowMapper willowMapper;
 
-
     @Override
     public void sendWillow(Map<String, String> fields) {
         willowMapper.sendWillow(fields);
@@ -31,7 +30,12 @@ public class WillowServiceImpl implements WillowService {
     }
 
     @Override
-    public void acceptWillow(Integer userId) {
-        willowMapper.acceptWillow(userId);
+    public void acceptWillow(Map<String, String> fields) {
+        willowMapper.acceptWillow(fields);
+    }
+
+    @Override
+    public void deleteWillow(Map<String, String> fields) {
+        willowMapper.deleteWillow(fields);
     }
 }

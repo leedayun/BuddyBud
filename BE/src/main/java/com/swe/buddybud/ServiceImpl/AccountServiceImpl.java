@@ -17,7 +17,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Map<String, String> getUserInfo(Integer userId) {
-        return accountMapper.getNotice(userId);
+        return accountMapper.getUserInfo(userId);
     }
 
     @Override

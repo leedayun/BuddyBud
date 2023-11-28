@@ -37,9 +37,9 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String getHomesList() {
+    public String getHomesList(@RequestBody Map<String, String> fields) {
         JsonArray jsonArray = new JsonArray();
-        List<Map<String, String>> result = boardService.getBoardsList();
+        List<Map<String, String>> result = boardService.getBoardsList(fields);
 
         for (Map<String, String> home : result) {
             JsonObject jsonObject = new JsonObject();

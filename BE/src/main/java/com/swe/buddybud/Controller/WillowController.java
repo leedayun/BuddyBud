@@ -38,10 +38,10 @@ public class WillowController {
         JsonArray jsonArray = new JsonArray();
         List<Map<String, String>> result = willowService.getSentWillowList(userId);
 
-        for (Map<String, String> board : result) {
+        for (Map<String, String> willow : result) {
             JsonObject jsonObject = new JsonObject();
 
-            for (Map.Entry<String, String> entry : board.entrySet()) {
+            for (Map.Entry<String, String> entry : willow.entrySet()) {
                 jsonObject.addProperty(entry.getKey(), entry.getValue());
             }
             jsonArray.add(jsonObject);
@@ -55,10 +55,10 @@ public class WillowController {
         JsonArray jsonArray = new JsonArray();
         List<Map<String, String>> result = willowService.getReceivedWillowList(userId);
 
-        for (Map<String, String> board : result) {
+        for (Map<String, String> willow : result) {
             JsonObject jsonObject = new JsonObject();
 
-            for (Map.Entry<String, String> entry : board.entrySet()) {
+            for (Map.Entry<String, String> entry : willow.entrySet()) {
                 jsonObject.addProperty(entry.getKey(), entry.getValue());
             }
             jsonArray.add(jsonObject);
@@ -67,21 +67,38 @@ public class WillowController {
         return jsonArray.toString();
     }
 
-    @PostMapping("/willow/{userId}/accept")
-    public String acceptWillow(@PathVariable Integer userId) {
+    @PostMapping("/willow/accept")
+    public String acceptWillow(@RequestBody Map<String, String> fields) {
         JsonObject jsonObject = new JsonObject();
-
         boolean result = false;
 
         try {
-            willowService.acceptWillow(userId);
+            willowService.acceptWillow(fields);
             result = true;
         }
         catch (Exception e) {
             result = false;
         }
 
-        jsonObject.addProperty("acceptWillowResult", result);
+        jsonObject.addProperty("sendWillowRequestResult", result);
+
+        return jsonObject.toString();
+    }
+
+    @PostMapping("/willow/delete")
+    public String deleteWillow(@RequestBody Map<String, String> fields) {
+        JsonObject jsonObject = new JsonObject();
+        boolean result = false;
+
+        try {
+            willowService.deleteWillow(fields);
+            result = true;
+        }
+        catch (Exception e) {
+            result = false;
+        }
+
+        jsonObject.addProperty("deleteWillowResult", result);
 
         return jsonObject.toString();
     }

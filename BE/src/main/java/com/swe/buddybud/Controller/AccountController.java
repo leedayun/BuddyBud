@@ -17,7 +17,7 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-    @GetMapping("/accountant/{userId}")
+    @GetMapping("/account/{userId}")
     public String getUserInfo(@PathVariable Integer userId) {
         JsonObject jsonObject = new JsonObject();
 
@@ -30,15 +30,15 @@ public class AccountController {
         return jsonObject.toString();
     }
 
-    @GetMapping("/accountant/{userId}/post")
+    @GetMapping("/account/{userId}/post")
     public String getUserPostsList(@PathVariable Integer userId) {
         JsonArray jsonArray = new JsonArray();
         List<Map<String, String>> result = accountService.getUserPostsList(userId);
 
-        for (Map<String, String> notice : result) {
+        for (Map<String, String> post : result) {
             JsonObject jsonObject = new JsonObject();
 
-            for (Map.Entry<String, String> entry : notice.entrySet()) {
+            for (Map.Entry<String, String> entry : post.entrySet()) {
                 jsonObject.addProperty(entry.getKey(), entry.getValue());
             }
             jsonArray.add(jsonObject);
@@ -47,15 +47,15 @@ public class AccountController {
         return jsonArray.toString();
     }
 
-    @GetMapping("/accountant/{userId}/scrap")
+    @GetMapping("/account/{userId}/scrap")
     public String getUserScrapsList(@PathVariable Integer userId) {
         JsonArray jsonArray = new JsonArray();
         List<Map<String, String>> result = accountService.getUserScrapsList(userId);
 
-        for (Map<String, String> notice : result) {
+        for (Map<String, String> scrap : result) {
             JsonObject jsonObject = new JsonObject();
 
-            for (Map.Entry<String, String> entry : notice.entrySet()) {
+            for (Map.Entry<String, String> entry : scrap.entrySet()) {
                 jsonObject.addProperty(entry.getKey(), entry.getValue());
             }
             jsonArray.add(jsonObject);
