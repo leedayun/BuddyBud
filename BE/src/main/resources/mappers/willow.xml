@@ -4,4 +4,62 @@
 
 <mapper namespace="com.swe.buddybud.Mapper.WillowMapper">
 
+    <!--  willow 신청  -->
+    <insert id="sendWillow">
+        INSERT INTO
+            W_WILLOW (
+            sender_no,
+            receiver_no,
+            state
+        )
+        VALUES (
+            #{sender_no},
+            #{receiver_no},
+            'N'
+       )
+    </insert>
+
+    <!--  willow 신청한 목록 조회 -->
+    <select id="getSentWillowList" resultType="java.util.Map">
+        SELECT
+            W_WILLOW.sender_no AS sender_no,
+            W_WILLOW.receiver_no AS receiver_no,
+            W_WILLOW.state AS state,
+            M_USER.id AS receiver_id,
+            M_USER.school AS receiver_school,
+            M_USER.gender AS receiver_gender
+        FROM
+            W_WILLOW
+                INNER JOIN M_USER ON W_WILLOW.receiver_no = M_USER.seq
+        WHERE
+            W_WILLOW.sender_no = #{userId}
+    </select>
+
+    <!--  willow 신청받은 목록 조회  -->
+    <select id="getReceivedWillowList" resultType="java.util.Map">
+        SELECT
+            W_WILLOW.sender_no AS sender_no,
+            W_WILLOW.receiver_no AS receiver_no,
+            W_WILLOW.state AS state,
+            M_USER.id AS sender_id,
+            M_USER.school AS sender_school,
+            M_USER.gender AS sender_gender
+        FROM
+            W_WILLOW
+                INNER JOIN M_USER ON W_WILLOW.sender_no = M_USER.seq
+        WHERE
+            W_WILLOW.receiver_no = #{userId}
+    </select>
+
+
+    <!--  willow 신청 수락  -->
+    <update id="acceptWillow">
+        UPDATE
+            W_WILLOW
+        SET
+            state = 'Y'
+        WHERE
+            receiver_no = #{userId};
+    </update>
+
 </mapper>
