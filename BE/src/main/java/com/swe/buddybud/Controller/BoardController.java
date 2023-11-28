@@ -58,7 +58,7 @@ public class BoardController {
             result = false;
         }
 
-        jsonObject.addProperty("inserBoardResult", result);
+        jsonObject.addProperty("insertBoardResult", result);
 
         return jsonObject.toString();
     }
