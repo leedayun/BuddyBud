@@ -17,7 +17,7 @@
     <!--  사용자 작성글 목록 조회  -->
     <select id="getUserPostsList" resultType="java.util.Map">
         SELECT
-            A.seq,
+            CAST(A.seq AS CHAR) AS post_no,
             A.title,
             A.content,
             CASE
@@ -28,19 +28,18 @@
                         B_POST_LIKE B
                     WHERE
                         B.post_no = A.seq
-                        AND B.user_no = #{user_no}
                     ) THEN 'Y'
                     ELSE 'N'
             END AS
                 like_yn,
-                (
-                    SELECT
-                        COUNT(*)
-                    FROM
-                        B_POST_LIKE B
-                    WHERE
-                        B.post_no = A.seq
-                ) AS like_num,
+            CAST((
+                SELECT
+                    COUNT(*)
+                FROM
+                    B_POST_LIKE B
+                WHERE
+                    B.post_no = A.seq
+            ) AS CHAR) AS like_num,
             DATE_FORMAT(A.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
             DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
@@ -53,12 +52,12 @@
     </select>
 
     <!--  사용자 스크랩 목록 조회  -->
-    <select id="getScrappedPosts" resultType="java.util.Map">
+    <select id="getUserScrapsList" resultType="java.util.Map">
         SELECT
-            A.seq AS post_no,
+            CAST(A.seq AS CHAR) AS post_no,
             A.title,
             A.content,
-            <if test='A.board_type == "Notice"'>
+            <if test='board_type == "Notice"'>
                 CASE
                     WHEN EXISTS (
                         SELECT
@@ -67,19 +66,18 @@
                             B_SCRAP C
                         WHERE
                             C.post_no = A.seq
-                            AND C.user_no = #{user_no}
                     ) THEN 'Y'
                     ELSE 'N'
                 END AS
                     scrap_yn,
-                (
+                CAST((
                     SELECT
                         COUNT(*)
                     FROM
                         B_SCRAP C
                     WHERE
                         C.post_no = A.seq
-                ) AS scrap_num,
+                ) AS CHAR) AS scrap_num,
             </if>
             CASE
                 WHEN EXISTS (
@@ -89,18 +87,17 @@
                         B_POST_LIKE B
                     WHERE
                         B.post_no = A.seq
-                      AND B.user_no = #{user_no}
                 ) THEN 'Y'
                 ELSE 'N'
                 END AS like_yn,
-            (
+            CAST((
                 SELECT
                     COUNT(*)
                 FROM
                     B_POST_LIKE B
                 WHERE
                     B.post_no = A.seq
-            ) AS like_num,
+            ) AS CHAR) AS like_num,
             DATE_FORMAT(A.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
             DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
@@ -111,6 +108,5 @@
         ORDER BY
             A.created_at DESC;
     </select>
-
 
 </mapper>

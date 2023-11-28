@@ -16,9 +16,9 @@ public class BoardController {
     BoardService boardService;
 
     @GetMapping("/board")
-    public String getBoardsList() {
+    public String getBoardsList(@RequestBody Map<String, String> fields) {
         JsonArray jsonArray = new JsonArray();
-        List<Map<String, String>> result = boardService.getBoardsList();
+        List<Map<String, String>> result = boardService.getBoardsList(fields);
 
         for (Map<String, String> board : result) {
             JsonObject jsonObject = new JsonObject();

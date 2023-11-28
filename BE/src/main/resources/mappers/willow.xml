@@ -4,4 +4,74 @@
 
 <mapper namespace="com.swe.buddybud.Mapper.WillowMapper">
 
+    <!--  willow 신청  -->
+    <insert id="sendWillow">
+        INSERT INTO
+            W_WILLOW (
+            sender_no,
+            receiver_no,
+            created_at,
+            state
+        )
+        VALUES (
+            #{sender_no},
+            #{receiver_no},
+            sysdate(),
+            'N'
+       )
+    </insert>
+
+    <!--  willow 신청한 목록 조회 -->
+    <select id="getSentWillowList" resultType="java.util.Map">
+        SELECT
+            CAST(W_WILLOW.receiver_no AS CHAR) AS receiver_no,
+            DATE_FORMAT(W_WILLOW.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
+            W_WILLOW.state AS state,
+            M_USER.id AS receiver_id,
+            M_USER.school AS receiver_school,
+            M_USER.gender AS receiver_gender
+        FROM
+            W_WILLOW
+                INNER JOIN M_USER ON W_WILLOW.receiver_no = M_USER.seq
+        WHERE
+            W_WILLOW.sender_no = #{userId}
+    </select>
+
+    <!--  willow 신청받은 목록 조회  -->
+    <select id="getReceivedWillowList" resultType="java.util.Map">
+        SELECT
+            CAST(W_WILLOW.sender_no AS CHAR) AS sender_no,
+            DATE_FORMAT(W_WILLOW.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
+            W_WILLOW.state AS state,
+            M_USER.id AS sender_id,
+            M_USER.school AS sender_school,
+            M_USER.gender AS sender_gender
+        FROM
+            W_WILLOW
+                INNER JOIN M_USER ON W_WILLOW.sender_no = M_USER.seq
+        WHERE
+            W_WILLOW.receiver_no = #{userId}
+    </select>
+
+
+    <!--  willow 신청 수락  -->
+    <update id="acceptWillow">
+        UPDATE
+            W_WILLOW
+        SET
+            state = 'Y'
+        WHERE
+            sender_no = #{sender_no} AND receiver_no = #{receiver_no}
+    </update>
+
+    <!--  willow 삭제  -->
+    <update id="deleteWillow">
+        UPDATE
+            W_WILLOW
+        SET
+            state = 'N'
+        WHERE
+            sender_no = #{sender_no} AND receiver_no = #{receiver_no}
+    </update>
+
 </mapper>

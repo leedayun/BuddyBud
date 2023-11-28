@@ -16,8 +16,8 @@ public class BoardServiceImpl implements BoardService {
     BoardMapper boardMapper;
 
     @Override
-    public List<Map<String, String>> getBoardsList() {
-        return boardMapper.getBoardsList();
+    public List<Map<String, String>> getBoardsList(Map<String, String> fields) {
+        return boardMapper.getBoardsList(fields);
     }
 
     @Override
