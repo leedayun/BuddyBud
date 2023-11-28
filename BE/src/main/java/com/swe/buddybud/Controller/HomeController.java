@@ -2,6 +2,7 @@ package com.swe.buddybud.Controller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.swe.buddybud.Service.BoardService;
 import com.swe.buddybud.Service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,18 +15,20 @@ public class HomeController {
 
     @Autowired
     HomeService homeService;
+    @Autowired
+    BoardService boardService;
 
     @PostMapping("/home")
     public String insertHome(@RequestBody Map<String, String> fields) {
         JsonObject jsonObject = new JsonObject();
-        String result = "fail";
+        boolean result = false;
 
         try {
-            homeService.insertHome(fields);
-            result = "succeed";
+            boardService.insertBoard(fields);
+            result = true;
         }
         catch (Exception e) {
-            result = "fail";
+            result = false;
         }
 
         jsonObject.addProperty("createHomeResult", result);
@@ -36,7 +39,7 @@ public class HomeController {
     @GetMapping("/home")
     public String getHomesList() {
         JsonArray jsonArray = new JsonArray();
-        List<Map<String, String>> result = homeService.getHomesList();
+        List<Map<String, String>> result = boardService.getBoardsList();
 
         for (Map<String, String> home : result) {
             JsonObject jsonObject = new JsonObject();
@@ -54,7 +57,7 @@ public class HomeController {
     public String getHome(@PathVariable Integer homeId) {
         JsonObject jsonObject = new JsonObject();
 
-        Map<String, String> result = homeService.getHome(homeId);
+        Map<String, String> result = boardService.getBoard(homeId);
 
         for (Map.Entry<String, String> entry : result.entrySet()) {
             jsonObject.addProperty(entry.getKey(), entry.getValue());
@@ -66,14 +69,16 @@ public class HomeController {
     @PutMapping("/home/{homeId}")
     public String updateHome(@PathVariable Integer homeId, @RequestBody Map<String, String> fields) {
         JsonObject jsonObject = new JsonObject();
-        String result = "fail";
+        boolean result = false;
+
+        fields.put("homeId", homeId.toString());
 
         try {
-            homeService.updateHome(homeId, fields);
-            result = "succeed";
+            boardService.updateBoard(fields);
+            result = true;
         }
         catch (Exception e) {
-            result = "fail";
+            result = false;
         }
 
         jsonObject.addProperty("updateHomeResult", result);
@@ -84,7 +89,14 @@ public class HomeController {
     @DeleteMapping("/home/{homeId}")
     public String deleteHome(@PathVariable Integer homeId) {
         JsonObject jsonObject = new JsonObject();
-        boolean result = homeService.deleteHome(homeId);
+        boolean result = false;
+
+        try {
+            boardService.deleteBoard(homeId);
+            result = true;
+        } catch (Exception e) {
+            result = false;
+        }
 
         jsonObject.addProperty("deleteHomeResult", result);
 

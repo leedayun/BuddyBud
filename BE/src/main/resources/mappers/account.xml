@@ -17,35 +17,100 @@
     <!--  사용자 작성글 목록 조회  -->
     <select id="getUserPostsList" resultType="java.util.Map">
         SELECT
-            title, content, url, DATE_FORMAT(created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
-            DATE_FORMAT(last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
+            A.seq,
+            A.title,
+            A.content,
+            CASE
+                WHEN EXISTS (
+                    SELECT
+                        1
+                    FROM
+                        B_POST_LIKE B
+                    WHERE
+                        B.post_no = A.seq
+                        AND B.user_no = #{user_no}
+                    ) THEN 'Y'
+                    ELSE 'N'
+            END AS
+                like_yn,
+                (
+                    SELECT
+                        COUNT(*)
+                    FROM
+                        B_POST_LIKE B
+                    WHERE
+                        B.post_no = A.seq
+                ) AS like_num,
+            DATE_FORMAT(A.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
+            DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
-            B_POST
+            B_POST A
         WHERE
-            user_no = #{userId}
+            A.user_no = #{userId}
+            and A.state = 'Y'
         ORDER BY
-            created_at DESC;
+            A.created_at DESC;
     </select>
 
     <!--  사용자 스크랩 목록 조회  -->
-    <select id="getUserScrapsList" resultType="java.util.Map">
+    <select id="getScrappedPosts" resultType="java.util.Map">
         SELECT
-            B_SCRAP.post_no AS post_no,
-            B_POST.title AS title,
-            B_POST.content AS content,
-            B_POST.url AS url,
-            DATE_FORMAT(B_POST.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
-            DATE_FORMAT(B_POST.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
+            A.seq AS post_no,
+            A.title,
+            A.content,
+            <if test='A.board_type == "Notice"'>
+                CASE
+                    WHEN EXISTS (
+                        SELECT
+                            1
+                        FROM
+                            B_SCRAP C
+                        WHERE
+                            C.post_no = A.seq
+                            AND C.user_no = #{user_no}
+                    ) THEN 'Y'
+                    ELSE 'N'
+                END AS
+                    scrap_yn,
+                (
+                    SELECT
+                        COUNT(*)
+                    FROM
+                        B_SCRAP C
+                    WHERE
+                        C.post_no = A.seq
+                ) AS scrap_num,
+            </if>
+            CASE
+                WHEN EXISTS (
+                    SELECT
+                        1
+                    FROM
+                        B_POST_LIKE B
+                    WHERE
+                        B.post_no = A.seq
+                      AND B.user_no = #{user_no}
+                ) THEN 'Y'
+                ELSE 'N'
+                END AS like_yn,
+            (
+                SELECT
+                    COUNT(*)
+                FROM
+                    B_POST_LIKE B
+                WHERE
+                    B.post_no = A.seq
+            ) AS like_num,
+            DATE_FORMAT(A.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
+            DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
-            B_SCRAP
-                INNER JOIN
-            B_POST ON B_SCRAP.post_no = B_POST.seq
-                INNER JOIN
-            M_USER ON B_SCRAP.user_no = M_USER.seq
+            B_POST A
+                INNER JOIN B_SCRAP B ON A.seq = B.post_no
         WHERE
-            M_USER.seq = #{userId}
+            B.user_no = #{user_no}
         ORDER BY
-            B_SCRAP.post_no DESC;
+            A.created_at DESC;
     </select>
+
 
 </mapper>
