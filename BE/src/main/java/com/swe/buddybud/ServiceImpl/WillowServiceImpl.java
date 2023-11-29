@@ -30,12 +30,33 @@ public class WillowServiceImpl implements WillowService {
     }
 
     @Override
+    public List<Map<String, Object>> getAllChat(Integer sender_no, Integer receiver_no) {
+        return willowMapper.getAllChat(sender_no, receiver_no);
+    }
+
+    @Override
+    public List<Map<String, Object>> getMyWillows(Integer user_no) {
+        return willowMapper.getMyWillows(user_no);
+    }
+
+    @Override
+    public void insertChat(Map<String, String> fields) {
+        insertChat(fields);
+    }
+
+    @Override
+    public void addChatRoom(Map<String, String> fields) {
+        willowMapper.addChatRoom(fields);
+    }
+
+    @Override
     public void acceptWillow(Map<String, String> fields) {
         willowMapper.acceptWillow(fields);
     }
 
     @Override
-    public void deleteWillow(Map<String, String> fields) {
-        willowMapper.deleteWillow(fields);
+    public boolean deleteWillowRequest(Map<String, String> fields) {
+        int rowsAffected = willowMapper.deleteWillowRequest(fields);
+        return rowsAffected > 0;
     }
 }

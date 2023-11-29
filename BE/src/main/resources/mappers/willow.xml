@@ -54,24 +54,78 @@
     </select>
 
 
-    <!--  willow 신청 수락  -->
+    <!-- 채팅 가져오기 -->
+    <select id="getAllChat" resultType="java.util.Map">
+        SELECT
+            W_CHAT_MESSAGE.sender_no as sender, W_CHAT_MESSAGE.content as content, W_CHAT_MESSAGE.created_at as time
+        FROM
+            W_CHAT_ROOM JOIN W_CHAT_MESSAGE ON W_CHAT_ROOM.seq = W_CHAT_MESSAGE.chat_room_no
+        WHERE
+            (W_CHAT_ROOM.sender_no = #{sender_no} AND W_CHAT_ROOM.receiver_no = #{receiver_no})
+        OR
+            (W_CHAT_ROOM.sender_no = #{receiver_no} AND W_CHAT_ROOM.receiver_no = #{sender_no})
+        ORDER BY
+            created_at DESC;
+    </select>
+
+    <!-- 내 모든 윌로우 가져오기 -->
+    <select id="getMyWillows" resultType="java.util.Map">
+        SELECT chat.sender_no AS sender_no, chat.receiver_no AS receiver_no, user.id AS uid
+        FROM W_CHAT_ROOM AS chat
+        JOIN M_USER AS user ON user.seq = chat.sender_no OR user.seq = chat.receiver_no
+        WHERE chat.sender_no = #{user_no} OR chat.receiver_no = #{user_no};
+    </select>
+
+    <!-- 채팅 보내기 -->
+    <insert id="insertChat">
+        INSERT INTO
+            W_CHAT_MESSAGE (
+                chat_room_no,
+                sender_no,
+                content,
+                created_at,
+            )
+            VALUES (
+                #{chat_room_no},
+                #{sender_no},
+                #{content},
+                str_to_date(#{created_at}, "%Y%m%d%H%i%S"),
+            )
+    </insert>
+
+    <!-- willow 승인시 채팅방 생성 -->
+    <insert id="addChatRoom">
+        INSERT INTO
+            W_CHAT_ROOM (
+                sender_no,
+                receiver_no,
+            )
+            VALUES (
+                #{sender_no},
+                #{receiver_no},
+            )
+    </insert>
+
+    <!-- willow 신청 승인 -->
     <update id="acceptWillow">
         UPDATE
             W_WILLOW
         SET
-            state = 'Y'
+            state = 'Y',
         WHERE
-            sender_no = #{sender_no} AND receiver_no = #{receiver_no}
+            (sender_no = #{sender_no} AND receiver_no = #{receiver_no})
+            OR
+            (sender_no = #{receiver_no} AND receiver_no = #{sender_no})
     </update>
+    
 
-    <!--  willow 삭제  -->
-    <update id="deleteWillow">
-        UPDATE
+    <!-- willow 신청 취소/거부 -->
+    <delete id="deleteWillowRequest">
+        DELETE FROM
             W_WILLOW
-        SET
-            state = 'N'
         WHERE
-            sender_no = #{sender_no} AND receiver_no = #{receiver_no}
-    </update>
+            sender_no = #{sender_no} AND
+            receiver_no = #{receiver_no};
+    </delete>
 
 </mapper>

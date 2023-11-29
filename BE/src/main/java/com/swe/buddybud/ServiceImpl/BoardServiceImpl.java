@@ -16,13 +16,13 @@ public class BoardServiceImpl implements BoardService {
     BoardMapper boardMapper;
 
     @Override
-    public List<Map<String, String>> getBoardsList(Map<String, String> fields) {
-        return boardMapper.getBoardsList(fields);
+    public List<Map<String, String>> getBoardsList(String boardType) {
+        return boardMapper.getBoardsList(boardType);
     }
 
     @Override
-    public Map<String, String> getBoard(Integer boardId) {
-        return boardMapper.getBoard(boardId);
+    public Map<String, String> getBoard(String boardType, Integer boardId) {
+        return boardMapper.getBoard(boardType, boardId);
     }
 
     @Override
@@ -38,5 +38,15 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void deleteBoard(Integer boardId) {
         boardMapper.deleteBoard(boardId);
+    }
+
+    @Override
+    public List<Map<String, String>> getComment(Integer boardId) {
+        return boardMapper.getComment(boardId);
+    }
+
+    @Override
+    public void insertComment(Map<String, String> fields) {
+        boardMapper.insertComment(fields);
     }
 }

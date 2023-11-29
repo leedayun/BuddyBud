@@ -7,7 +7,9 @@
     <!--  사용자 정보 조회  -->
     <select id="getUserInfo" resultType="java.util.Map">
         SELECT
-            *
+            id,
+            lang,
+            gender
         FROM
             M_USER
         WHERE
@@ -57,28 +59,26 @@
             CAST(A.seq AS CHAR) AS post_no,
             A.title,
             A.content,
-            <if test='board_type == "Notice"'>
-                CASE
-                    WHEN EXISTS (
-                        SELECT
-                            1
-                        FROM
-                            B_SCRAP C
-                        WHERE
-                            C.post_no = A.seq
-                    ) THEN 'Y'
-                    ELSE 'N'
-                END AS
-                    scrap_yn,
-                CAST((
+            CASE
+                WHEN EXISTS (
                     SELECT
-                        COUNT(*)
+                        1
                     FROM
                         B_SCRAP C
                     WHERE
                         C.post_no = A.seq
-                ) AS CHAR) AS scrap_num,
-            </if>
+                ) THEN 'Y'
+                ELSE 'N'
+            END AS
+                scrap_yn,
+            CAST((
+                SELECT
+                    COUNT(*)
+                FROM
+                    B_SCRAP C
+                WHERE
+                    C.post_no = A.seq
+            ) AS CHAR) AS scrap_num,
             CASE
                 WHEN EXISTS (
                     SELECT
@@ -108,5 +108,17 @@
         ORDER BY
             A.created_at DESC;
     </select>
+
+    <!--  사용자 정보 수정  -->
+    <update id="updateUserInfo">
+        UPDATE
+            M_USER
+        SET
+            id = #{id},
+            lang = #{lang},
+            gender = #{gender}
+        WHERE
+            seq = #{userId};
+    </update>
 
 </mapper>

@@ -4,9 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.swe.buddybud.Service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -62,5 +60,26 @@ public class AccountController {
         }
 
         return jsonArray.toString();
+    }
+
+    @PutMapping("/account/{userId}")
+    public String updateUserInfo(@PathVariable Integer userId, @RequestBody Map<String, String> fields) {
+        JsonObject jsonObject = new JsonObject();
+
+        boolean result = false;
+
+        fields.put("userId", userId.toString());
+
+        try {
+            accountService.updateUserInfo(fields);
+            result = true;
+        }
+        catch (Exception e) {
+            result = false;
+        }
+
+        jsonObject.addProperty("updateUserInfoResult", result);
+
+        return jsonObject.toString();
     }
 }

@@ -29,4 +29,9 @@ public class AccountServiceImpl implements AccountService {
     public List<Map<String, String>> getUserScrapsList(Integer userId) {
         return accountMapper.getUserScrapsList(userId);
     }
+
+    @Override
+    public void updateUserInfo(Map<String, String> fields) {
+        accountMapper.updateUserInfo(fields);
+    }
 }
