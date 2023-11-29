@@ -15,21 +15,21 @@ public class WillowController {
     @Autowired
     WillowService willowService;
 
-    @PostMapping("/willow")
-    public String sendWillow(@RequestBody Map<String, String> fields) {
-        JsonObject jsonObject = new JsonObject();
-        boolean result = false;
-
-        try {
-            willowService.sendWillow(fields);
-            result = true;
+    @GetMapping("/willow/{userId}")
+    public String getMyWillows(@PathVariable Integer userId){
+        JsonArray jsonArray = new JsonArray();
+        List<Map<String, Object>> willows = willowService.getMyWillows(userId);
+        for (Map<String, Object> willow: willows) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("uid",willow.get("id").toString());
+            jsonObject.addProperty("user_no",willow.get("seq").toString());
+            jsonObject.addProperty("chat_room_no",willow.get("chat_room_no").toString());
+            jsonObject.addProperty("latest_message",willow.get("latest_message").toString());
+            jsonObject.addProperty("created_at",willow.get("message_time").toString());
+            jsonArray.add(jsonObject);
         }
-        catch (Exception e) {
-            result = false;
-        }
 
-        jsonObject.addProperty("sendWillowRequestResult", result);
-        return jsonObject.toString();
+        return jsonArray.toString();
     }
 
     @GetMapping("/willow/{userId}/sent")
@@ -43,20 +43,6 @@ public class WillowController {
             for (Map.Entry<String, String> entry : willow.entrySet()) {
                 jsonObject.addProperty(entry.getKey(), entry.getValue());
             }
-            jsonArray.add(jsonObject);
-        }
-        return jsonArray.toString();
-    }
-
-    @GetMapping("/willow/getAllChat")
-    public String getAllChat(Integer sender_no, Integer receiver_no){
-        JsonArray jsonArray = new JsonArray();
-        List<Map<String, Object>> chatLog = willowService.getAllChat(sender_no, receiver_no);
-        for (Map<String, Object> chat: chatLog) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("sender_no",chat.get("sender").toString());
-            jsonObject.addProperty("content",chat.get("content").toString());
-            jsonObject.addProperty("time",chat.get("time").toString());
             jsonArray.add(jsonObject);
         }
         return jsonArray.toString();
@@ -78,17 +64,36 @@ public class WillowController {
         return jsonArray.toString();
     }
 
-    @GetMapping("/willow/{userId}")
-    public String getMyWillows(Integer user_no){
+    @GetMapping("/willow/getAllChat")
+    public String getAllChat(Integer sender_no, Integer receiver_no){
         JsonArray jsonArray = new JsonArray();
-        List<Map<String, Object>> willows = willowService.getMyWillows(user_no);
-        for (Map<String, Object> willow: willows) {
+        List<Map<String, Object>> chatLog = willowService.getAllChat(sender_no, receiver_no);
+        for (Map<String, Object> chat: chatLog) {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("uid",willow.get("uid").toString());
+            jsonObject.addProperty("sender_no",chat.get("sender").toString());
+            jsonObject.addProperty("content",chat.get("content").toString());
+            jsonObject.addProperty("created_at",chat.get("time").toString());
             jsonArray.add(jsonObject);
         }
-
         return jsonArray.toString();
+    }
+
+    @PostMapping("/willow")
+    public String sendWillow(@RequestBody Map<String, String> fields) {
+        JsonObject jsonObject = new JsonObject();
+        boolean result = false;
+
+        try {
+            int res = willowService.sendWillow(fields);
+            if(res>0)  result = true;
+            else result = false;
+        }
+        catch (Exception e) {
+            result = false;
+        }
+
+        jsonObject.addProperty("sendWillowRequestResult", result);
+        return jsonObject.toString();
     }
 
     @PostMapping("/willow/sendChat")
@@ -110,15 +115,7 @@ public class WillowController {
     @PostMapping("/willow/delete")
     public String deleteWillow(@RequestBody Map<String, String> fields) {
         JsonObject jsonObject = new JsonObject();
-        boolean result = false;
-
-        try {
-            willowService.deleteWillowRequest(fields);
-            result = true;
-        }
-        catch (Exception e) {
-            result = false;
-        }
+        boolean result = willowService.deleteWillowRequest(fields);
 
         jsonObject.addProperty("deleteWillowResult", result);
 
@@ -139,12 +136,16 @@ public class WillowController {
 
         if(result){
             try{
-                willowService.addChatRoom(fields);
-                result = true;
+                int updated = willowService.addChatRoom(fields);
+                if(updated>0)
+                    result = true;
+                else result = false;
             }catch(Exception e){
                 result = false;
             }
         }
+        if(!result)
+            willowService.cancelAcceptWillow(fields);
 
         jsonObject.addProperty("acceptWillowResult", result);
 

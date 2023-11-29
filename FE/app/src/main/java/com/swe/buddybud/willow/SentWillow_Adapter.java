@@ -18,8 +18,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SentWillow_Adapter extends RecyclerView.Adapter<SentWillow_Adapter.ViewHolder>{
     private ArrayList<SentWillowData> mData;
 
-    private String userid;
-
     public void setmData(ArrayList<SentWillowData> mData) {
         this.mData = mData;
     }
@@ -38,17 +36,19 @@ public class SentWillow_Adapter extends RecyclerView.Adapter<SentWillow_Adapter.
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //TODO : deleteWillow -> get sentWillow -> notifyDataSetChanged
+                    /*
                     int idx = getAdapterPosition();
                     mData.remove(idx);
                     notifyItemRemoved(idx);
+                     */
                 }
             });
         }
     }
 
-    SentWillow_Adapter(ArrayList<SentWillowData> list, String userid){
+    SentWillow_Adapter(ArrayList<SentWillowData> list){
         this.mData = list;
-        this.userid = userid;
     }
 
     @NonNull
