@@ -62,7 +62,7 @@
                     B_COMMENT BC
                 WHERE
                     BC.post_no = A.seq
-            ) AS CHAR) AS comment_count
+            ) AS CHAR) AS comment_num
         FROM
             B_POST A
         WHERE
