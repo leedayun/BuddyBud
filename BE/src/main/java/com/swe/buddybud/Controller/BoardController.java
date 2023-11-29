@@ -16,10 +16,10 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
-    @GetMapping("/board/all/{boardType}")
-    public String getBoardsList(@PathVariable String boardType) {
+    @GetMapping("/board/all/{boardType}/{userId}")
+    public String getBoardsList(@PathVariable String boardType, @PathVariable Integer userId) {
         JsonArray jsonArray = new JsonArray();
-        List<Map<String, String>> result = boardService.getBoardsList(boardType);
+        List<Map<String, String>> result = boardService.getBoardsList(boardType, userId);
 
         for (Map<String, String> board : result) {
             JsonObject jsonObject = new JsonObject();
@@ -33,11 +33,11 @@ public class BoardController {
         return jsonArray.toString();
     }
 
-    @GetMapping("/board/detail/{boardType}/{boardId}")
-    public String getBoard(@PathVariable String boardType, @PathVariable Integer boardId) {
+    @GetMapping("/board/detail/{boardType}/{userId}/{boardId}")
+    public String getBoard(@PathVariable String boardType, @PathVariable Integer userId, @PathVariable Integer boardId) {
         JsonObject jsonObject = new JsonObject();
 
-        Map<String, String> result = boardService.getBoard(boardType, boardId);
+        Map<String, String> result = boardService.getBoard(boardType, userId, boardId);
 
         if (boardType.equals("SNS")) {
             List<Map<String, String>> comments = boardService.getComment(boardId);
