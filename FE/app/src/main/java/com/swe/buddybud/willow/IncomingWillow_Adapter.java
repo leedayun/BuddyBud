@@ -43,6 +43,8 @@ public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_
             acceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //TODO : acceptWillow ,notifyDataSetChanged()
+                    /*
                     int idx = getAdapterPosition();
                     Context context = v.getContext();
                     Resources resources = context.getResources();
@@ -54,15 +56,21 @@ public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_
                         mData.remove(idx);
                         notifyItemRemoved(idx);
                     }
+
+                     */
                 }
             });
 
             rejectBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //TODO : deleteWillow -> get receivedWillow -> notifyDataSetChanged
+                    /*
                     int idx = getAdapterPosition();
                     mData.remove(idx);
                     notifyItemRemoved(idx);
+
+                     */
                 }
             });
         }

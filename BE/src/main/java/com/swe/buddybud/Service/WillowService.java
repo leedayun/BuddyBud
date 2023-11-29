@@ -14,11 +14,13 @@ public interface WillowService {
 
     void insertChat(Map<String, String> fields);
 
-    void addChatRoom(Map<String, String> fields);
+    int addChatRoom(Map<String, String> fields);
 
     void acceptWillow(Map<String, String> fields);
 
-    void sendWillow(Map<String, String> fields);
+    void cancelAcceptWillow(Map<String, String> fields);
+
+    int sendWillow(Map<String, String> fields);
 
     List<Map<String, String>> getSentWillowList(Integer userId);
 

@@ -37,6 +37,8 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
         TextView lastTimeText;
 
         Context context;
+        int opponentNo;
+        String opponentId;
 
         ViewHolder(View v) {
             super(v);
@@ -49,12 +51,8 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, WillowChatActivity.class);
-                    /*
-                    TODO: get global login data
-                    private SharedPreferences preferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
-                    intent.putExtra("USER_ID",preferences.getString("userid","user1"));
-                     */
-                    intent.putExtra("USER_ID","user1");
+                    intent.putExtra("OPPONENT_ID",opponentId);
+                    intent.putExtra("OPPONENT_NO",opponentNo);
                     context.startActivity(intent);
                 }
             });
@@ -87,6 +85,8 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
             holder.lastTimeText.setText("");
             holder.lastMsgText.setText("");
         }
+        holder.opponentId = mData.get(position).getUserId();
+        holder.opponentNo = mData.get(position).getUserNo();
 
     }
 
