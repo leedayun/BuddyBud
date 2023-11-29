@@ -9,14 +9,18 @@ import java.util.Map;
 @Service
 public interface BoardService {
 
-    List<Map<String, String>> getBoardsList(Map<String, String> fields);
+    List<Map<String, String>> getBoardsList(String boardType);
 
-    Map<String, String> getBoard(Integer boardId);
+    Map<String, String> getBoard(String boardType, Integer boardId);
 
     void insertBoard(Map<String, String> fields);
 
     void updateBoard(Map<String, String> fields);
 
     void deleteBoard(Integer boardId);
+
+    List<Map<String, String>> getComment(Integer boardId);
+
+    void insertComment(Map<String, String> fields);
 }
 

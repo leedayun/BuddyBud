@@ -1,5 +1,6 @@
 package com.swe.buddybud.Controller;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.swe.buddybud.Service.BoardService;
@@ -15,10 +16,10 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
-    @GetMapping("/board")
-    public String getBoardsList(@RequestBody Map<String, String> fields) {
+    @GetMapping("/board/all/{boardType}")
+    public String getBoardsList(@PathVariable String boardType) {
         JsonArray jsonArray = new JsonArray();
-        List<Map<String, String>> result = boardService.getBoardsList(fields);
+        List<Map<String, String>> result = boardService.getBoardsList(boardType);
 
         for (Map<String, String> board : result) {
             JsonObject jsonObject = new JsonObject();
@@ -32,11 +33,17 @@ public class BoardController {
         return jsonArray.toString();
     }
 
-    @GetMapping("/board/{boardId}")
-    public String getBoard(@PathVariable Integer boardId) {
+    @GetMapping("/board/detail/{boardType}/{boardId}")
+    public String getBoard(@PathVariable String boardType, @PathVariable Integer boardId) {
         JsonObject jsonObject = new JsonObject();
 
-        Map<String, String> result = boardService.getBoard(boardId);
+        Map<String, String> result = boardService.getBoard(boardType, boardId);
+
+        if (boardType.equals("SNS")) {
+            List<Map<String, String>> comments = boardService.getComment(boardId);
+
+            jsonObject.add("comments", new Gson().toJsonTree(comments));
+        }
 
         for (Map.Entry<String, String> entry : result.entrySet()) {
             jsonObject.addProperty(entry.getKey(), entry.getValue());
@@ -59,6 +66,24 @@ public class BoardController {
         }
 
         jsonObject.addProperty("insertBoardResult", result);
+
+        return jsonObject.toString();
+    }
+
+    @PostMapping("/board/comment")
+    public String insertComment(@RequestBody Map<String, String> fields) {
+        JsonObject jsonObject = new JsonObject();
+        boolean result = false;
+
+        try {
+            boardService.insertComment(fields);
+            result = true;
+        }
+        catch (Exception e) {
+            result = false;
+        }
+
+        jsonObject.addProperty("insertCommentResult", result);
 
         return jsonObject.toString();
     }

@@ -13,4 +13,6 @@ public interface AccountService {
     List<Map<String, String>> getUserPostsList(Integer userId);
 
     List<Map<String, String>> getUserScrapsList(Integer userId);
+
+    void updateUserInfo(Map<String, String> fields);
 }
