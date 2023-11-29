@@ -20,6 +20,7 @@
                             B_SCRAP C
                         WHERE
                             C.post_no = A.seq
+                            AND C.user_no = #{user_no}
                     ) THEN 'Y'
                     ELSE 'N'
                 END AS
@@ -41,6 +42,7 @@
                         B_POST_LIKE B
                     WHERE
                         B.post_no = A.seq
+                        AND B.user_no = #{user_no}
                     ) THEN 'Y'
                     ELSE 'N'
             END AS
@@ -53,8 +55,19 @@
                 WHERE
                     B.post_no = A.seq
             ) AS CHAR) AS like_num,
-            DATE_FORMAT(A.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
-            DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at,
+            CASE
+                WHEN EXISTS (
+                    SELECT
+                        1
+                    FROM
+                        B_COMMENT BC
+                    WHERE
+                        BC.post_no = A.seq
+                        AND BC.user_no = #{user_no}
+                    ) THEN 'Y'
+                    ELSE 'N'
+            END AS
+                comment_yn,
             CAST((
                 SELECT
                     COUNT(*)
@@ -62,11 +75,13 @@
                     B_COMMENT BC
                 WHERE
                     BC.post_no = A.seq
-            ) AS CHAR) AS comment_count
+            ) AS CHAR) AS comment_num,
+            DATE_FORMAT(A.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
+            DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
             B_POST A
         WHERE
-            A.board_type = #{boardType}
+            A.board_type = #{board_type}
             and A.state = 'Y'
         ORDER BY
             A.created_at DESC;
@@ -77,7 +92,7 @@
         SELECT
             A.title,
             A.content,
-            <if test='boardType == "Notice"'>
+            <if test='board_type == "Notice"'>
                 A.url,
                 CASE
                     WHEN EXISTS (
@@ -86,7 +101,8 @@
                         FROM
                             B_SCRAP C
                         WHERE
-                            C.post_no = #{boardId}
+                            C.post_no = #{post_no}
+                            AND C.user_no = #{user_no}
                         ) THEN 'Y'
                         ELSE 'N'
                 END AS
@@ -97,7 +113,7 @@
                     FROM
                         B_SCRAP C
                     WHERE
-                        C.post_no = #{boardId}
+                        C.post_no = #{post_no}
                 ) AS CHAR) AS scrap_num,
             </if>
             CASE
@@ -107,7 +123,8 @@
                     FROM
                         B_POST_LIKE B
                     WHERE
-                        B.post_no = #{boardId}
+                        B.post_no = #{post_no}
+                        AND B.user_no = #{user_no}
                 ) THEN 'Y'
                 ELSE 'N'
             END AS
@@ -118,16 +135,37 @@
                 FROM
                     B_POST_LIKE B
                 WHERE
-                    B.post_no = #{boardId}
+                    B.post_no = #{post_no}
             ) AS CHAR) AS like_num,
+            CASE
+                WHEN EXISTS (
+                    SELECT
+                        1
+                    FROM
+                        B_COMMENT BC
+                    WHERE
+                        BC.post_no = A.seq
+                        AND BC.user_no = #{user_no}
+                ) THEN 'Y'
+                ELSE 'N'
+            END AS
+                comment_yn,
+            CAST((
+                SELECT
+                    COUNT(*)
+                FROM
+                    B_COMMENT BC
+                WHERE
+                    BC.post_no = A.seq
+            ) AS CHAR) AS comment_num,
             DATE_FORMAT(A.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
             DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
             B_POST A
         WHERE
-            A.seq = #{boardId}
+            A.seq = #{post_no}
             AND
-            A.board_type = #{boardType}
+            A.board_type = #{board_type}
     </select>
 
     <!--  게시글 작성  -->
