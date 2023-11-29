@@ -25,36 +25,34 @@
         android:id="@+id/profile_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/profile"
+        android:src="@drawable/cat"
         app:layout_constraintTop_toBottomOf="@id/go_back_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         android:layout_marginTop="24dp" />
 
-    <!-- User Name Edit -->
-    <EditText
-        android:id="@+id/user_name_edit"
+    <TextView
+        android:id="@+id/user_id_edit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/profile_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:hint="miliili"
-        android:inputType="text"
         android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="40dp"/>
+        android:layout_marginHorizontal="40dp"
+        android:text="user id here"/>
 
     <!-- Language Spinner -->
     <Spinner
         android:id="@+id/language_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/user_name_edit"
+        app:layout_constraintTop_toBottomOf="@id/user_id_edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:entries="@array/languages_array"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="40dp"/>
 
     <!-- Upload Image Button -->
