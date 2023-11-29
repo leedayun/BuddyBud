@@ -54,7 +54,15 @@
                     B.post_no = A.seq
             ) AS CHAR) AS like_num,
             DATE_FORMAT(A.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
-            DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
+            DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at,
+            CAST((
+                SELECT
+                    COUNT(*)
+                FROM
+                    B_COMMENT BC
+                WHERE
+                    BC.post_no = A.seq
+            ) AS CHAR) AS comment_count
         FROM
             B_POST A
         WHERE
