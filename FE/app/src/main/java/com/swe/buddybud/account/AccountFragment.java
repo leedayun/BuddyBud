@@ -3,20 +3,28 @@ package com.swe.buddybud.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.swe.buddybud.R;
-import com.swe.buddybud.account.PostScrapAdapter;
+import com.swe.buddybud.common.RetrofitClient;
+import com.swe.buddybud.user.LoginData;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccountFragment extends Fragment {
 
@@ -30,18 +38,22 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
+        String userid = LoginData.getLoginUserId();
+        TextView user_id_textview = view.findViewById(R.id.user_name);
+        user_id_textview.setText(userid);
+
         postsRecyclerView = view.findViewById(R.id.posts_recycler_view);
         scrapsRecyclerView = view.findViewById(R.id.scraps_recycler_view);
 
         // toggle button
-        Button myPostsButton = view.findViewById(R.id.my_posts_button);
-        Button myScrapsButton = view.findViewById(R.id.my_scraps_button);
+        ImageButton myPostsButton = view.findViewById(R.id.my_posts_button);
+        ImageButton myScrapsButton = view.findViewById(R.id.my_scraps_button);
 
-        // recycle view 
-        setupRecyclerView(postsRecyclerView, loadPosts());
-        setupRecyclerView(scrapsRecyclerView, loadScraps()); // Initially empty
+        // load data from server api
+        loadPosts(userid);
+        loadScraps(userid);
 
-        // 유저 프로파일 이미지 설정
+        // set user's profile image
         ImageView profileImageView = view.findViewById(R.id.profile_image);
 
         // 유저 프로파일 이미지 클릭하면 계정 설정 창으로 넘어가게 만드는 클릭 리스너
@@ -80,24 +92,120 @@ public class AccountFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private List<PostScrapData> loadPosts() {
-        List<PostScrapData> posts = new ArrayList<>();
+    private void loadPosts(String userid) {
+        AccountApiService accountApiService = RetrofitClient.getService(AccountApiService.class);
 
-        String userid = com.swe.buddybud.user.LoginData.getLoginUserId();
+        Call<AccountApiData> call = accountApiService.getUserPosts(userid);
+        call.enqueue(new Callback<AccountApiData>() {
+            @Override
+            public void onResponse(Call<AccountApiData> call, Response<AccountApiData> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<PostData> posts = response.body().getPosts();
+                    if (posts != null) {
+                        List<PostScrapData> postScrapDataList = convertPostDataToPostScrapData(posts, userid);
+                        setupRecyclerView(postsRecyclerView, postScrapDataList);
+                    }
+                } else {
+                    // Handle failure
+                    Log.d("API Response", "no response");
+                    if (getActivity() != null) {
+                        Toast.makeText(getActivity(), "No Posts", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
 
-        // Add test data with the userid from LoginData
-//        posts.add(new PostScrapData(userid, "2023-11-01 10:00", "Post Title 1", "Content of the first post"));
-//        posts.add(new PostScrapData(userid, "2023-11-01 11:30", "Post Title 2", "Content of the second post"));
-//        posts.add(new PostScrapData(userid, "2023-11-01 12:45", "Post Title 3", "Content of the third post"));
-        return posts;
+            @Override
+            public void onFailure(Call<AccountApiData> call, Throwable t) {
+                // Handle network error
+                Log.d("API Failure", t.getMessage());
+                if (getActivity() != null) {
+                    Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    private List<PostScrapData> loadScraps() {
-        List<PostScrapData> scraps = new ArrayList<>();
-        // Add test data
-//        scraps.add(new PostScrapData("User1", "2023-11-01 10:00", "Scrap Title 1", "Content of the first scrap"));
-//        scraps.add(new PostScrapData("User2", "2023-11-01 11:30", "Scrap Title 2", "Content of the second scrap"));
-//        scraps.add(new PostScrapData("User3", "2023-11-01 12:45", "Scrap Title 3", "Content of the third scrap"));
-        return scraps;
+
+    private void loadScraps(String userid) {
+        AccountApiService accountApiService = RetrofitClient.getService(AccountApiService.class);
+
+        Call<AccountApiData> call = accountApiService.getUserScraps(userid);
+        call.enqueue(new Callback<AccountApiData>() {
+            @Override
+            public void onResponse(Call<AccountApiData> call, Response<AccountApiData> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<ScrapData> scraps = response.body().getScraps();
+                    if (scraps != null) {
+                        List<PostScrapData> scrapDataList = convertScrapDataToPostScrapData(scraps, userid);
+                        setupRecyclerView(scrapsRecyclerView, scrapDataList);
+                    }
+                } else {
+                    Log.d("API Response", "no response");
+                    if (getActivity() != null) {
+                        Toast.makeText(getActivity(), "No Scraps", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AccountApiData> call, Throwable t) {
+                Log.d("API Failure", t.getMessage());
+                if (getActivity() != null) {
+                    Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
+    private List<PostScrapData> convertPostDataToPostScrapData(List<PostData> postDataList, String userid) {
+        List<PostScrapData> postScrapDataList = new ArrayList<>();
+
+        for (PostData postData : postDataList) {
+            int postId = Integer.parseInt(postData.getPostNo()); // Assuming post_no can be parsed as an integer.
+            int thumbsUpNumber = Integer.parseInt(postData.getLikeNum()); // Assuming like_num is a number.
+
+            // Create a PostScrapData object using the values from postData.
+            PostScrapData postScrapData = new PostScrapData(
+                    postId, // id
+                    0, // profileImageId, assuming you don't have this info in the API response
+                    userid, // userid, assuming you will get it from somewhere else or set a default value
+                    postData.getCreatedAt(), // date
+                    postData.getTitle(), // title
+                    postData.getContent(), // content
+                    thumbsUpNumber, // thumbsUpNumber
+                    0, // commentNumber, assuming you don't have this info in the API response
+                    null // imageUris, assuming you don't have this info in the API response
+            );
+
+            postScrapDataList.add(postScrapData);
+        }
+
+        return postScrapDataList;
+    }
+
+    private List<PostScrapData> convertScrapDataToPostScrapData(List<ScrapData> scrapDataList, String userid) {
+        List<PostScrapData> postScrapDataList = new ArrayList<>();
+
+        for (ScrapData scrapData : scrapDataList) {
+            int scrapId = Integer.parseInt(scrapData.getScrapNum()); // Convert scrap number to int.
+            int thumbsUpNumber = Integer.parseInt(scrapData.getLikeNum()); // Convert like number to int.
+
+            PostScrapData postScrapData = new PostScrapData(
+                    scrapId, // id
+                    0, // profileImageId, assuming you don't have this info in the API response
+                    userid, // userid, assuming you will get it from somewhere else or set a default value
+                    scrapData.getCreatedAt(), // date
+                    scrapData.getTitle(), // title
+                    scrapData.getContent(), // content
+                    thumbsUpNumber, // thumbsUpNumber
+                    0, // commentNumber, assuming you don't have this info in the API response
+                    null // imageUris, assuming you don't have this info in the API response
+            );
+
+            postScrapDataList.add(postScrapData);
+        }
+
+        return postScrapDataList;
     }
 }
