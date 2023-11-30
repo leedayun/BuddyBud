@@ -3,11 +3,13 @@ package com.swe.buddybud.willow;
 import androidx.annotation.NonNull;
 
 public class SentWillowData {
-    SentWillowData(String userId, int imgResId){
+    SentWillowData(String userId, int userNo, int imgResId){
         this.userId = userId;
+        this.userNo = userNo;
         this.imgResId = imgResId;
     }
     private String userId;
+    private int userNo;
     private int imgResId;
 
     public String getUserId() {
@@ -16,6 +18,10 @@ public class SentWillowData {
 
     public int getImgResId() {
         return imgResId;
+    }
+
+    public int getUserNo() {
+        return userNo;
     }
 
     @NonNull

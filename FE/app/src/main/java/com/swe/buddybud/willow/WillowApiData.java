@@ -7,6 +7,9 @@ public class WillowApiData {
     @SerializedName("sender_no")
     private Integer sender_no;
 
+    @SerializedName("receiver_no")
+    private Integer receiver_no;
+
     @SerializedName("chat_room_no")
     private Integer chat_room_no;
 
@@ -75,6 +78,10 @@ public class WillowApiData {
 
     public String getReceiver_id() {
         return receiver_id;
+    }
+
+    public Integer getReceiver_no() {
+        return receiver_no;
     }
 
     public String getCreated_at() {
