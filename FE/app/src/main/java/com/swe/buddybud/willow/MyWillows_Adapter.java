@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.swe.buddybud.R;
 
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -37,6 +38,8 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
         TextView lastTimeText;
 
         Context context;
+        int opponentNo;
+        String opponentId;
 
         ViewHolder(View v) {
             super(v);
@@ -49,12 +52,8 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, WillowChatActivity.class);
-                    /*
-                    TODO: get global login data
-                    private SharedPreferences preferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
-                    intent.putExtra("USER_ID",preferences.getString("userid","user1"));
-                     */
-                    intent.putExtra("USER_ID","user1");
+                    intent.putExtra("OPPONENT_ID",opponentId);
+                    intent.putExtra("OPPONENT_NO",opponentNo);
                     context.startActivity(intent);
                 }
             });
@@ -80,13 +79,18 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
         //MyWillowsData data = mData.get(position);
         holder.nameText.setText(mData.get(position).getUserId());
         holder.profileImage.setImageResource(mData.get(position).getImgResId());
-        if(mData.get(position).getLastMsgTime()!=null){
+        try{
             holder.lastTimeText.setText(mData.get(position).getLastMsgTime().format(DateTimeFormatter.ofPattern("yy/MM-dd HH:mm")));
             holder.lastMsgText.setText(mData.get(position).getLastMsg());
-        } else {
+        } catch(DateTimeParseException e) {
+            holder.lastTimeText.setText("");
+            holder.lastMsgText.setText("");
+        } catch(NullPointerException e ){
             holder.lastTimeText.setText("");
             holder.lastMsgText.setText("");
         }
+        holder.opponentId = mData.get(position).getUserId();
+        holder.opponentNo = mData.get(position).getUserNo();
 
     }
 
