@@ -41,12 +41,42 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Map<String, String>> getComment(Integer boardId) {
-        return boardMapper.getComment(boardId);
+    public List<Map<String, String>> getComment(Integer boardId, Integer userId) {
+        return boardMapper.getComment(boardId, userId);
     }
 
     @Override
     public void insertComment(Map<String, String> fields) {
         boardMapper.insertComment(fields);
+    }
+
+    @Override
+    public void deleteBoardLike(Integer boardId, Integer userId) {
+        boardMapper.deleteBoardLike(boardId, userId);
+    }
+
+    @Override
+    public void insertBoardLike(Integer boardId, Integer userId) {
+        boardMapper.insertBoardLike(boardId, userId);
+    }
+
+    @Override
+    public void deleteCommentLike(String tableType, Integer commentId, Integer userId) {
+        boardMapper.deleteCommentLike(tableType, commentId, userId);
+    }
+
+    @Override
+    public void insertCommentLike(String tableType, Integer commentId, Integer userId) {
+        boardMapper.insertCommentLike(tableType, commentId, userId);
+    }
+
+    @Override
+    public void deleteScrap(Integer boardId, Integer userId) {
+        boardMapper.deleteScrap(boardId, userId);
+    }
+
+    @Override
+    public void insertScrap(Integer boardId, Integer userId) {
+        boardMapper.insertScrap(boardId, userId);
     }
 }

@@ -10,6 +10,7 @@
             CAST(A.seq AS CHAR) AS post_no,
             A.title,
             A.content,
+            M_USER.id AS post_user_id,
             <if test='boardType == "Notice"'>
                 A.url,
                 CASE
@@ -80,6 +81,7 @@
             DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
             B_POST A
+            INNER JOIN M_USER ON A.user_no = M_USER.seq
         WHERE
             A.board_type = #{boardType}
             and A.state = 'Y'
@@ -196,12 +198,14 @@
             content,
             post_no,
             user_no,
+            parent_comment_no,
             created_at
         )
         VALUES (
                    #{content},
                    #{post_no},
                    #{user_no},
+                   #{parent_comment_no},
                    sysdate()
                )
     </insert>
@@ -231,16 +235,160 @@
     <!--  댓글 조회  -->
     <select id="getComment" resultType="java.util.Map">
         SELECT
-            B_COMMENT.seq AS comment_no,
-            B_COMMENT.content AS content,
-            DATE_FORMAT(B_COMMENT.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
-            M_USER.id AS user_id
+            B.seq AS comment_no,
+            B.content AS content,
+            DATE_FORMAT(B.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
+            M_USER.id AS user_id,
+            CASE
+                WHEN EXISTS (
+                    SELECT
+                        1
+                    FROM
+                        B_COMMENT_LIKE CL
+                    WHERE
+                        CL.comment_no = B.seq
+                        AND CL.user_no = #{userId}
+                ) THEN 'Y'
+                ELSE 'N'
+            END AS
+                  comment_like_yn,
+            CAST((
+                SELECT
+                    COUNT(*)
+                FROM
+                    B_COMMENT_LIKE CL
+                WHERE
+                    CL.comment_no = B.seq
+            ) AS CHAR) AS comment_like_num,
+            CASE
+                WHEN EXISTS (
+                    SELECT
+                        1
+                    FROM
+                        B_COMMENT_HATE CH
+                    WHERE
+                        CH.comment_no = B.seq
+                      AND CH.user_no = #{userId}
+                ) THEN 'Y'
+                ELSE 'N'
+            END AS
+                  comment_hate_yn,
+            CAST((
+                SELECT
+                    COUNT(*)
+                FROM
+                    B_COMMENT_HATE CH
+                WHERE
+                    CH.comment_no = B.seq
+            ) AS CHAR) AS comment_hate_num,
+            (
+                SELECT
+                    M_USER.id
+                FROM
+                    B_COMMENT BC
+                        JOIN M_USER ON BC.user_no = M_USER.seq
+                WHERE
+                    BC.seq = B.parent_comment_no
+            ) AS parent_comment_user_id
         FROM
-            B_COMMENT
-                JOIN
-            M_USER ON B_COMMENT.user_no = M_USER.seq
+            B_COMMENT B
+            JOIN M_USER ON B.user_no = M_USER.seq
         WHERE
-            B_COMMENT.post_no = #{boardId}
+            B.post_no = #{boardId}
+        ORDER BY
+            B.created_at;
     </select>
+    
+    <!--  게시판 좋아요 삭제  -->
+    <delete id="deleteBoardLike">
+        DELETE
+        FROM
+            B_POST_LIKE
+        WHERE
+            post_no = #{boardId}
+            AND user_no = #{userId}
+    </delete>
+
+    <!--  게시판 좋아요 추가  -->
+    <insert id="insertBoardLike">
+        INSERT INTO
+            B_POST_LIKE (
+            post_no,
+            user_no
+        )
+        VALUES (
+                #{boardId},
+                #{userId}
+       )
+    </insert>
+
+    <!--  댓글 좋아요/싫어요 삭제  -->
+    <delete id="deleteCommentLike">
+        <if test='tableType == "Like"'>
+            DELETE
+            FROM
+                B_COMMENT_LIKE
+            WHERE
+                comment_no = #{commentId}
+                AND user_no = #{userId}
+        </if>
+        <if test='tableType == "Hate"'>
+            DELETE
+            FROM
+                B_COMMENT_HATE
+            WHERE
+                comment_no = #{commentId}
+                AND user_no = #{userId}
+        </if>
+    </delete>
+
+    <!--  댓글 좋아요/싫어요 추가  -->
+    <insert id="insertCommentLike">
+        <if test='tableType == "Like"'>
+            INSERT INTO
+                B_COMMENT_LIKE (
+                comment_no,
+                user_no
+            )
+            VALUES (
+                #{commentId},
+                #{userId}
+            )
+        </if>
+        <if test='tableType == "Hate"'>
+            INSERT INTO
+                B_COMMENT_HATE (
+                comment_no,
+                user_no
+            )
+            VALUES (
+                #{commentId},
+                #{userId}
+            )
+        </if>
+    </insert>
+
+    <!--  스크랩 삭제  -->
+    <delete id="deleteScrap">
+        DELETE
+        FROM
+            B_SCRAP
+        WHERE
+            post_no = #{boardId}
+          AND user_no = #{userId}
+    </delete>
+
+    <!--  스크랩 추가  -->
+    <insert id="insertScrap">
+        INSERT INTO
+            B_SCRAP (
+            post_no,
+            user_no
+        )
+        VALUES (
+                   #{boardId},
+                   #{userId}
+               )
+    </insert>
 
 </mapper>

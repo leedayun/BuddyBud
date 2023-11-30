@@ -40,7 +40,7 @@ public class BoardController {
         Map<String, String> result = boardService.getBoard(boardType, userId, boardId);
 
         if (boardType.equals("SNS")) {
-            List<Map<String, String>> comments = boardService.getComment(boardId);
+            List<Map<String, String>> comments = boardService.getComment(boardId, userId);
 
             jsonObject.add("comments", new Gson().toJsonTree(comments));
         }
@@ -105,6 +105,104 @@ public class BoardController {
         }
 
         jsonObject.addProperty("updateBoardResult", result);
+
+        return jsonObject.toString();
+    }
+
+    @PutMapping("/board/boardLike/{likeYN}/{userId}/{boardId}")
+    public String updateBoardLike(@PathVariable String likeYN, @PathVariable Integer userId, @PathVariable Integer boardId) {
+        JsonObject jsonObject = new JsonObject();
+
+        String result = "failed";
+
+        try {
+            if (likeYN.equals("Y")) {
+                boardService.deleteBoardLike(boardId, userId);
+                result = "delete success";
+            } else if (likeYN.equals("N")) {
+                boardService.insertBoardLike(boardId, userId);
+                result = "insert success";
+            }
+        }
+        catch (Exception e) {
+            result = "request failed";
+        }
+
+        jsonObject.addProperty("updateBoardLikeResult", result);
+
+        return jsonObject.toString();
+    }
+
+    @PutMapping("/board/commentLike/{likeYN}/{userId}/{commentId}")
+    public String updateCommentLike(@PathVariable String likeYN, @PathVariable Integer commentId, @PathVariable Integer userId) {
+        JsonObject jsonObject = new JsonObject();
+
+        String result = "failed";
+        String tableType = "Like";
+
+        try {
+            if (likeYN.equals("Y")) {
+                boardService.deleteCommentLike(tableType, commentId, userId);
+                result = "delete success";
+            } else if (likeYN.equals("N")) {
+                boardService.insertCommentLike(tableType, commentId, userId);
+                result = "insert success";
+            }
+        }
+        catch (Exception e) {
+            result = "request failed";
+        }
+
+        jsonObject.addProperty("updateCommentLikeResult", result);
+
+        return jsonObject.toString();
+    }
+
+    @PutMapping("/board/commentHate/{hateYN}/{userId}/{commentId}")
+    public String updateCommentHate(@PathVariable String hateYN, @PathVariable Integer commentId, @PathVariable Integer userId) {
+        JsonObject jsonObject = new JsonObject();
+
+        String result = "failed";
+        String tableType = "Hate";
+
+        try {
+            if (hateYN.equals("Y")) {
+                boardService.deleteCommentLike(tableType, commentId, userId);
+                result = "delete success";
+            } else if (hateYN.equals("N")) {
+                boardService.insertCommentLike(tableType, commentId, userId);
+                result = "insert success";
+            }
+        }
+        catch (Exception e) {
+            result = "request failed";
+        }
+
+        jsonObject.addProperty("updateCommentHateResult", result);
+
+        return jsonObject.toString();
+    }
+
+    @PutMapping("/board/scrap/{scrapYN}/{userId}/{boardId}")
+    public String updateScrap(@PathVariable String scrapYN, @PathVariable Integer userId, @PathVariable Integer boardId) {
+        JsonObject jsonObject = new JsonObject();
+
+        String result = "failed";
+
+        try {
+            if (scrapYN.equals("Y")) {
+                boardService.deleteScrap(boardId, userId);
+                result = "delete success";
+            } else if (scrapYN.equals("N")) {
+                boardService.insertScrap(boardId, userId);
+                result = "insert success";
+            }
+        }
+        catch (Exception e) {
+            result = "request failed";
+        }
+
+        jsonObject.addProperty("updateScrapResult", result);
 
         return jsonObject.toString();
     }
