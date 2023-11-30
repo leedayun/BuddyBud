@@ -12,30 +12,24 @@ public class FeedData implements Serializable {
     private String date;
     private String title;
     private String content;
-    private String translateTitle;
-    private String translateContent;
     private int thumbsUpNumber;
     private int commentNumber;
     private boolean isThumbsUpClicked;
     private boolean isCommentWritten;
     private boolean isTranslated;
-    private List<CommentData> comments;
     private List<Uri> imageUris;
-    public FeedData(int id, int profileImageId, String nickname, String date, String title, String content, String translateTitle, String translateContent,
-                    int thumbsUpNumber, int commentNumber, List<CommentData> comments, List<Uri> imageUris) {
+    public FeedData(int id, int profileImageId, String nickname, String date, String title, String content,
+                    int thumbsUpNumber, int commentNumber, List<Uri> imageUris) {
         this.id = id;
         this.profileImageId = profileImageId;
         this.nickname = nickname;
         this.date = date;
         this.title = title;
         this.content = content;
-        this.translateTitle = translateTitle;
-        this.translateContent = translateContent;
         this.thumbsUpNumber = thumbsUpNumber;
         this.commentNumber = commentNumber;
         this.isThumbsUpClicked = false;
         this.isTranslated = false;
-        this.comments = comments;
         this.imageUris = imageUris;
     }
     public int getId() {
@@ -82,22 +76,6 @@ public class FeedData implements Serializable {
         this.content = content;
     }
 
-    public String getTranslateTitle() {
-        return translateTitle;
-    }
-
-    public void setTranslateTitle(String translateTitle) {
-        this.translateTitle = translateTitle;
-    }
-
-    public String getTranslateContent() {
-        return translateContent;
-    }
-
-    public void setTranslateContent(String translateContent) {
-        this.translateContent = translateContent;
-    }
-
     public int getThumbsUpNumber() {
         return thumbsUpNumber;
     }
@@ -128,14 +106,6 @@ public class FeedData implements Serializable {
 
     public void setTranslated(boolean translated) {
         isTranslated = translated;
-    }
-
-    public List<CommentData> getComments() {
-        return comments;
-    }
-
-    public void addComments(CommentData comment) {
-        comments.add(comment);
     }
 
     public void setId(int id) {

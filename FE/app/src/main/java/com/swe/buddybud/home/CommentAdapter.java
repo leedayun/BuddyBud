@@ -2,6 +2,7 @@ package com.swe.buddybud.home;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         // replyToNickname이 null이 아니면 대댓글로 간주
         CommentData item = commentDataList.get(position);
-        if (item.getReplyToNickname() != null) {
+        if (item.getReplyToCommentId() != -1) {
             return TYPE_REPLY;
         } else {
             return TYPE_COMMENT;
@@ -160,7 +161,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
 
-            // 대댓글 번역 아이콘을 눌렀을 경우
+            // 댓글 번역 아이콘을 눌렀을 경우
             commentViewHolder.imageTranslation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -169,7 +170,19 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     data.setTranslated(!data.isTranslated());
 
                     if (data.isTranslated()) {
-                        commentViewHolder.content.setText(data.getTranslateContent());
+                        Translator translator = new Translator();
+                        translator.detectAndTranslate(data.getContent(), new Translator.TranslationCallback() {
+                            @Override
+                            public void onTranslationDone(String translatedText) {
+                                // 번역된 텍스트 처리
+                                commentViewHolder.content.setText(translatedText);
+                            }
+                            @Override
+                            public void onTranslationError(Exception e) {
+                                // 에러 처리
+                                Log.e("Translation", "Error during translation", e);
+                            }
+                        });
                         commentViewHolder.imageTranslation.setColorFilter(Color.parseColor("#94DEF7"));
                     } else {
                         commentViewHolder.content.setText(data.getContent());
@@ -264,7 +277,19 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     data.setTranslated(!data.isTranslated());
 
                     if (data.isTranslated()) {
-                        replyViewHolder.content.setText(data.getTranslateContent());
+                        Translator translator = new Translator();
+                        translator.detectAndTranslate(data.getContent(), new Translator.TranslationCallback() {
+                            @Override
+                            public void onTranslationDone(String translatedText) {
+                                // 번역된 텍스트 처리
+                                replyViewHolder.content.setText(translatedText);
+                            }
+                            @Override
+                            public void onTranslationError(Exception e) {
+                                // 에러 처리
+                                Log.e("Translation", "Error during translation", e);
+                            }
+                        });
                         replyViewHolder.imageTranslation.setColorFilter(Color.parseColor("#94DEF7"));
                     } else {
                         replyViewHolder.content.setText(data.getContent());
