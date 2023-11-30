@@ -1,13 +1,14 @@
 package com.swe.buddybud.Mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
 
 @Mapper
 public interface WillowMapper {
-    List<Map<String, Object>> getAllChat(Integer sender_no, Integer receiver_no);
+    List<Map<String, Object>> getAllChat(@Param("sender_no") Integer sender_no, @Param("receiver_no") Integer receiver_no);
 
     List<Map<String, Object>> getMyWillows(Integer user_no);
 

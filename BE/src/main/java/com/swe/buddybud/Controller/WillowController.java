@@ -24,8 +24,14 @@ public class WillowController {
             jsonObject.addProperty("uid",willow.get("id").toString());
             jsonObject.addProperty("user_no",willow.get("seq").toString());
             jsonObject.addProperty("chat_room_no",willow.get("chat_room_no").toString());
-            jsonObject.addProperty("latest_message",willow.get("latest_message").toString());
-            jsonObject.addProperty("created_at",willow.get("message_time").toString());
+            if(willow.get("latest_message")!=null)
+                jsonObject.addProperty("latest_message",willow.get("latest_message").toString());
+            else
+                jsonObject.addProperty("latest_message","");
+            if(willow.get("message_time")!=null)
+                jsonObject.addProperty("created_at",willow.get("message_time").toString());
+            else
+                jsonObject.addProperty("created_at","");
             jsonArray.add(jsonObject);
         }
 

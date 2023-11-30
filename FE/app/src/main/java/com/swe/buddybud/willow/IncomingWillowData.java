@@ -3,19 +3,25 @@ package com.swe.buddybud.willow;
 import androidx.annotation.NonNull;
 
 public class IncomingWillowData {
-    IncomingWillowData(String userId, String dept, String gender, int imgResId){
+    IncomingWillowData(String userId, int userNo, String dept, String gender, int imgResId){
         this.userId = userId;
+        this.userNo = userNo;
         this.dept = dept;
         this.gender = gender;
         this.imgResId = imgResId;
     }
     private String userId;
+    private int userNo;
     private String dept;
     private String gender;
     private int imgResId;
 
     public String getUserId() {
         return userId;
+    }
+
+    public int getUserNo() {
+        return userNo;
     }
 
     public String getDept() {
