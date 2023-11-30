@@ -14,11 +14,13 @@ public class BoardData implements Serializable {
     private String content;
     private int thumbsUpNumber;
     private int scrapNumber;
-    private boolean isThumbsUpClicked;
-    private boolean isScrapClicked;
+    private String isThumbsUpClicked;
+    private String isScrapClicked;
     private boolean isTranslated;
+    private String initialIsThumbsUpClicked;
+    private int initialThumbsUpNumber;
     public BoardData(int id, int profileImageId, String nickname, String date, String title, String content,
-                    int thumbsUpNumber, int scrapNumber) {
+                     String isThumbsUpClicked, String isScrapClicked, int thumbsUpNumber, int scrapNumber) {
         this.id = id;
         this.profileImageId = profileImageId;
         this.nickname = nickname;
@@ -27,8 +29,11 @@ public class BoardData implements Serializable {
         this.content = content;
         this.thumbsUpNumber = thumbsUpNumber;
         this.scrapNumber = scrapNumber;
-        this.isThumbsUpClicked = false;
+        this.isThumbsUpClicked = isThumbsUpClicked;
+        this.isScrapClicked = isScrapClicked;
         this.isTranslated = false;
+        this.initialIsThumbsUpClicked = isThumbsUpClicked;
+        this.initialThumbsUpNumber = thumbsUpNumber;
     }
     public int getId() {
         return id;
@@ -90,11 +95,11 @@ public class BoardData implements Serializable {
         this.scrapNumber = scrapNumber;
     }
 
-    public boolean isThumbsUpClicked() {
+    public String isThumbsUpClicked() {
         return isThumbsUpClicked;
     }
 
-    public void setThumbsUpClicked(boolean thumbsUpClicked) {
+    public void setThumbsUpClicked(String thumbsUpClicked) {
         isThumbsUpClicked = thumbsUpClicked;
     }
 
@@ -110,11 +115,43 @@ public class BoardData implements Serializable {
         this.id = id;
     }
 
-    public boolean isScrapClicked() {
+    public String isScrapClicked() {
         return isScrapClicked;
     }
 
     public void setScrapClicked(boolean isScrapClicked) {
         isScrapClicked = isScrapClicked;
+    }
+
+    // 아래 코드는 좋아요 / 댓글 관련 코드
+    // 좋아요 상태를 boolean으로 반환
+    public boolean isLiked() {
+        return "Y".equals(this.isThumbsUpClicked);
+    }
+
+    // 좋아요 상태를 설정
+    public void setLiked(boolean isLiked) {
+        this.isThumbsUpClicked = isLiked ? "Y" : "N";
+    }
+
+    // 좋아요 수 변경
+    public void incrementLikeCount() {
+        this.thumbsUpNumber++;
+    }
+
+    public void decrementLikeCount() {
+        this.thumbsUpNumber--;
+    }
+
+    public String getInitialIsThumbsUpClicked() {
+        return initialIsThumbsUpClicked;
+    }
+
+    public int getInitialThumbsUpNumber() {
+        return initialThumbsUpNumber;
+    }
+
+    public String getIsThumbsUpClicked() {
+        return isThumbsUpClicked;
     }
 }

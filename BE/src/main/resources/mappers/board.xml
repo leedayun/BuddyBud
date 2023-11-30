@@ -11,6 +11,7 @@
             A.title,
             A.content,
             M_USER.id AS post_user_id,
+            CAST(M_USER.seq AS CHAR) AS post_user_no,
             <if test='boardType == "Notice"'>
                 A.url,
                 CASE
@@ -92,8 +93,10 @@
     <!--  게시글 상세 조회  -->
     <select id="getBoard" resultType="java.util.Map">
         SELECT
+            CAST(A.seq AS CHAR) AS post_no,
             A.title,
             A.content,
+            M_USER.id AS post_user_id,
             <if test='boardType == "Notice"'>
                 A.url,
                 CASE
@@ -164,6 +167,7 @@
             DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
             B_POST A
+            INNER JOIN M_USER ON A.user_no = M_USER.seq
         WHERE
             A.seq = #{boardId}
             AND
@@ -192,9 +196,8 @@
     </insert>
 
     <!--  댓글 작성  -->
-    <insert id="insertComment">
-        INSERT INTO
-            B_COMMENT (
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="seq">
+        INSERT INTO B_COMMENT (
             content,
             post_no,
             user_no,
@@ -205,10 +208,29 @@
                    #{content},
                    #{post_no},
                    #{user_no},
-                   #{parent_comment_no},
+                    <choose>
+                        <when test="parent_comment_no != -1">
+                            #{parent_comment_no}
+                        </when>
+                        <otherwise>
+                            NULL
+                        </otherwise>
+                    </choose>,
                    sysdate()
                )
     </insert>
+
+    <!-- 방금 작성한 댓글 seq 가져오기 -->
+    <select id="getLastInsertId" resultType="int">
+        SELECT LAST_INSERT_ID()
+    </select>
+
+    <!-- 댓글 작성과 동시에 parent_comment_no 수정 -->
+    <update id="updateParentCommentNo">
+        UPDATE B_COMMENT
+        SET parent_comment_no = #{seq}
+        WHERE seq = #{seq} AND parent_comment_no IS NULL
+    </update>
 
     <!--  게시글 수정  -->
     <update id="updateBoard">
@@ -237,6 +259,7 @@
         SELECT
             B.seq AS comment_no,
             B.content AS content,
+            B.parent_comment_no AS parent_comment_no,
             DATE_FORMAT(B.created_at, '%Y/%m/%d %H:%i:%s') AS created_at,
             M_USER.id AS user_id,
             CASE
@@ -289,14 +312,24 @@
                         JOIN M_USER ON BC.user_no = M_USER.seq
                 WHERE
                     BC.seq = B.parent_comment_no
-            ) AS parent_comment_user_id
+            ) AS parent_comment_user_id,
+            CAST((
+                SELECT
+                    M_USER.seq
+                FROM
+                    B_COMMENT BC
+                        JOIN M_USER ON BC.user_no = M_USER.seq
+                WHERE
+                    BC.seq = B.parent_comment_no
+            ) AS CHAR) AS parent_comment_user_no
         FROM
             B_COMMENT B
             JOIN M_USER ON B.user_no = M_USER.seq
         WHERE
             B.post_no = #{boardId}
         ORDER BY
-            B.created_at;
+            B.parent_comment_no ASC,
+            B.seq ASC
     </select>
     
     <!--  게시판 좋아요 삭제  -->

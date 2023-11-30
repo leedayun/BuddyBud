@@ -22,6 +22,12 @@ public interface BoardApiService {
     @GET("/board/detail/{boardType}/{userId}/{boardId}")
     Call<JsonObject> getBoardDetails(@Path("boardType") String boardType, @Path("userId") Integer userId, @Path("boardId") Integer boardId);
 
+    @PUT("/board/boardLike/{likeYN}/{userId}/{boardId}")
+    Call<JsonObject> updateBoardLike(@Path("likeYN") String likeYN, @Path("userId") Integer userId, @Path("boardId") Integer boardId);
+
+    @POST("/board/comment")
+    Call<JsonObject> insertComment(@Body RequestBody requestBody);
+
     @POST("/board")
     Call<BoardApiData> insertBoard(@Body RequestBody requestBody);
 

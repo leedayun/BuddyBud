@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
@@ -18,12 +20,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.JsonObject;
 import com.swe.buddybud.R;
+import com.swe.buddybud.common.RetrofitClient;
 import com.swe.buddybud.home.DataManager;
+import com.swe.buddybud.home.FeedData;
 import com.swe.buddybud.home.Translator;
+import com.swe.buddybud.user.LoginData;
 
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHolder> {
 
@@ -55,39 +64,35 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
         holder.feedThumbsUpNumber.setText(String.valueOf(data.getThumbsUpNumber()));
         holder.feedScrapNumber.setText(String.valueOf(data.getScrapNumber()));
 
-        // 좋아요 상태에 따른 버튼 색상 설정
-        if (data.isThumbsUpClicked()) {
-            holder.imageThumbsUp.setColorFilter(Color.parseColor("#94DEF7"));
-        } else {
-            holder.imageThumbsUp.setColorFilter(Color.parseColor("#A4A4A4"));
-        }
+        // 좋아요 상태 설정
+        boolean isLiked = data.isLiked();
+        holder.imageThumbsUp.setColorFilter(isLiked ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+        holder.feedThumbsUpNumber.setText(String.valueOf(data.getThumbsUpNumber()));
 
-        // 좋아요 버튼을 눌렀을 경우
+        // 좋아요 버튼 클릭 리스너
         holder.imageThumbsUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int adapterPosition = holder.getAdapterPosition();
-                BoardData currentData = dataList.get(adapterPosition);
-
-                boolean isClicked = currentData.isThumbsUpClicked();
-                DataManager.getInstance().updateThumbsUp(currentData.getId(), !isClicked);
-
-                if (!isClicked) {
-                    holder.imageThumbsUp.setColorFilter(Color.parseColor("#94DEF7"));
+                // 상태 변경
+                data.setLiked(!data.isLiked());
+                if (data.isLiked()) {
+                    data.incrementLikeCount();
                 } else {
-                    holder.imageThumbsUp.setColorFilter(Color.parseColor("#A4A4A4"));
+                    data.decrementLikeCount();
                 }
 
-                holder.feedThumbsUpNumber.setText(String.valueOf(currentData.getThumbsUpNumber()));
+                // UI 업데이트
+                holder.imageThumbsUp.setColorFilter(data.isLiked() ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+                holder.feedThumbsUpNumber.setText(String.valueOf(data.getThumbsUpNumber()));
             }
         });
 
         // 스크랩 아이콘 색상 설정
-        if (data.isScrapClicked()) {
-            holder.imageScrap.setColorFilter(Color.parseColor("#94DEF7"));
-        } else {
-            holder.imageScrap.setColorFilter(Color.parseColor("#A4A4A4"));
-        }
+//        if (data.isScrapClicked()) {
+//            holder.imageScrap.setColorFilter(Color.parseColor("#94DEF7"));
+//        } else {
+//            holder.imageScrap.setColorFilter(Color.parseColor("#A4A4A4"));
+//        }
 
         // 스크랩 수 설정
         holder.feedScrapNumber.setText(String.valueOf(data.getScrapNumber()));
@@ -111,29 +116,23 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
                     translator.detectAndTranslate(data.getTitle(), new Translator.TranslationCallback() {
                         @Override
                         public void onTranslationDone(String translatedText) {
-                            // 번역된 텍스트 처리
                             holder.feedTitle.setText(translatedText);
                         }
                         @Override
                         public void onTranslationError(Exception e) {
-                            // 에러 처리
                             Log.e("Translation", "Error during translation", e);
                         }
                     });
                     translator.detectAndTranslate(data.getContent(), new Translator.TranslationCallback() {
                         @Override
                         public void onTranslationDone(String translatedText) {
-                            // 번역된 텍스트 처리
                             holder.feedContent.setText(translatedText);
                         }
                         @Override
                         public void onTranslationError(Exception e) {
-                            // 에러 처리
                             Log.e("Translation", "Error during translation", e);
                         }
                     });
-                    //holder.feedTitle.setText(data.getTranslateTitle());
-                    //holder.feedContent.setText(data.getTranslateContent());
                     holder.imageTranslation.setColorFilter(Color.parseColor("#94DEF7"));
                 } else {
                     holder.feedTitle.setText(data.getTitle());
@@ -143,10 +142,23 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
             }
         });
 
+        // 링크 아이콘을 눌렀을 경우
+        holder.imageLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Network Connection Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         // 피드 아이템 클릭 리스너
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // 변경된 좋아요 상태를 추적하고 필요한 경우 API 호출
+                updateAllLikesBeforeNavigating();
+
+                // BoardDetailFragment로 이동
                 BoardDetailFragment boardDetailFragment = new BoardDetailFragment();
 
                 Bundle bundle = new Bundle();
@@ -161,6 +173,36 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
         });
     }
 
+    private void updateAllLikesBeforeNavigating() {
+        for (BoardData data : dataList) {
+            // 좋아요 상태가 변경된 경우 확인
+            if (!data.getInitialIsThumbsUpClicked().equals(data.getIsThumbsUpClicked())) {
+                String likeYN = data.getIsThumbsUpClicked();
+                int userId = LoginData.getLoginUserNo();
+                int boardId = data.getId();
+                updateLikeStatus(likeYN, userId, boardId);
+            }
+        }
+    }
+    private void updateLikeStatus(String likeYN, int userId, int boardId) {
+        BoardApiService service = RetrofitClient.getService(BoardApiService.class);
+        Call<JsonObject> call = service.updateBoardLike(likeYN, userId, boardId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Log.d("BoardAdapter", "Board like status updated successfully");
+                } else {
+                    Log.e("BoardAdapter", "Server error occurred while updating board like status");
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("BoardAdapter", "Network error: " + t.getMessage());
+            }
+        });
+    }
+
     @Override
     public int getItemCount() {
         return dataList.size();
@@ -168,7 +210,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
 
     public class BoardViewHolder extends RecyclerView.ViewHolder {
         CircleImageView feedProfileImage;
-        ImageView imageThumbsUp, imageScrap, imageTranslation;
+        ImageView imageThumbsUp, imageScrap, imageTranslation, imageLink;
         TextView feedNickname, feedDate, feedTitle, feedContent, feedThumbsUpNumber, feedScrapNumber;
 
         public BoardViewHolder(@NonNull View itemView) {
@@ -177,6 +219,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
             imageThumbsUp = itemView.findViewById(R.id.imageThumbsUp);
             imageScrap = itemView.findViewById(R.id.imageScrap);
             imageTranslation = itemView.findViewById(R.id.imageTranslation);
+            imageLink = itemView.findViewById(R.id.imageLink);
             feedNickname = itemView.findViewById(R.id.feedNickname);
             feedDate = itemView.findViewById(R.id.feedDate);
             feedTitle = itemView.findViewById(R.id.feedTitle);
@@ -185,4 +228,5 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
             feedScrapNumber = itemView.findViewById(R.id.feedScrapNumber);
         }
     }
+
 }

@@ -27,11 +27,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.commentDataList = commentDataList;
     }
 
+    public void setDataList(List<CommentData> commentDataList) {
+        this.commentDataList = commentDataList;
+    }
+
     @Override
     public int getItemViewType(int position) {
-        // replyToNickname이 null이 아니면 대댓글로 간주
         CommentData item = commentDataList.get(position);
-        if (item.getReplyToCommentId() != -1) {
+        if (item.getReplyToCommentId() != item.getCommentId()) {
             return TYPE_REPLY;
         } else {
             return TYPE_COMMENT;
@@ -108,16 +111,16 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             commentViewHolder.thumbsDownNumber.setText(String.valueOf(commentData.getThumbsDownNumber()));;
 
             // 프로필 사진을 눌렀을 경우
-            commentViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = v.getContext();
-                    if (context instanceof AppCompatActivity) {
-                        CustomDialog customDialog = CustomDialog.newInstance(commentData.getNickname(), commentData.getProfileImageId());
-                        customDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "customDialog");
-                    }
-                }
-            });
+//            commentViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Context context = v.getContext();
+//                    if (context instanceof AppCompatActivity) {
+//                        CustomDialog customDialog = CustomDialog.newInstance(commentData.getNickname(), commentData.getProfileImageId());
+//                        customDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "customDialog");
+//                    }
+//                }
+//            });
 
             // 댓글 좋아요 버튼을 눌렀을 경우
             commentViewHolder.imageThumbsUp.setOnClickListener(new View.OnClickListener() {
@@ -215,16 +218,16 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             replyViewHolder.thumbsDownNumber.setText(String.valueOf(commentData.getThumbsDownNumber()));;
 
             // 프로필 사진을 눌렀을 경우
-            replyViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = v.getContext();
-                    if (context instanceof AppCompatActivity) {
-                        CustomDialog customDialog = CustomDialog.newInstance(commentData.getNickname(), commentData.getProfileImageId());
-                        customDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "customDialog");
-                    }
-                }
-            });
+//            replyViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Context context = v.getContext();
+//                    if (context instanceof AppCompatActivity) {
+//                        CustomDialog customDialog = CustomDialog.newInstance(commentData.getNickname(), commentData.getProfileImageId());
+//                        customDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "customDialog");
+//                    }
+//                }
+//            });
 
             // 대댓글 좋아요 버튼을 눌렀을 경우
             replyViewHolder.imageThumbsUp.setOnClickListener(new View.OnClickListener() {

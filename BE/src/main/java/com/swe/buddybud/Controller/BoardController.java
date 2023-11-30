@@ -29,6 +29,7 @@ public class BoardController {
             }
             jsonArray.add(jsonObject);
         }
+        System.out.println(jsonArray.toString());
 
         return jsonArray.toString();
     }
@@ -49,6 +50,7 @@ public class BoardController {
             jsonObject.addProperty(entry.getKey(), entry.getValue());
         }
 
+        System.out.println(jsonObject.toString());
         return jsonObject.toString();
     }
 
@@ -74,12 +76,19 @@ public class BoardController {
     public String insertComment(@RequestBody Map<String, String> fields) {
         JsonObject jsonObject = new JsonObject();
         boolean result = false;
-
+        System.out.println("say hi 1");
         try {
+            System.out.println("say hi 2");
             boardService.insertComment(fields);
+            System.out.println("say hi 3");
+            int seq = boardService.getLastInsertId();
+            System.out.println("say hi 4");
+            boardService.updateParentCommentNo(seq);
+            System.out.println("say hi 5");
             result = true;
         }
         catch (Exception e) {
+            e.printStackTrace();
             result = false;
         }
 
@@ -112,19 +121,19 @@ public class BoardController {
     @PutMapping("/board/boardLike/{likeYN}/{userId}/{boardId}")
     public String updateBoardLike(@PathVariable String likeYN, @PathVariable Integer userId, @PathVariable Integer boardId) {
         JsonObject jsonObject = new JsonObject();
-
         String result = "failed";
 
         try {
             if (likeYN.equals("Y")) {
-                boardService.deleteBoardLike(boardId, userId);
+                boardService.insertBoardLike(boardId, userId);
                 result = "delete success";
             } else if (likeYN.equals("N")) {
-                boardService.insertBoardLike(boardId, userId);
+                boardService.deleteBoardLike(boardId, userId);
                 result = "insert success";
             }
         }
         catch (Exception e) {
+            e.printStackTrace();
             result = "request failed";
         }
 

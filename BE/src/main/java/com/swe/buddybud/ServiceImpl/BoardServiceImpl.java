@@ -51,6 +51,15 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public int getLastInsertId() {
+        return boardMapper.getLastInsertId();
+    }
+
+    @Override
+    public void updateParentCommentNo(Integer seq) {
+        boardMapper.updateParentCommentNo(seq);
+    }
+    @Override
     public void deleteBoardLike(Integer boardId, Integer userId) {
         boardMapper.deleteBoardLike(boardId, userId);
     }

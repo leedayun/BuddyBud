@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
 import com.swe.buddybud.R;
 import com.swe.buddybud.common.RetrofitClient;
 import com.swe.buddybud.home.DataManager;
@@ -60,8 +61,8 @@ public class BoardFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.recycleView);
 
         // 1. 보드 화면 진입시 Api 요청
-        dataList = new ArrayList<>(); // FeedData 리스트 초기화
-        adapter = new BoardAdapter(new ArrayList<>()); // 어댑터 초기화
+        dataList = new ArrayList<>();
+        adapter = new BoardAdapter(new ArrayList<>());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new RecycleViewDecoration(20));
@@ -69,18 +70,28 @@ public class BoardFragment extends Fragment {
         loadBoardData("Notice", LoginData.getLoginUserNo()); // 초기 데이터 로드
 
         // 검색 버튼 리스너 설정
-//        searchButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String searchText = editTextSearch.getText().toString();
-//                List<BoardData> filteredBoards = DataManager.getInstance().filterFeeds(searchText);
-//                adapter.setDataList(filteredFeeds);
-//                adapter.notifyDataSetChanged();
-//
-//                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
-//            }
-//        });
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchText = editTextSearch.getText().toString();
+
+                List<BoardData> filteredList = new ArrayList<>();
+                if (searchText != null && !searchText.isEmpty()) {
+                    for (BoardData board : dataList) {
+                        if (board.getTitle().toLowerCase().contains(searchText.toLowerCase()) || board.getContent().toLowerCase().contains(searchText.toLowerCase()) ) {
+                            filteredList.add(board);
+                        }
+                    }
+                    adapter.setDataList(filteredList);
+                } else {
+                    adapter.setDataList(dataList);
+                }
+                adapter.notifyDataSetChanged();
+
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
+            }
+        });
 
         return rootView;
     }
@@ -111,11 +122,13 @@ public class BoardFragment extends Fragment {
                     for (Map<String, String> boardItem : boardList) {
                         BoardData boardData = new BoardData(
                                 Integer.parseInt(boardItem.get("post_no")),
-                                R.drawable.logo_profile, // 프로필 이미지 임시 값
-                                "temp_nickname", // 닉네임 임시 값
+                                R.drawable.logo_profile,
+                                boardItem.get("post_user_id"),
                                 boardItem.get("created_at"),
                                 boardItem.get("title"),
                                 boardItem.get("content"),
+                                boardItem.get("like_yn"),
+                                boardItem.get("scrap_yn"),
                                 Integer.parseInt(boardItem.get("like_num")),
                                 Integer.parseInt(boardItem.get("comment_num"))
                         );
@@ -133,6 +146,43 @@ public class BoardFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Map<String, String>>> call, Throwable t) {
                 Log.d("error", "network error: " + t.getMessage());
+            }
+        });
+    }
+
+    private void updateAllLikesBeforeLeaving() {
+        // 여기서 dataList는 좋아요 상태가 포함된 FeedData 객체의 리스트입니다.
+        for (BoardData data : dataList) {
+            // 좋아요 상태가 변경된 경우 확인
+            if (!data.getInitialIsThumbsUpClicked().equals(data.getIsThumbsUpClicked())) {
+                String likeYN = data.getIsThumbsUpClicked();
+                int userId = LoginData.getLoginUserNo();
+                int boardId = data.getId();
+                updateLikeStatus(likeYN, userId, boardId);
+            }
+        }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        updateAllLikesBeforeLeaving();
+    }
+
+    private void updateLikeStatus(String likeYN, int userId, int boardId) {
+        BoardApiService service = RetrofitClient.getService(BoardApiService.class);
+        Call<JsonObject> call = service.updateBoardLike(likeYN, userId, boardId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Log.d("HomeFragment", "Board like status updated successfully");
+                } else {
+                    Log.e("HomeFragment", "Server error occurred while updating board like status");
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("HomeFragment", "Network error: " + t.getMessage());
             }
         });
     }
