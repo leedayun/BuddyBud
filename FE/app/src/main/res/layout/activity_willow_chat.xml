@@ -112,6 +112,7 @@
             android:layout_marginStart="8dp"
             android:background="#00FFFFFF"
             android:scaleType="fitCenter"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/chat_edittext"
             app:layout_constraintStart_toStartOf="@+id/chat_edittext"
             app:layout_constraintTop_toTopOf="@+id/chat_edittext"

@@ -11,11 +11,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +39,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class WillowFragment extends Fragment implements View.OnClickListener, WillowManageInterface {
+public class WillowFragment extends Fragment implements TextWatcher, View.OnClickListener, WillowManageInterface {
     public TextView seeAllText;
+    public TextView emptyIncomingText;
+    public TextView emptyMyWillowText;
+    public ImageView totalEmptyImageView;
+    public EditText willowSearchEditText;
     public ImageButton searchBtn;
     public ImageButton sentWillowBtn;
     public RecyclerView incomingWillowRcView;
@@ -74,15 +82,30 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_willow, container,false);
+
+        totalEmptyImageView = view.findViewById(R.id.total_empty_img);
+        totalEmptyImageView.setVisibility(View.INVISIBLE);
+
+        emptyIncomingText = view.findViewById(R.id.incoming_empty_textview);
+        emptyIncomingText.setVisibility(View.GONE);
+
+        emptyMyWillowText = view.findViewById(R.id.mywillow_empty_textview);
+        emptyMyWillowText.setVisibility(View.GONE);
+
         incomingWillowRcView = view.findViewById(R.id.incoming_willow_view);
         myWillowsRcView = view.findViewById(R.id.my_willows_view);
+
         seeAllText = view.findViewById(R.id.seeall_text);
-        sentWillowBtn = view.findViewById(R.id.sent_willow_btn);
-        searchBtn = view.findViewById(R.id.search_btn);
         seeAllText.setOnClickListener(this);
+
+        sentWillowBtn = view.findViewById(R.id.sent_willow_btn);
         sentWillowBtn.setOnClickListener(this);
+
+        searchBtn = view.findViewById(R.id.search_btn);
         searchBtn.setOnClickListener(this);
 
+        willowSearchEditText = view.findViewById(R.id.willowsearch_text);
+        willowSearchEditText.addTextChangedListener(this);
 
         iclayoutManager = new LinearLayoutManager(getActivity());
         mwlayoutManager = new LinearLayoutManager(getActivity());
@@ -162,7 +185,15 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
                             incomingWillowItems.add(willow);
                         }
                     }
+                    if(incomingWillowItems.size()==0){
+                        emptyIncomingText.setVisibility(View.VISIBLE);
+                        if(myWillowsItems.size()==0) totalEmptyImageView.setVisibility(View.VISIBLE);
+                    } else {
+                        emptyIncomingText.setVisibility(View.GONE);
+                        totalEmptyImageView.setVisibility(View.INVISIBLE);
+                    }
                     incomingWillowAdapter.notifyDataSetChanged();
+
                     return;
                 }
                 else {
@@ -200,6 +231,13 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
                             myWillowsItems.add(new MyWillowsData(res.getUid(), res.getUser_no(), null, "", resourceId));
                         }
                     }
+                    if(myWillowsItems.size()==0){
+                        emptyMyWillowText.setVisibility(View.VISIBLE);
+                        if(incomingWillowItems.size()==0) totalEmptyImageView.setVisibility(View.VISIBLE);
+                    } else {
+                        emptyMyWillowText.setVisibility(View.GONE);
+                        totalEmptyImageView.setVisibility(View.INVISIBLE);
+                    }
                     myWillowsAdapter.notifyDataSetChanged();
                     return;
                 }
@@ -214,5 +252,20 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
                 return;
             }
         });
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        myWillowsAdapter.getFilter().filter(charSequence);
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
     }
 }
