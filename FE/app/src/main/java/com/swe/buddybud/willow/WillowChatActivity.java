@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -52,6 +53,7 @@ public class WillowChatActivity extends AppCompatActivity {
     private RecyclerView chatRecyclerView;
     private RecyclerView imageRecyclerView;
     private WillowChat_Adapter chatAdapter;
+    private TextView titleText;
     private ImageButton backBtn;
     private ImageButton addImgBtn;
     private ImageButton sendChatBtn;
@@ -70,6 +72,8 @@ public class WillowChatActivity extends AppCompatActivity {
         opponentNo = getIntent().getIntExtra("OPPONENT_NO",0);
         //if(userID == null) userID = "user1";
 
+        titleText =findViewById(R.id.chat_title_txt);
+        titleText.setText(opponentID);
         chatRecyclerView = findViewById(R.id.chat_recyclerView);
         imageRecyclerView = findViewById(R.id.chat_image_recycler_view);
         chatAdapter = new WillowChat_Adapter(mData, LoginData.getLoginUserId());
@@ -115,8 +119,8 @@ public class WillowChatActivity extends AppCompatActivity {
                 Map<String, String> fields = new HashMap<>();
                 Gson gson = new Gson();
 
-                fields.put("receiver_no", String.valueOf(LoginData.getLoginUserNo()));
-                fields.put("sender_no", String.valueOf(opponentNo));
+                fields.put("sender_no", String.valueOf(LoginData.getLoginUserNo()));
+                fields.put("receiver_no", String.valueOf(opponentNo));
                 fields.put("content", chatEditText.getText().toString());
                 sendChat(gson.toJson(fields));
                 /*
@@ -251,7 +255,7 @@ public class WillowChatActivity extends AppCompatActivity {
                         mData.add(new ChatData(
                                 LocalDateTime.parse(res.getCreated_at(), DateTimeFormatter.ISO_LOCAL_DATE_TIME),
                                 res.getContent(),
-                                LoginData.getLoginUserNo()==res.getSender_no() ? opponentID : LoginData.getLoginUserId(),
+                                LoginData.getLoginUserNo() == res.getSender_no() ? LoginData.getLoginUserId() : opponentID,
                                 resourceId,
                                 null,
                                 ""));

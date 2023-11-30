@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.swe.buddybud.R;
@@ -21,6 +23,7 @@ import retrofit2.Response;
 
 public class SentWillowActivity extends AppCompatActivity {
     private RecyclerView sentWillowRcView;
+    private ImageButton backBtn;
     private SentWillow_Adapter sentWillowAdapter;
     ArrayList<SentWillowData> sentWillowItems = new ArrayList<>();
     private WillowApiService willowApiService = RetrofitClient.getService(WillowApiService.class);
@@ -28,6 +31,12 @@ public class SentWillowActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sent_willow);
+
+        backBtn = findViewById(R.id.sent_willow_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {finish();}
+        });
 
         sentWillowRcView = findViewById(R.id.sent_willow_recycleview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);

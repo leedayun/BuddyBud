@@ -51,6 +51,23 @@
             app:layout_constraintTop_toTopOf="@+id/title_text"
             app:srcCompat="@drawable/logo_gray" />
 
+        <ImageView
+            android:id="@+id/total_empty_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="100dp"
+            android:alpha="0.2"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:src="@drawable/logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nestedScrollView"
+            app:layout_constraintVertical_bias="1.0"
+            app:tint="#5C5C5C" />
+
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
@@ -64,7 +81,7 @@
         <EditText
             android:id="@+id/willowsearch_text"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="55dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:background="@drawable/edittext_shadow"
@@ -72,7 +89,6 @@
             android:drawablePadding="0dp"
             android:ems="10"
             android:fontFamily="@font/noto_sans"
-            android:hint="search"
             android:inputType="textPersonName"
             android:textAlignment="center"
             android:textColorHint="#A4A4A4"
@@ -82,6 +98,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider" />
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
@@ -106,7 +123,7 @@
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/noto_sans"
-                        android:text="Incoming Willow"
+                        android:text="Incoming WilloW"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -129,17 +146,27 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <TextView
+                    android:id="@+id/incoming_empty_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="48dp"
+                    android:text="No Incoming WilloW, Yet!"
+                    android:visibility="gone" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/incoming_willow_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constrainedHeight="true"
-                    android:nestedScrollingEnabled="false">
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constrainedHeight="true">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
                 <View
-                    android:id="@+id/divider2"
+                    android:id="@+id/willow_recycleview_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="?android:attr/listDivider" />
@@ -151,9 +178,18 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/noto_sans"
-                    android:text="Willow"
+                    android:text="WilloW"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/mywillow_empty_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginTop="24dp"
+                    android:text="No WilloW, Yet!"
+                    android:visibility="gone" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/my_willows_view"

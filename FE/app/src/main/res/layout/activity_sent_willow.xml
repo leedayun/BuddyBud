@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".willow.SentWillowActivity">
 
+    <ImageButton
+        android:id="@+id/sent_willow_back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:alpha="0.54"
+        android:background="#00FFFFFF"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/left_arrow" />
+
     <TextView
         android:id="@+id/title_text"
         android:layout_width="wrap_content"

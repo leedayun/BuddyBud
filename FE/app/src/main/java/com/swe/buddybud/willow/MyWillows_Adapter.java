@@ -2,9 +2,12 @@ package com.swe.buddybud.willow;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.ViewHolder>{
+public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.ViewHolder> implements Filterable {
     public int addData(MyWillowsData data) {
         if(this.mData.add(data))
             return mData.size()-1;
@@ -30,6 +33,37 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
     }
 
     private ArrayList<MyWillowsData> mData;
+    private ArrayList<MyWillowsData> unFilteredData;
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if(charString.isEmpty()){
+                    mData = unFilteredData;
+                } else {
+                    ArrayList<MyWillowsData> filterTempData = new ArrayList<>();
+                    for(MyWillowsData dat : unFilteredData){
+                        if(dat.getUserId().toLowerCase().contains(charString.toLowerCase())){
+                            filterTempData.add(dat);
+                        }
+                    }
+                    mData = filterTempData;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mData;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mData = (ArrayList<MyWillowsData>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView profileImage;
@@ -62,6 +96,7 @@ public class MyWillows_Adapter extends RecyclerView.Adapter<MyWillows_Adapter.Vi
 
     MyWillows_Adapter(ArrayList<MyWillowsData> list){
         mData = list;
+        unFilteredData = list;
     }
 
     @NonNull
