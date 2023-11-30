@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +17,10 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.swe.buddybud.board.BoardApiData;
+import com.swe.buddybud.board.BoardApiService;
+import com.swe.buddybud.common.RetrofitClient;
 import com.swe.buddybud.willow.ImageUploadAdapter;
 import com.swe.buddybud.R;
 
@@ -27,9 +32,17 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WritePostActivity extends AppCompatActivity {
     private EditText titleEditText;
@@ -88,25 +101,9 @@ public class WritePostActivity extends AppCompatActivity {
                 String title = titleEditText.getText().toString();
                 String content = contentEditText.getText().toString();
 
-                // 제목과 내용이 비어있지 않은 경우에만 피드를 추가
+                // 제목과 내용이 비어있지 않은 경우에만 API 호출
                 if (!title.isEmpty() && !content.isEmpty()) {
-                    // FeedData 객체 생성
-                    int feedId = DataManager.getInstance().getFeedList().size() + 1;
-                    int profileImageId = R.drawable.mili; // 예시 이미지
-                    String nickname = "jinwoo";
-                    SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm", Locale.getDefault());
-                    sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
-                    String currentDate = sdf.format(new Date());
-                    String translateTitle = "피드 작성 번역 제목";
-                    String translateContent = "피드 작성 번역 내용";
-                    int thumbsUpNumber = 0;
-                    int commentNumber = 0;
-                    List<CommentData> comments = new ArrayList<>();
-
-                    FeedData newFeed = new FeedData(feedId, profileImageId, nickname, currentDate, title, content, translateTitle, translateContent, thumbsUpNumber, commentNumber, comments, selectedImageUris);
-                    DataManager.getInstance().addFeed(newFeed);
-                    // 작성 액티비티 종료
-                    finish();
+                    insertBoard(title, content, 2); // user_no는 2로 설정
                 } else {
                     // 제목 또는 내용이 비어 있을 경우 사용자에게 알림
                     Toast.makeText(WritePostActivity.this, "Please enter the title and content.", Toast.LENGTH_SHORT).show();
@@ -115,6 +112,40 @@ public class WritePostActivity extends AppCompatActivity {
         });
     }
 
+    private void insertBoard(String title, String content, int userNo) {
+        Map<String, String> fields = new HashMap<>();
+        fields.put("title", title);
+        fields.put("content", content);
+        fields.put("user_no", String.valueOf(userNo));
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(fields));
+
+        BoardApiService boardApiServices = RetrofitClient.getService(BoardApiService.class);
+        Call<BoardApiData> call = boardApiServices.insertBoard(requestBody);
+
+        call.enqueue(new Callback<BoardApiData>() {
+            @Override
+            public void onResponse(Call<BoardApiData> call, Response<BoardApiData> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    boolean result = response.body().getInsertBoardResult();
+                    if (result) {
+                        Toast.makeText(WritePostActivity.this, "Post successfully created.", Toast.LENGTH_SHORT).show();
+                        finish(); // 작성 액티비티 종료
+                    } else {
+                        Toast.makeText(WritePostActivity.this, "Failed to create the post.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Log.d("WritePost", "Server error");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BoardApiData> call, Throwable t) {
+                Log.d("WritePost", "Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    // 아래는 게시글 이미지 관련 코드
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
