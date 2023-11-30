@@ -35,6 +35,21 @@ public class AccountFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        // 사용자 정보가 변경되었을 수 있으므로 TextView 업데이트
+        String userid = LoginData.getLoginUserId();
+        TextView user_id_textview = getView().findViewById(R.id.user_name);
+        user_id_textview.setText(userid);
+
+        // RecyclerView 데이터 다시 불러오기
+        String usernum = String.valueOf(LoginData.getLoginUserNo());
+        loadPosts(usernum);
+        loadScraps(usernum);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
@@ -50,8 +65,9 @@ public class AccountFragment extends Fragment {
         ImageButton myScrapsButton = view.findViewById(R.id.my_scraps_button);
 
         // load data from server api
-        loadPosts(userid);
-        loadScraps(userid);
+        String usernum = String.valueOf(LoginData.getLoginUserNo());
+        loadPosts(usernum);
+        loadScraps(usernum);
 
         // set user's profile image
         ImageView profileImageView = view.findViewById(R.id.profile_image);
@@ -92,21 +108,17 @@ public class AccountFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private void loadPosts(String userid) {
+    private void loadPosts(String usernum) {
         AccountApiService accountApiService = RetrofitClient.getService(AccountApiService.class);
+        Call<List<PostData>> call = accountApiService.getUserPosts(usernum);
 
-        Call<AccountApiData> call = accountApiService.getUserPosts(userid);
-        call.enqueue(new Callback<AccountApiData>() {
+        call.enqueue(new Callback<List<PostData>>() {
             @Override
-            public void onResponse(Call<AccountApiData> call, Response<AccountApiData> response) {
+            public void onResponse(Call<List<PostData>> call, Response<List<PostData>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<PostData> posts = response.body().getPosts();
-                    if (posts != null) {
-                        List<PostScrapData> postScrapDataList = convertPostDataToPostScrapData(posts, userid);
-                        setupRecyclerView(postsRecyclerView, postScrapDataList);
-                    }
+                    List<PostScrapData> postScrapDataList = convertPostDataToPostScrapData(response.body(), LoginData.getLoginUserId());
+                    setupRecyclerView(postsRecyclerView, postScrapDataList);
                 } else {
-                    // Handle failure
                     Log.d("API Response", "no response");
                     if (getActivity() != null) {
                         Toast.makeText(getActivity(), "No Posts", Toast.LENGTH_SHORT).show();
@@ -115,8 +127,7 @@ public class AccountFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<AccountApiData> call, Throwable t) {
-                // Handle network error
+            public void onFailure(Call<List<PostData>> call, Throwable t) {
                 Log.d("API Failure", t.getMessage());
                 if (getActivity() != null) {
                     Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
@@ -126,19 +137,17 @@ public class AccountFragment extends Fragment {
     }
 
 
-    private void loadScraps(String userid) {
-        AccountApiService accountApiService = RetrofitClient.getService(AccountApiService.class);
 
-        Call<AccountApiData> call = accountApiService.getUserScraps(userid);
-        call.enqueue(new Callback<AccountApiData>() {
+    private void loadScraps(String usernum) {
+        AccountApiService accountApiService = RetrofitClient.getService(AccountApiService.class);
+        Call<List<ScrapData>> call = accountApiService.getUserScraps(usernum);
+
+        call.enqueue(new Callback<List<ScrapData>>() {
             @Override
-            public void onResponse(Call<AccountApiData> call, Response<AccountApiData> response) {
+            public void onResponse(Call<List<ScrapData>> call, Response<List<ScrapData>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<ScrapData> scraps = response.body().getScraps();
-                    if (scraps != null) {
-                        List<PostScrapData> scrapDataList = convertScrapDataToPostScrapData(scraps, userid);
-                        setupRecyclerView(scrapsRecyclerView, scrapDataList);
-                    }
+                    List<PostScrapData> scrapDataList = convertScrapDataToPostScrapData(response.body(), LoginData.getLoginUserId());
+                    setupRecyclerView(scrapsRecyclerView, scrapDataList);
                 } else {
                     Log.d("API Response", "no response");
                     if (getActivity() != null) {
@@ -148,7 +157,7 @@ public class AccountFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<AccountApiData> call, Throwable t) {
+            public void onFailure(Call<List<ScrapData>> call, Throwable t) {
                 Log.d("API Failure", t.getMessage());
                 if (getActivity() != null) {
                     Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
@@ -156,6 +165,7 @@ public class AccountFragment extends Fragment {
             }
         });
     }
+
 
 
     private List<PostScrapData> convertPostDataToPostScrapData(List<PostData> postDataList, String userid) {
@@ -177,6 +187,7 @@ public class AccountFragment extends Fragment {
                     0, // commentNumber, assuming you don't have this info in the API response
                     null // imageUris, assuming you don't have this info in the API response
             );
+
 
             postScrapDataList.add(postScrapData);
         }

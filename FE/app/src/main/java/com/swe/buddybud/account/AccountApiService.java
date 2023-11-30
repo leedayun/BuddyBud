@@ -2,6 +2,8 @@ package com.swe.buddybud.account;
 
 import com.swe.buddybud.user.UserApiData;
 
+import java.util.List;
+
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -13,11 +15,12 @@ import retrofit2.http.Query;
 
 public interface AccountApiService {
     @GET("/account/{userId}/post")
-    Call<AccountApiData> getUserPosts(@Path("userId") String userId);
+    Call<List<PostData>> getUserPosts(@Path("userId") String userId); // Update to List<PostData>
 
     @GET("/account/{userId}/scrap")
-    Call<AccountApiData> getUserScraps(@Path("userId") String userId);
+    Call<List<ScrapData>> getUserScraps(@Path("userId") String userId); // Update to List<ScrapData>
 
     @PUT("/account/{userId}")
-    Call<Void> updateUserAccount(@Path("userId") String userId, @Body UserAccountUpdate userAccountUpdate);
+    Call<UpdateResponse> updateUserAccount(@Path("userId") String userId, @Body UserAccountUpdate userAccountUpdate);
+
 }

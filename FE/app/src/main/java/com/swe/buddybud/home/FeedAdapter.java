@@ -137,7 +137,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                 }
             }
         });
-        
+
         // 프로필 사진을 눌렀을 경우
         holder.feedProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
