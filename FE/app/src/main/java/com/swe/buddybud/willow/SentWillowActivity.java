@@ -40,8 +40,6 @@ public class SentWillowActivity extends AppCompatActivity {
 
     private ArrayList<SentWillowData> getData(){
         sentWillowItems.clear();
-
-        //TODO: sentWillow -> sentWillowItems
         Call<List<WillowApiData>> call = willowApiService.sentWillow(LoginData.getLoginUserNo());
         call.enqueue(new Callback<List<WillowApiData>>() {
             @Override

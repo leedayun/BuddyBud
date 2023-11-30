@@ -7,26 +7,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.swe.buddybud.R;
+import com.swe.buddybud.common.RetrofitClient;
+import com.swe.buddybud.user.LoginData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_Adapter.ViewHolder>{
     private ArrayList<IncomingWillowData> mData;
-
     private WillowManageInterface parentfrag;
+    private WillowApiService willowApiService = RetrofitClient.getService(WillowApiService.class);
 
     public void setmData(ArrayList<IncomingWillowData> mData) {
         this.mData = mData;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        int sentUserNo;
         CircleImageView profileImage;
         TextView nameText;
         TextView infoText;
@@ -44,6 +56,38 @@ public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_
                 @Override
                 public void onClick(View view) {
                     //TODO : acceptWillow ,notifyDataSetChanged()
+                    //make post body
+                    Map<String, String> fields = new HashMap<>();
+                    Gson gson = new Gson();
+
+                    fields.put("receiver_no", String.valueOf(LoginData.getLoginUserNo()));
+                    fields.put("sender_no", String.valueOf(sentUserNo));
+
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), gson.toJson(fields));
+
+                    //post acceptwillow
+                    Call<WillowApiData> call = willowApiService.acceptWillow(requestBody);
+                    call.enqueue(new Callback<WillowApiData>() {
+                        @Override
+                        public void onResponse(Call<WillowApiData> call, Response<WillowApiData> response) {
+                            WillowApiData userResponse = response.body();
+
+                            // User Info Insert 성공시
+                            if(userResponse.getAcceptWillowResult()){
+                                parentfrag.refreshWillowList();
+                            }
+                            else {
+                                Toast.makeText(view.getContext(),"acceptWillow Network Error", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<WillowApiData> call, Throwable t) {
+                            Toast.makeText(view.getContext(),"acceptWillow Network Error", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    });
                     /*
                     int idx = getAdapterPosition();
                     Context context = v.getContext();
@@ -65,6 +109,38 @@ public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_
                 @Override
                 public void onClick(View view) {
                     //TODO : deleteWillow -> get receivedWillow -> notifyDataSetChanged
+                    //make post body
+                    Map<String, String> fields = new HashMap<>();
+                    Gson gson = new Gson();
+
+                    fields.put("receiver_no", String.valueOf(LoginData.getLoginUserNo()));
+                    fields.put("sender_no", String.valueOf(sentUserNo));
+
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), gson.toJson(fields));
+
+                    //post acceptwillow
+                    Call<WillowApiData> call = willowApiService.deleteWillow(requestBody);
+                    call.enqueue(new Callback<WillowApiData>() {
+                        @Override
+                        public void onResponse(Call<WillowApiData> call, Response<WillowApiData> response) {
+                            WillowApiData userResponse = response.body();
+
+                            // User Info Insert 성공시
+                            if(userResponse.getDeleteWillowResult()){
+                                parentfrag.refreshWillowList();
+                            }
+                            else {
+                                Toast.makeText(view.getContext(),"rejectWillow Network Error", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<WillowApiData> call, Throwable t) {
+                            Toast.makeText(view.getContext(),"rejectWillow Network Error", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    });
                     /*
                     int idx = getAdapterPosition();
                     mData.remove(idx);
@@ -98,6 +174,7 @@ public class IncomingWillow_Adapter extends RecyclerView.Adapter<IncomingWillow_
         holder.nameText.setText(mData.get(position).getUserId());
         holder.profileImage.setImageResource(mData.get(position).getImgResId());
         holder.infoText.setText(mData.get(position).getDept() + "\n" + mData.get(position).getGender());
+        holder.sentUserNo = mData.get(position).getUserNo();
     }
 
     @Override

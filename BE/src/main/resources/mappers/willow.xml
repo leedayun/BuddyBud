@@ -55,7 +55,8 @@
             W_WILLOW
                 INNER JOIN M_USER ON W_WILLOW.sender_no = M_USER.seq
         WHERE
-            W_WILLOW.receiver_no = #{userId}
+            W_WILLOW.receiver_no = #{userId} AND
+            W_WILLOW.state = 'N'
     </select>
 
 
@@ -75,17 +76,17 @@
 
     <!-- 내 모든 윌로우 가져오기 -->
     <select id="getMyWillows" resultType="java.util.Map">
-        SELECT user.id, user.seq, chat.chat_room_no, chat.content AS latest_message, chat.created_at as message_time
+        SELECT user.id, user.seq, chatroom.seq as chat_room_no, chat.content AS latest_message, chat.created_at as message_time
         FROM W_WILLOW ww
             JOIN M_USER user ON 
                 user.seq = 
                 CASE WHEN ww.sender_no = #{user_no} 
                     THEN ww.receiver_no 
                     ELSE ww.sender_no END
-            LEFT JOIN W_CHAT_ROOM chatroom ON 
+            INNER JOIN W_CHAT_ROOM chatroom ON
                 chatroom.sender_no = ww.sender_no AND 
                 chatroom.receiver_no = ww.receiver_no
-            LEFT JOIN W_CHAT_MESSAGE chat ON 
+            LEFT JOIN W_CHAT_MESSAGE chat ON
                 chat.chat_room_no = chatroom.seq
         WHERE 
             ww.sender_no = #{user_no} OR 

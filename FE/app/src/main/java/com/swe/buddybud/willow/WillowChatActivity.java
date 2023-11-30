@@ -112,7 +112,6 @@ public class WillowChatActivity extends AppCompatActivity {
                     imageUploadAdapter.notifyDataSetChanged();
                 }
                 if(chatEditText.getText().length()<1) return;
-                //TODO: sendChat -> 밑에거 놔두거나 getAllChat 다시
                 Map<String, String> fields = new HashMap<>();
                 Gson gson = new Gson();
 

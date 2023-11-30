@@ -26,6 +26,7 @@ import com.swe.buddybud.user.LoginData;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,91 +50,17 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
     protected RecyclerView.LayoutManager iclayoutManager;
     protected RecyclerView.LayoutManager mwlayoutManager;
     private WillowApiService willowApiService = RetrofitClient.getService(WillowApiService.class);
-
-
+    private boolean incomingExpanded = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        incomingWillows = new ArrayList<>();
-        //TEST : receivedWillow
-        Call<List<WillowApiData>> call = willowApiService.receivedWillow(LoginData.getLoginUserNo());
-        call.enqueue(new Callback<List<WillowApiData>>() {
-            @Override
-            public void onResponse(Call<List<WillowApiData>> call, Response<List<WillowApiData>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<WillowApiData> userResponse = response.body();
-                    for(WillowApiData res : userResponse){
-                        Resources resources = getResources();
-                        int resourceId = R.drawable.profile;
-                        if(res.getSender_no()!=LoginData.getLoginUserNo()) {
-                            int foundProfileImg = resources.getIdentifier(res.getSender_id().toLowerCase(), "drawable", getActivity().getPackageName());
-                            if (foundProfileImg > 0) resourceId = foundProfileImg;
-                        }
-                        incomingWillows.add(new IncomingWillowData(res.getSender_id(),res.getSender_school(),res.getSender_gender(), resourceId));
-                    }
-                    incomingWillowAdapter.notifyDataSetChanged();
-                    return;
-                }
-                else {
-                    Toast.makeText(getActivity().getApplicationContext(),"receivedWillow Network Error", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-            @Override
-            public void onFailure(Call<List<WillowApiData>> call, Throwable t) {
-                Toast.makeText(getActivity().getApplicationContext(),"receivedWillow Network Error", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        });
-        /*
+        incomingExpanded = false;
+        refreshWillowList();
+        /* TEST DATA
         IncomingWillowData woosik = new IncomingWillowData("Woosik12","software","male", R.drawable.woosik);
         IncomingWillowData marvelyvly = new IncomingWillowData("marvelyvly","Chemistry","female",  R.drawable.marvelyvly);
         incomingWillows.add(woosik);
         incomingWillows.add(marvelyvly);
-
-         */
-
-        if(incomingWillows.size()>1) {
-            incomingWillowItems = new ArrayList<IncomingWillowData>();
-            incomingWillowItems.add(incomingWillows.get(0));
-        } else {
-            incomingWillowItems = incomingWillows;
-        }
-
-        myWillowsItems = new ArrayList<>();
-        //TEST : getMyWillows
-        call = willowApiService.getMyWillows(LoginData.getLoginUserNo());
-        call.enqueue(new Callback<List<WillowApiData>>() {
-            @Override
-            public void onResponse(Call<List<WillowApiData>> call, Response<List<WillowApiData>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<WillowApiData> userResponse = response.body();
-                    for(WillowApiData res : userResponse){
-                        Resources resources = getResources();
-                        int resourceId = R.drawable.profile;
-                        if(res.getSender_no()!=LoginData.getLoginUserNo()) {
-                            int foundProfileImg = resources.getIdentifier(res.getUid().toLowerCase(), "drawable", getActivity().getPackageName());
-                            if (foundProfileImg > 0) resourceId = foundProfileImg;
-                        }
-                        myWillowsItems.add(
-                                new MyWillowsData(res.getUid(), res.getUser_no(), LocalDateTime.parse(res.getCreated_at(), DateTimeFormatter.ISO_LOCAL_DATE_TIME), res.getLatest_message(), resourceId));
-                    }
-                    myWillowsAdapter.notifyDataSetChanged();
-                    return;
-                }
-                else {
-                    Toast.makeText(getActivity().getApplicationContext(),"getMyWillows Network Error", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-            @Override
-            public void onFailure(Call<List<WillowApiData>> call, Throwable t) {
-                Toast.makeText(getActivity().getApplicationContext(),"getMyWillows Network Error", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        });
-
-        /*
         MyWillowsData realisshoman = new MyWillowsData("realisshoman",LocalDateTime.of(2023, 1, 23, 07, 18),"살바도르 달리, 반고흐 같이 Picasso in my body. Man I'm freakin artist", R.drawable.realisshoman);
         MyWillowsData nakedbibi = new MyWillowsData("nakedbibi", LocalDateTime.of(2022, 12, 25, 11, 24),"well, thank you have a nice day", R.drawable.nakedbibi);
         MyWillowsData calmdownman = new MyWillowsData("calmdownman", LocalDateTime.of(2022, 9, 3, 1, 11),"Wow! thank you for your support", R.drawable.calmdownman);
@@ -205,11 +132,87 @@ public class WillowFragment extends Fragment implements View.OnClickListener, Wi
     }
 
     @Override
-    public void onAddWillow(MyWillowsData newWillow) {
-        myWillowsRcView.invalidate();
-        int res = myWillowsAdapter.addData(newWillow);
-        if(res>0) myWillowsAdapter.notifyItemInserted(res);
-        incomingWillowRcView.invalidate();
-        incomingWillowAdapter.notifyDataSetChanged();
+    public void refreshWillowList() {
+        getIncomingWillow();
+        getMyWillows();
+    }
+
+    private void getIncomingWillow(){
+        incomingWillows.clear();
+        Call<List<WillowApiData>> call = willowApiService.receivedWillow(LoginData.getLoginUserNo());
+        call.enqueue(new Callback<List<WillowApiData>>() {
+            @Override
+            public void onResponse(Call<List<WillowApiData>> call, Response<List<WillowApiData>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<WillowApiData> userResponse = response.body();
+                    for(WillowApiData res : userResponse){
+                        Resources resources = getResources();
+                        int resourceId = R.drawable.profile;
+                        if(res.getSender_no()!=LoginData.getLoginUserNo()) {
+                            int foundProfileImg = resources.getIdentifier(res.getSender_id().toLowerCase(), "drawable", getActivity().getPackageName());
+                            if (foundProfileImg > 0) resourceId = foundProfileImg;
+                        }
+                        incomingWillows.add(new IncomingWillowData(res.getSender_id(),res.getSender_no(),res.getSender_school(),res.getSender_gender(), resourceId));
+                    }
+                    incomingWillowItems.clear();
+                    if(!incomingExpanded && incomingWillows.size()>1) {
+                        incomingWillowItems.add(incomingWillows.get(0));
+                    } else {
+                        for(IncomingWillowData willow:incomingWillows) {
+                            incomingWillowItems.add(willow);
+                        }
+                    }
+                    incomingWillowAdapter.notifyDataSetChanged();
+                    return;
+                }
+                else {
+                    Toast.makeText(getActivity().getApplicationContext(),"receivedWillow Network Error", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            @Override
+            public void onFailure(Call<List<WillowApiData>> call, Throwable t) {
+                Toast.makeText(getActivity().getApplicationContext(),"receivedWillow Network Error", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        });
+    }
+
+    private void getMyWillows(){
+        myWillowsItems.clear();
+        //TEST : getMyWillows
+        Call<List<WillowApiData>> call = willowApiService.getMyWillows(LoginData.getLoginUserNo());
+        call.enqueue(new Callback<List<WillowApiData>>() {
+            @Override
+            public void onResponse(Call<List<WillowApiData>> call, Response<List<WillowApiData>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<WillowApiData> userResponse = response.body();
+                    for(WillowApiData res : userResponse){
+                        Resources resources = getResources();
+                        int resourceId = R.drawable.profile;
+                        if(res.getSender_no()!=LoginData.getLoginUserNo()) {
+                            int foundProfileImg = resources.getIdentifier(res.getUid().toLowerCase(), "drawable", getActivity().getPackageName());
+                            if (foundProfileImg > 0) resourceId = foundProfileImg;
+                        }
+                        try {
+                            myWillowsItems.add(new MyWillowsData(res.getUid(), res.getUser_no(), LocalDateTime.parse(res.getCreated_at(), DateTimeFormatter.ISO_LOCAL_DATE_TIME), res.getLatest_message(), resourceId));
+                        } catch (DateTimeParseException e){
+                            myWillowsItems.add(new MyWillowsData(res.getUid(), res.getUser_no(), null, "", resourceId));
+                        }
+                    }
+                    myWillowsAdapter.notifyDataSetChanged();
+                    return;
+                }
+                else {
+                    Toast.makeText(getActivity().getApplicationContext(),"getMyWillows Network Error", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            @Override
+            public void onFailure(Call<List<WillowApiData>> call, Throwable t) {
+                Toast.makeText(getActivity().getApplicationContext(),"getMyWillows Network Error", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        });
     }
 }
