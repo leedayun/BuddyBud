@@ -8,9 +8,9 @@ import java.util.Map;
 @Mapper
 public interface BoardMapper {
 
-    List<Map<String, String>> getBoardsList(Map<String, String> fields);
+    List<Map<String, String>> getBoardsList(String boardType, Integer userId);
 
-    Map<String, String> getBoard(Map<String, String> fields);
+    Map<String, String> getBoard(String boardType, Integer userId, Integer boardId);
 
     void insertBoard(Map<String, String> fields);
 

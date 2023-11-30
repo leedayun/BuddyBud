@@ -16,13 +16,13 @@ public class BoardServiceImpl implements BoardService {
     BoardMapper boardMapper;
 
     @Override
-    public List<Map<String, String>> getBoardsList(Map<String, String> fields) {
-        return boardMapper.getBoardsList(fields);
+    public List<Map<String, String>> getBoardsList(String boardType, Integer userId) {
+        return boardMapper.getBoardsList(boardType, userId);
     }
 
     @Override
-    public Map<String, String> getBoard(Map<String, String> fields) {
-        return boardMapper.getBoard(fields);
+    public Map<String, String> getBoard(String boardType, Integer userId, Integer boardId) {
+        return boardMapper.getBoard(boardType, userId, boardId);
     }
 
     @Override

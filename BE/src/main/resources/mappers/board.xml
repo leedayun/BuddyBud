@@ -10,7 +10,7 @@
             CAST(A.seq AS CHAR) AS post_no,
             A.title,
             A.content,
-            <if test='board_type == "Notice"'>
+            <if test='boardType == "Notice"'>
                 A.url,
                 CASE
                     WHEN EXISTS (
@@ -20,7 +20,7 @@
                             B_SCRAP C
                         WHERE
                             C.post_no = A.seq
-                            AND C.user_no = #{user_no}
+                            AND C.user_no = #{userId}
                     ) THEN 'Y'
                     ELSE 'N'
                 END AS
@@ -42,7 +42,7 @@
                         B_POST_LIKE B
                     WHERE
                         B.post_no = A.seq
-                        AND B.user_no = #{user_no}
+                        AND B.user_no = #{userId}
                     ) THEN 'Y'
                     ELSE 'N'
             END AS
@@ -63,7 +63,7 @@
                         B_COMMENT BC
                     WHERE
                         BC.post_no = A.seq
-                        AND BC.user_no = #{user_no}
+                        AND BC.user_no = #{userId}
                     ) THEN 'Y'
                     ELSE 'N'
             END AS
@@ -81,7 +81,7 @@
         FROM
             B_POST A
         WHERE
-            A.board_type = #{board_type}
+            A.board_type = #{boardType}
             and A.state = 'Y'
         ORDER BY
             A.created_at DESC;
@@ -92,7 +92,7 @@
         SELECT
             A.title,
             A.content,
-            <if test='board_type == "Notice"'>
+            <if test='boardType == "Notice"'>
                 A.url,
                 CASE
                     WHEN EXISTS (
@@ -101,8 +101,8 @@
                         FROM
                             B_SCRAP C
                         WHERE
-                            C.post_no = #{post_no}
-                            AND C.user_no = #{user_no}
+                            C.post_no = #{boardId}
+                            AND C.user_no = #{userId}
                         ) THEN 'Y'
                         ELSE 'N'
                 END AS
@@ -113,7 +113,7 @@
                     FROM
                         B_SCRAP C
                     WHERE
-                        C.post_no = #{post_no}
+                        C.post_no = #{boardId}
                 ) AS CHAR) AS scrap_num,
             </if>
             CASE
@@ -123,8 +123,8 @@
                     FROM
                         B_POST_LIKE B
                     WHERE
-                        B.post_no = #{post_no}
-                        AND B.user_no = #{user_no}
+                        B.post_no = #{boardId}
+                        AND B.user_no = #{userId}
                 ) THEN 'Y'
                 ELSE 'N'
             END AS
@@ -135,7 +135,7 @@
                 FROM
                     B_POST_LIKE B
                 WHERE
-                    B.post_no = #{post_no}
+                    B.post_no = #{boardId}
             ) AS CHAR) AS like_num,
             CASE
                 WHEN EXISTS (
@@ -145,7 +145,7 @@
                         B_COMMENT BC
                     WHERE
                         BC.post_no = A.seq
-                        AND BC.user_no = #{user_no}
+                        AND BC.user_no = #{userId}
                 ) THEN 'Y'
                 ELSE 'N'
             END AS
@@ -163,9 +163,9 @@
         FROM
             B_POST A
         WHERE
-            A.seq = #{post_no}
+            A.seq = #{boardId}
             AND
-            A.board_type = #{board_type}
+            A.board_type = #{boardType}
     </select>
 
     <!--  게시글 작성  -->

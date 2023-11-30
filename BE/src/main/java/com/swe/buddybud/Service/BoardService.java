@@ -9,9 +9,9 @@ import java.util.Map;
 @Service
 public interface BoardService {
 
-    List<Map<String, String>> getBoardsList(Map<String, String> fields);
+    List<Map<String, String>> getBoardsList(String boardType, Integer userId);
 
-    Map<String, String> getBoard(Map<String, String> fields);
+    Map<String, String> getBoard(String boardType, Integer userId, Integer boardId);
 
     void insertBoard(Map<String, String> fields);
 
@@ -23,4 +23,3 @@ public interface BoardService {
 
     void insertComment(Map<String, String> fields);
 }
-
