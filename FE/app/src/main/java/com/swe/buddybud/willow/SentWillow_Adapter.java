@@ -1,9 +1,12 @@
 package com.swe.buddybud.willow;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,11 +29,44 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SentWillow_Adapter extends RecyclerView.Adapter<SentWillow_Adapter.ViewHolder>{
+public class SentWillow_Adapter extends RecyclerView.Adapter<SentWillow_Adapter.ViewHolder> implements Filterable {
     private ArrayList<SentWillowData> mData;
+    private ArrayList<SentWillowData> unFilteredData;
+    private WillowManageInterface parentActivity;
 
     public void setmData(ArrayList<SentWillowData> mData) {
         this.mData = mData;
+        this.unFilteredData = mData;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if(charString.isEmpty()){
+                    mData = unFilteredData;
+                } else {
+                    ArrayList<SentWillowData> filterTempData = new ArrayList<>();
+                    for(SentWillowData dat : unFilteredData){
+                        if(dat.getUserId().toLowerCase().contains(charString.toLowerCase())){
+                            filterTempData.add(dat);
+                        }
+                    }
+                    mData = filterTempData;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mData;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mData = (ArrayList<SentWillowData>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -49,26 +85,26 @@ public class SentWillow_Adapter extends RecyclerView.Adapter<SentWillow_Adapter.
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO : deleteWillow -> get sentWillow -> notifyDataSetChanged
                     //make post body
                     Map<String, String> fields = new HashMap<>();
                     Gson gson = new Gson();
 
-                    fields.put("receiver_no", String.valueOf(LoginData.getLoginUserNo()));
-                    fields.put("sender_no", String.valueOf(receiveUserNo));
+                    fields.put("receiver_no", String.valueOf(receiveUserNo));
+                    fields.put("sender_no", String.valueOf(LoginData.getLoginUserNo()));
 
                     RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), gson.toJson(fields));
 
-                    //post acceptwillow
-                    Call<WillowApiData> call = willowApiService.acceptWillow(requestBody);
+                    //post deleteWillow
+                    Call<WillowApiData> call = willowApiService.deleteWillow(requestBody);
                     call.enqueue(new Callback<WillowApiData>() {
                         @Override
                         public void onResponse(Call<WillowApiData> call, Response<WillowApiData> response) {
                             WillowApiData userResponse = response.body();
 
+
                             // User Info Insert 성공시
                             if(userResponse.getDeleteWillowResult()){
-
+                                parentActivity.refreshWillowList();
                             }
                             else {
                                 Toast.makeText(view.getContext(),"cancel Request Network Error", Toast.LENGTH_SHORT).show();
@@ -87,8 +123,10 @@ public class SentWillow_Adapter extends RecyclerView.Adapter<SentWillow_Adapter.
         }
     }
 
-    SentWillow_Adapter(ArrayList<SentWillowData> list){
+    SentWillow_Adapter(ArrayList<SentWillowData> list, WillowManageInterface parent){
         this.mData = list;
+        this.unFilteredData = list;
+        this.parentActivity = parent;
     }
 
     @NonNull
@@ -102,6 +140,7 @@ public class SentWillow_Adapter extends RecyclerView.Adapter<SentWillow_Adapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.profileImage.setImageResource(mData.get(position).getImgResId());
         holder.nameText.setText(mData.get(position).getUserId());
+        holder.receiveUserNo = mData.get(position).getUserNo();
     }
 
     @Override

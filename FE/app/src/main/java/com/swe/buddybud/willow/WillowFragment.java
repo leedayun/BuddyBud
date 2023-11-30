@@ -28,7 +28,6 @@ import com.swe.buddybud.common.RetrofitClient;
 import com.swe.buddybud.user.LoginData;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -63,7 +62,6 @@ public class WillowFragment extends Fragment implements TextWatcher, View.OnClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         incomingExpanded = false;
-        refreshWillowList();
         /* TEST DATA
         IncomingWillowData woosik = new IncomingWillowData("Woosik12","software","male", R.drawable.woosik);
         IncomingWillowData marvelyvly = new IncomingWillowData("marvelyvly","Chemistry","female",  R.drawable.marvelyvly);
@@ -101,7 +99,7 @@ public class WillowFragment extends Fragment implements TextWatcher, View.OnClic
         sentWillowBtn = view.findViewById(R.id.sent_willow_btn);
         sentWillowBtn.setOnClickListener(this);
 
-        searchBtn = view.findViewById(R.id.search_btn);
+        searchBtn = view.findViewById(R.id.sent_willow_search_btn);
         searchBtn.setOnClickListener(this);
 
         willowSearchEditText = view.findViewById(R.id.willowsearch_text);
@@ -129,6 +127,12 @@ public class WillowFragment extends Fragment implements TextWatcher, View.OnClic
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        refreshWillowList();
+    }
+
+    @Override
     public void onClick(View view) {
         Log.w("test","click " + view.getId());
         switch(view.getId()){
@@ -147,7 +151,7 @@ public class WillowFragment extends Fragment implements TextWatcher, View.OnClic
                 break;
             }
 
-            case R.id.search_btn:{
+            case R.id.sent_willow_search_btn:{
                 if(willowSearchEditText.getVisibility() == View.VISIBLE)
                     willowSearchEditText.setVisibility(View.GONE);
                 else
