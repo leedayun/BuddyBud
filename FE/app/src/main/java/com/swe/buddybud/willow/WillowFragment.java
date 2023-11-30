@@ -105,6 +105,7 @@ public class WillowFragment extends Fragment implements TextWatcher, View.OnClic
         searchBtn.setOnClickListener(this);
 
         willowSearchEditText = view.findViewById(R.id.willowsearch_text);
+        willowSearchEditText.setVisibility(View.GONE);
         willowSearchEditText.addTextChangedListener(this);
 
         iclayoutManager = new LinearLayoutManager(getActivity());
@@ -140,7 +141,6 @@ public class WillowFragment extends Fragment implements TextWatcher, View.OnClic
                 break;
             }
             case R.id.sent_willow_btn:{
-
                 Context context = view.getContext();
                 Intent intent = new Intent(context, SentWillowActivity.class);
                 context.startActivity(intent);
@@ -148,6 +148,10 @@ public class WillowFragment extends Fragment implements TextWatcher, View.OnClic
             }
 
             case R.id.search_btn:{
+                if(willowSearchEditText.getVisibility() == View.VISIBLE)
+                    willowSearchEditText.setVisibility(View.GONE);
+                else
+                    willowSearchEditText.setVisibility(View.VISIBLE);
                 break;
             }
 
