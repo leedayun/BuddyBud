@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,8 +102,33 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                 data.setTranslated(!data.isTranslated());
 
                 if (data.isTranslated()) {
-                    holder.feedTitle.setText(data.getTranslateTitle());
-                    holder.feedContent.setText(data.getTranslateContent());
+                    Translator translator = new Translator();
+                    translator.detectAndTranslate(data.getTitle(), new Translator.TranslationCallback() {
+                        @Override
+                        public void onTranslationDone(String translatedText) {
+                            // 번역된 텍스트 처리
+                            holder.feedTitle.setText(translatedText);
+                        }
+                        @Override
+                        public void onTranslationError(Exception e) {
+                            // 에러 처리
+                            Log.e("Translation", "Error during translation", e);
+                        }
+                    });
+                    translator.detectAndTranslate(data.getContent(), new Translator.TranslationCallback() {
+                        @Override
+                        public void onTranslationDone(String translatedText) {
+                            // 번역된 텍스트 처리
+                            holder.feedContent.setText(translatedText);
+                        }
+                        @Override
+                        public void onTranslationError(Exception e) {
+                            // 에러 처리
+                            Log.e("Translation", "Error during translation", e);
+                        }
+                    });
+                    //holder.feedTitle.setText(data.getTranslateTitle());
+                    //holder.feedContent.setText(data.getTranslateContent());
                     holder.imageTranslation.setColorFilter(Color.parseColor("#94DEF7"));
                 } else {
                     holder.feedTitle.setText(data.getTitle());

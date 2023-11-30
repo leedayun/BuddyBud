@@ -1,5 +1,6 @@
 package com.swe.buddybud.board;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,297 +8,166 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.swe.buddybud.R;
+import com.swe.buddybud.common.RetrofitClient;
+import com.swe.buddybud.home.DataManager;
+import com.swe.buddybud.home.FeedAdapter;
+import com.swe.buddybud.home.FeedData;
+import com.swe.buddybud.home.RecycleViewDecoration;
+import com.swe.buddybud.user.LoginData;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BoardFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class BoardFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView recyclerView;
+    private BoardAdapter adapter;
+    private List<BoardData> dataList;
 
     public BoardFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ArticleFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BoardFragment newInstance(String param1, String param2) {
-        BoardFragment fragment = new BoardFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_board, container, false);
 
-        ImageButton scrap_1_Button = rootView.findViewById(R.id.scrap_1_Button);
-        final TextView[] scrap_1_Count = {rootView.findViewById(R.id.scrap_1_Count)};
+        EditText editTextSearch = rootView.findViewById(R.id.editTextSearch);
+        ImageView searchButton = rootView.findViewById(R.id.searchButton);
+        ImageView filterButton = rootView.findViewById(R.id.filterButton);
 
-        String scrap_1_Count_Text = scrap_1_Count[0].getText().toString();
-        final int[] scrap_1_Count_int = {Integer.parseInt(scrap_1_Count_Text)};
+        recyclerView = rootView.findViewById(R.id.recycleView);
 
-        final boolean[] isScrapped_1 = { false };
-        scrap_1_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isScrapped_1[0]) {
-                    scrap_1_Button.setImageResource(R.drawable.scrapping);
-                    scrap_1_Count_int[0]--;
-                    scrap_1_Count[0].setText(String.valueOf(scrap_1_Count_int[0]));
-                    isScrapped_1[0] = false;
-                } else {
-                    scrap_1_Button.setImageResource(R.drawable.scrapped);
-                    scrap_1_Count_int[0]++;
-                    scrap_1_Count[0].setText(String.valueOf(scrap_1_Count_int[0]));
-                    isScrapped_1[0] = true;
-                }
-            }
-        });
+        // 1. 보드 화면 진입시 Api 요청
+        dataList = new ArrayList<>(); // FeedData 리스트 초기화
+        adapter = new BoardAdapter(new ArrayList<>()); // 어댑터 초기화
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new RecycleViewDecoration(20));
 
-        ImageButton like_1_Button = rootView.findViewById(R.id.like_1_Button);
-        final TextView[] like_1_Count = {rootView.findViewById(R.id.like_1_Count)};
+        loadBoardData("Notice", LoginData.getLoginUserNo()); // 초기 데이터 로드
 
-        String like_1_Count_Text = like_1_Count[0].getText().toString();
-        final int[] like_1_Count_int = {Integer.parseInt(like_1_Count_Text)};
-
-        final boolean[] isLiked_1 = { false };
-        like_1_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isLiked_1[0]) {
-                    like_1_Button.setImageResource(R.drawable.liking);
-                    like_1_Count_int[0]--;
-                    like_1_Count[0].setText(String.valueOf(like_1_Count_int[0]));
-                    isLiked_1[0] = false;
-                } else {
-                    like_1_Button.setImageResource(R.drawable.liked);
-                    like_1_Count_int[0]++;
-                    like_1_Count[0].setText(String.valueOf(like_1_Count_int[0]));
-                    isLiked_1[0] = true;
-                }
-            }
-        });
-
-        ImageButton translate_1_Button = rootView.findViewById(R.id.translate_1_Button);
-        TextView post_1_Title = rootView.findViewById(R.id.post_1_Title);
-
-        final boolean[] isTranslated_1 = { false };
-        translate_1_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isTranslated_1[0]) {
-                    post_1_Title.setText("[채용/모집] [연장] 성균관대학교 SW융합대학...");
-                    isTranslated_1[0] = false;
-                } else {
-                    post_1_Title.setText("[Recruit] [Extended] SKKU College of SW...");
-                    isTranslated_1[0] = true;
-                }
-            }
-        });
-
-        ImageButton scrap_2_Button = rootView.findViewById(R.id.scrap_2_Button);
-        final TextView[] scrap_2_Count = {rootView.findViewById(R.id.scrap_2_Count)};
-
-        String scrap_2_Count_Text = scrap_2_Count[0].getText().toString();
-        final int[] scrap_2_Count_int = {Integer.parseInt(scrap_2_Count_Text)};
-
-        final boolean[] isScrapped_2 = { false };
-        scrap_2_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isScrapped_2[0]) {
-                    scrap_2_Button.setImageResource(R.drawable.scrapping);
-                    scrap_2_Count_int[0]--;
-                    scrap_2_Count[0].setText(String.valueOf(scrap_2_Count_int[0]));
-                    isScrapped_2[0] = false;
-                } else {
-                    scrap_2_Button.setImageResource(R.drawable.scrapped);
-                    scrap_2_Count_int[0]++;
-                    scrap_2_Count[0].setText(String.valueOf(scrap_2_Count_int[0]));
-                    isScrapped_2[0] = true;
-                }
-            }
-        });
-
-        ImageButton like_2_Button = rootView.findViewById(R.id.like_2_Button);
-        final TextView[] like_2_Count = {rootView.findViewById(R.id.like_2_Count)};
-
-        String like_2_Count_Text = like_2_Count[0].getText().toString();
-        final int[] like_2_Count_int = {Integer.parseInt(like_2_Count_Text)};
-
-        final boolean[] isLiked_2 = { true };
-        like_2_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isLiked_2[0]) {
-                    like_2_Button.setImageResource(R.drawable.liking);
-                    like_2_Count_int[0]--;
-                    like_2_Count[0].setText(String.valueOf(like_2_Count_int[0]));
-                    isLiked_2[0] = false;
-                } else {
-                    like_2_Button.setImageResource(R.drawable.liked);
-                    like_2_Count_int[0]++;
-                    like_2_Count[0].setText(String.valueOf(like_2_Count_int[0]));
-                    isLiked_2[0] = true;
-                }
-            }
-        });
-
-        ImageButton translate_2_Button = rootView.findViewById(R.id.translate_2_Button);
-        TextView post_2_Title = rootView.findViewById(R.id.post_2_Title);
-
-        final boolean[] isTranslated_2 = { false };
-        translate_2_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isTranslated_2[0]) {
-                    post_2_Title.setText("\uD83D\uDE4B일대일 그룹 대학생 영어회화");
-                    isTranslated_2[0] = false;
-                } else {
-                    post_2_Title.setText("\uD83D\uDE4BOne-on-One Group College Student Eng...");
-                    isTranslated_2[0] = true;
-                }
-            }
-        });
-
-        ImageButton scrap_3_Button = rootView.findViewById(R.id.scrap_3_Button);
-        final TextView[] scrap_3_Count = {rootView.findViewById(R.id.scrap_3_Count)};
-
-        String scrap_3_Count_Text = scrap_3_Count[0].getText().toString();
-        final int[] scrap_3_Count_int = {Integer.parseInt(scrap_3_Count_Text)};
-
-        final boolean[] isScrapped_3 = { false };
-        scrap_3_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isScrapped_3[0]) {
-                    scrap_3_Button.setImageResource(R.drawable.scrapping);
-                    scrap_3_Count_int[0]--;
-                    scrap_3_Count[0].setText(String.valueOf(scrap_3_Count_int[0]));
-                    isScrapped_3[0] = false;
-                } else {
-                    scrap_3_Button.setImageResource(R.drawable.scrapped);
-                    scrap_3_Count_int[0]++;
-                    scrap_3_Count[0].setText(String.valueOf(scrap_3_Count_int[0]));
-                    isScrapped_3[0] = true;
-                }
-            }
-        });
-
-        ImageButton like_3_Button = rootView.findViewById(R.id.like_3_Button);
-        final TextView[] like_3_Count = {rootView.findViewById(R.id.like_3_Count)};
-
-        String like_3_Count_Text = like_3_Count[0].getText().toString();
-        final int[] like_3_Count_int = {Integer.parseInt(like_3_Count_Text)};
-
-        final boolean[] isLiked_3 = { false };
-        like_3_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isLiked_3[0]) {
-                    like_3_Button.setImageResource(R.drawable.liking);
-                    like_3_Count_int[0]--;
-                    like_3_Count[0].setText(String.valueOf(like_3_Count_int[0]));
-                    isLiked_3[0] = false;
-                } else {
-                    like_3_Button.setImageResource(R.drawable.liked);
-                    like_3_Count_int[0]++;
-                    like_3_Count[0].setText(String.valueOf(like_3_Count_int[0]));
-                    isLiked_3[0] = true;
-                }
-            }
-        });
-
-        ImageButton translate_3_Button = rootView.findViewById(R.id.translate_3_Button);
-        TextView post_3_Title = rootView.findViewById(R.id.post_3_Title);
-
-        final boolean[] isTranslated_3 = { false };
-        translate_3_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isTranslated_3[0]) {
-                    post_3_Title.setText("(상시모집)\uD83D\uDC9A\uD83D\uDE4F성균관대학교 천주교 중앙동...");
-                    isTranslated_3[0] = false;
-                } else {
-                    post_3_Title.setText("(常年招生)\uD83D\uDC9A\uD83D\uDE4F 成均齐大学天主教中央...");
-                    isTranslated_3[0] = true;
-                }
-            }
-        });
+        // 검색 버튼 리스너 설정
+//        searchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String searchText = editTextSearch.getText().toString();
+//                List<BoardData> filteredBoards = DataManager.getInstance().filterFeeds(searchText);
+//                adapter.setDataList(filteredFeeds);
+//                adapter.notifyDataSetChanged();
+//
+//                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
+//            }
+//        });
 
         return rootView;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
-        ImageView frame_1 = view.findViewById(R.id.frame_1_Shadow);
-        frame_1.setOnClickListener(new View.OnClickListener() {
+        // 백엔드에서 최신 데이터를 다시 로드
+        loadBoardData("Notice", LoginData.getLoginUserNo());
+    }
+
+    private void loadBoardData(String board_type, Integer user_no) {
+        String boardType = board_type;
+        Integer userNo = user_no;
+
+        BoardApiService boardApiServices = RetrofitClient.getService(BoardApiService.class);
+        Call<List<Map<String, String>>> call = boardApiServices.getBoardsList(boardType, userNo);
+
+        call.enqueue(new Callback<List<Map<String, String>>>() {
             @Override
-            public void onClick(View v) {
-                Fragment fragment = new BoardDetailFragment();
+            public void onResponse(Call<List<Map<String, String>>> call, Response<List<Map<String, String>>> response) {
+                if (response.isSuccessful()) {
+                    List<BoardData> newDataList = new ArrayList<>();
+                    List<Map<String, String>> boardList = response.body();
 
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.board_container, fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                    dataList.clear();
+                    for (Map<String, String> boardItem : boardList) {
+                        BoardData boardData = new BoardData(
+                                Integer.parseInt(boardItem.get("post_no")),
+                                R.drawable.logo_profile, // 프로필 이미지 임시 값
+                                "temp_nickname", // 닉네임 임시 값
+                                boardItem.get("created_at"),
+                                boardItem.get("title"),
+                                boardItem.get("content"),
+                                Integer.parseInt(boardItem.get("like_num")),
+                                Integer.parseInt(boardItem.get("comment_num"))
+                        );
+                        dataList.add(boardData);
+                    }
+                    // 데이터 리스트 업데이트 및 어댑터 갱신
+                    dataList.addAll(newDataList);
+                    adapter.setDataList(dataList);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Log.d("error", "server error");
+                }
             }
-        });
 
-        ImageView filterButton = view.findViewById(R.id.filterButton);
-        filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Fragment fragment = new BoardFilterFragment();
-
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.board_container, fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+            public void onFailure(Call<List<Map<String, String>>> call, Throwable t) {
+                Log.d("error", "network error: " + t.getMessage());
             }
         });
     }
+
+
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//
+//        ImageView frame_1 = view.findViewById(R.id.frame_1_Shadow);
+//        frame_1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Fragment fragment = new BoardDetailFragment();
+//
+//                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+//                FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                transaction.replace(R.id.board_container, fragment);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
+//            }
+//        });
+//
+//        ImageView filterButton = view.findViewById(R.id.filterButton);
+//        filterButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Fragment fragment = new BoardFilterFragment();
+//
+//                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+//                FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                transaction.replace(R.id.board_container, fragment);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
+//            }
+//        });
+//    }
 }

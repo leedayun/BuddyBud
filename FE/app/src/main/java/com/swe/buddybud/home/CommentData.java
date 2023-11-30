@@ -6,7 +6,6 @@ public class CommentData {
     private String nickname;
     private String date;
     private String content;
-    private String translateContent;
     private int thumbsUpNumber;
     private int thumbsDownNumber;
     private int replyToCommentId;
@@ -16,13 +15,12 @@ public class CommentData {
     private boolean isTranslated;
 
     // Constructor
-    public CommentData(int commentId, int profileImageId, String nickname, String date, String content, String translateContent, int thumbsUpNumber, int thumbsDownNumber, int replyToCommentId, String replyToNickname) {
+    public CommentData(int commentId, int profileImageId, String nickname, String date, String content, int thumbsUpNumber, int thumbsDownNumber, int replyToCommentId, String replyToNickname) {
         this.commentId = commentId;
         this.profileImageId = profileImageId;
         this.nickname = nickname;
         this.date = date;
         this.content = content;
-        this.translateContent = translateContent;
         this.thumbsUpNumber = thumbsUpNumber;
         this.thumbsDownNumber = thumbsDownNumber;
         this.replyToCommentId = replyToCommentId;
@@ -62,14 +60,6 @@ public class CommentData {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getTranslateContent() {
-        return translateContent;
-    }
-
-    public void setTranslateContent(String translateContent) {
-        this.translateContent = translateContent;
     }
 
     public int getThumbsUpNumber() {

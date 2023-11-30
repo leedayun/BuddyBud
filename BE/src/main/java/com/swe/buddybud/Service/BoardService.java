@@ -23,4 +23,3 @@ public interface BoardService {
 
     void insertComment(Map<String, String> fields);
 }
-
