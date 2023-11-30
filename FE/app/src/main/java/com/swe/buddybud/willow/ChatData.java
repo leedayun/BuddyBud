@@ -2,17 +2,17 @@ package com.swe.buddybud.willow;
 
 import android.net.Uri;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class ChatData {
-    private LocalTime timestamp;
+    private LocalDateTime timestamp;
     private String message;
     private String name;
     private int imgResId;
     private Uri imageURI;
     private String translatedString;
 
-    public ChatData(LocalTime timestamp, String message, String name, int imgResId, Uri imageURI, String translatedString) {
+    public ChatData(LocalDateTime timestamp, String message, String name, int imgResId, Uri imageURI, String translatedString) {
         this.timestamp = timestamp;
         if(imageURI!=null) {
             this.message = "";
@@ -27,7 +27,7 @@ public class ChatData {
         this.translatedString = translatedString;
     }
 
-    public LocalTime getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
     public String getMessage() {
