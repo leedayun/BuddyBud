@@ -416,11 +416,13 @@
         INSERT INTO
             B_SCRAP (
             post_no,
-            user_no
+            user_no,
+            created_at
         )
         VALUES (
                    #{boardId},
-                   #{userId}
+                   #{userId},
+                    sysdate()
                )
     </insert>
 

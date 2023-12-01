@@ -76,15 +76,10 @@ public class BoardController {
     public String insertComment(@RequestBody Map<String, String> fields) {
         JsonObject jsonObject = new JsonObject();
         boolean result = false;
-        System.out.println("say hi 1");
         try {
-            System.out.println("say hi 2");
             boardService.insertComment(fields);
-            System.out.println("say hi 3");
             int seq = boardService.getLastInsertId();
-            System.out.println("say hi 4");
             boardService.updateParentCommentNo(seq);
-            System.out.println("say hi 5");
             result = true;
         }
         catch (Exception e) {
@@ -124,12 +119,15 @@ public class BoardController {
         String result = "failed";
 
         try {
+            System.out.println("like say hi1");
             if (likeYN.equals("Y")) {
+                System.out.println("like say hi2");
                 boardService.insertBoardLike(boardId, userId);
-                result = "delete success";
-            } else if (likeYN.equals("N")) {
-                boardService.deleteBoardLike(boardId, userId);
                 result = "insert success";
+            } else if (likeYN.equals("N")) {
+                System.out.println("like say hi3");
+                boardService.deleteBoardLike(boardId, userId);
+                result = "delete success";
             }
         }
         catch (Exception e) {
@@ -151,11 +149,11 @@ public class BoardController {
 
         try {
             if (likeYN.equals("Y")) {
-                boardService.deleteCommentLike(tableType, commentId, userId);
-                result = "delete success";
-            } else if (likeYN.equals("N")) {
                 boardService.insertCommentLike(tableType, commentId, userId);
                 result = "insert success";
+            } else if (likeYN.equals("N")) {
+                boardService.deleteCommentLike(tableType, commentId, userId);
+                result = "delete success";
             }
         }
         catch (Exception e) {
@@ -176,14 +174,17 @@ public class BoardController {
 
         try {
             if (hateYN.equals("Y")) {
-                boardService.deleteCommentLike(tableType, commentId, userId);
-                result = "delete success";
-            } else if (hateYN.equals("N")) {
+                System.out.println("say hi1");
                 boardService.insertCommentLike(tableType, commentId, userId);
                 result = "insert success";
+            } else if (hateYN.equals("N")) {
+                System.out.println("say hi2");
+                boardService.deleteCommentLike(tableType, commentId, userId);
+                result = "delete success";
             }
         }
         catch (Exception e) {
+            System.out.println("say hi3");
             result = "request failed";
         }
 
@@ -199,15 +200,20 @@ public class BoardController {
         String result = "failed";
 
         try {
+            System.out.println("say hi1");
             if (scrapYN.equals("Y")) {
-                boardService.deleteScrap(boardId, userId);
-                result = "delete success";
-            } else if (scrapYN.equals("N")) {
+                System.out.println("say hi2");
                 boardService.insertScrap(boardId, userId);
                 result = "insert success";
+            } else if (scrapYN.equals("N")) {
+                System.out.println("say hi3");
+                boardService.deleteScrap(boardId, userId);
+                result = "delete success";
             }
         }
         catch (Exception e) {
+            System.out.println("say hi1");
+            e.printStackTrace();
             result = "request failed";
         }
 

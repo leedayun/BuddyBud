@@ -87,15 +87,28 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
             }
         });
 
-        // 스크랩 아이콘 색상 설정
-//        if (data.isScrapClicked()) {
-//            holder.imageScrap.setColorFilter(Color.parseColor("#94DEF7"));
-//        } else {
-//            holder.imageScrap.setColorFilter(Color.parseColor("#A4A4A4"));
-//        }
-
-        // 스크랩 수 설정
+        // 스크랩 상태 설정
+        boolean isScrap = data.isScrap();
+        holder.imageScrap.setColorFilter(isScrap ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
         holder.feedScrapNumber.setText(String.valueOf(data.getScrapNumber()));
+
+        // 스크랩 버튼 클릭 리스너
+        holder.imageScrap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 상태 변경
+                data.setScrap(!data.isScrap());
+                if (data.isScrap()) {
+                    data.incrementScrapCount();
+                } else {
+                    data.decrementScrapCount();
+                }
+
+                // UI 업데이트
+                holder.imageScrap.setColorFilter(data.isScrap() ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+                holder.feedScrapNumber.setText(String.valueOf(data.getScrapNumber()));
+            }
+        });
 
         // 제목과 내용 max line 설정
         holder.feedTitle.setMaxLines(1);
@@ -150,13 +163,12 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
             }
         });
 
-
         // 피드 아이템 클릭 리스너
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 변경된 좋아요 상태를 추적하고 필요한 경우 API 호출
-                updateAllLikesBeforeNavigating();
+                updateAllLikesAndScrapsBeforeNavigating();
 
                 // BoardDetailFragment로 이동
                 BoardDetailFragment boardDetailFragment = new BoardDetailFragment();
@@ -173,7 +185,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
         });
     }
 
-    private void updateAllLikesBeforeNavigating() {
+    private void updateAllLikesAndScrapsBeforeNavigating() {
         for (BoardData data : dataList) {
             // 좋아요 상태가 변경된 경우 확인
             if (!data.getInitialIsThumbsUpClicked().equals(data.getIsThumbsUpClicked())) {
@@ -182,11 +194,19 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
                 int boardId = data.getId();
                 updateLikeStatus(likeYN, userId, boardId);
             }
+            // 스크랩 상태가 변경된 경우 확인
+            if (!data.getInitialIsScrapClicked().equals(data.getIsScrapClicked())) {
+                String scrapYN = data.getIsScrapClicked();
+                int userId = LoginData.getLoginUserNo();
+                int boardId = data.getId();
+                updateScrapStatus(scrapYN, userId, boardId);
+            }
         }
     }
     private void updateLikeStatus(String likeYN, int userId, int boardId) {
         BoardApiService service = RetrofitClient.getService(BoardApiService.class);
         Call<JsonObject> call = service.updateBoardLike(likeYN, userId, boardId);
+        Log.d("test",likeYN);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -194,6 +214,25 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.BoardViewHol
                     Log.d("BoardAdapter", "Board like status updated successfully");
                 } else {
                     Log.e("BoardAdapter", "Server error occurred while updating board like status");
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("BoardAdapter", "Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    private void updateScrapStatus(String scrapYN, int userId, int boardId) {
+        BoardApiService service = RetrofitClient.getService(BoardApiService.class);
+        Call<JsonObject> call = service.updateScrap(scrapYN, userId, boardId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Log.d("BoardAdapter", "Board scrap status updated successfully");
+                } else {
+                    Log.e("BoardAdapter", "Server error occurred while updating board scrap status");
                 }
             }
             @Override

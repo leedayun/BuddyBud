@@ -10,12 +10,19 @@ public class CommentData {
     private int thumbsDownNumber;
     private int replyToCommentId;
     private String replyToNickname;
-    private boolean isThumbsUpClicked;
-    private boolean isThumbsDownClicked;
+    private String isThumbsUpClicked;
+    private String isThumbsDownClicked;
     private boolean isTranslated;
+    private String initialIsThumbsUpClicked;
+    private int initialThumbsUpNumber;
+    private String initialIsThumbsDownClicked;
+    private int initialThumbsDownNumber;
+    private boolean likeStatusChanged = false;
+    private boolean hateStatusChanged = false;
 
     // Constructor
-    public CommentData(int commentId, int profileImageId, String nickname, String date, String content, int thumbsUpNumber, int thumbsDownNumber, int replyToCommentId, String replyToNickname) {
+    public CommentData(int commentId, int profileImageId, String nickname, String date, String content, int thumbsUpNumber,
+                       int thumbsDownNumber, int replyToCommentId, String replyToNickname, String isThumbsUpClicked, String isThumbsDownClicked) {
         this.commentId = commentId;
         this.profileImageId = profileImageId;
         this.nickname = nickname;
@@ -25,9 +32,13 @@ public class CommentData {
         this.thumbsDownNumber = thumbsDownNumber;
         this.replyToCommentId = replyToCommentId;
         this.replyToNickname = replyToNickname;
-        this.isThumbsUpClicked = false;
-        this.isThumbsDownClicked = false;
+        this.isThumbsUpClicked = isThumbsUpClicked;
+        this.isThumbsDownClicked = isThumbsDownClicked;
         this.isTranslated = false;
+        this.initialIsThumbsUpClicked = isThumbsUpClicked;
+        this.initialThumbsUpNumber = thumbsUpNumber;
+        this.initialIsThumbsDownClicked = isThumbsDownClicked;
+        this.initialThumbsDownNumber = thumbsDownNumber;
     }
 
     public int getProfileImageId() {
@@ -86,19 +97,19 @@ public class CommentData {
         this.replyToNickname = replyToNickname;
     }
 
-    public boolean isThumbsUpClicked() {
+    public String isThumbsUpClicked() {
         return isThumbsUpClicked;
     }
 
-    public void setThumbsUpClicked(boolean thumbsUpClicked) {
+    public void setThumbsUpClicked(String thumbsUpClicked) {
         isThumbsUpClicked = thumbsUpClicked;
     }
 
-    public boolean isThumbsDownClicked() {
+    public String isThumbsDownClicked() {
         return isThumbsDownClicked;
     }
 
-    public void setThumbsDownClicked(boolean thumbsDownClicked) {
+    public void setThumbsDownClicked(String thumbsDownClicked) {
         isThumbsDownClicked = thumbsDownClicked;
     }
 
@@ -124,5 +135,78 @@ public class CommentData {
 
     public void setReplyToCommentId(int replyToCommentId) {
         this.replyToCommentId = replyToCommentId;
+    }
+
+    // 아래 코드는 좋아요 / 싫어요 관련 코드
+    public boolean isLiked() {
+        return "Y".equals(this.isThumbsUpClicked);
+    }
+
+    // 좋아요 상태를 설정
+    public void setLiked(boolean isLiked) {
+        this.isThumbsUpClicked = isLiked ? "Y" : "N";
+    }
+
+    // 좋아요 수 변경
+    public void incrementLikeCount() {
+        this.thumbsUpNumber++;
+    }
+
+    public void decrementLikeCount() { this.thumbsUpNumber--; }
+
+    public String getInitialIsThumbsUpClicked() {
+        return initialIsThumbsUpClicked;
+    }
+
+    public int getInitialThumbsUpNumber() {
+        return initialThumbsUpNumber;
+    }
+
+    public String getIsThumbsUpClicked() {
+        return isThumbsUpClicked;
+    }
+
+    public boolean isHated() {
+        return "Y".equals(this.isThumbsDownClicked);
+    }
+
+    // 싫어요 상태를 설정
+    public void setHated(boolean isHated) {
+        this.isThumbsDownClicked = isHated ? "Y" : "N";
+    }
+
+    // 싫어요 수 변경
+    public void incrementHateCount() {
+        this.thumbsDownNumber++;
+    }
+
+    public void decrementHateCount() { this.thumbsDownNumber--; }
+
+    public String getInitialIsThumbsDownClicked() {
+        return initialIsThumbsDownClicked;
+    }
+
+    public int getInitialThumbsDownNumber() {
+        return initialThumbsDownNumber;
+    }
+
+    public String getIsThumbsDownClicked() {
+        return isThumbsDownClicked;
+    }
+
+    public void setLikeStatusChanged(boolean likeStatusChanged) {
+        this.likeStatusChanged = likeStatusChanged;
+    }
+
+    public boolean isLikeStatusChanged() {
+        return likeStatusChanged;
+    }
+
+    public void setHateStatusChanged(boolean hateStatusChanged) {
+        this.hateStatusChanged = hateStatusChanged;
+    }
+
+    public boolean isHateStatusChanged() {
+        return hateStatusChanged;
     }
 }

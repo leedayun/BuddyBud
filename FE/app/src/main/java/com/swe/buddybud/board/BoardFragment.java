@@ -130,7 +130,7 @@ public class BoardFragment extends Fragment {
                                 boardItem.get("like_yn"),
                                 boardItem.get("scrap_yn"),
                                 Integer.parseInt(boardItem.get("like_num")),
-                                Integer.parseInt(boardItem.get("comment_num"))
+                                Integer.parseInt(boardItem.get("scrap_num"))
                         );
                         dataList.add(boardData);
                     }
@@ -150,7 +150,7 @@ public class BoardFragment extends Fragment {
         });
     }
 
-    private void updateAllLikesBeforeLeaving() {
+    private void updateAllLikesAndScrapsBeforeLeaving() {
         // 여기서 dataList는 좋아요 상태가 포함된 FeedData 객체의 리스트입니다.
         for (BoardData data : dataList) {
             // 좋아요 상태가 변경된 경우 확인
@@ -160,12 +160,20 @@ public class BoardFragment extends Fragment {
                 int boardId = data.getId();
                 updateLikeStatus(likeYN, userId, boardId);
             }
+            // 스크랩 상태가 변경된 경우 확인
+            if (!data.getInitialIsScrapClicked().equals(data.getIsScrapClicked())) {
+                String scrapYN = data.getIsScrapClicked();
+                int userId = LoginData.getLoginUserNo();
+                int boardId = data.getId();
+                updateScrapStatus(scrapYN, userId, boardId);
+            }
+
         }
     }
     @Override
     public void onPause() {
         super.onPause();
-        updateAllLikesBeforeLeaving();
+        updateAllLikesAndScrapsBeforeLeaving();
     }
 
     private void updateLikeStatus(String likeYN, int userId, int boardId) {
@@ -178,6 +186,25 @@ public class BoardFragment extends Fragment {
                     Log.d("HomeFragment", "Board like status updated successfully");
                 } else {
                     Log.e("HomeFragment", "Server error occurred while updating board like status");
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("HomeFragment", "Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    private void updateScrapStatus(String scrapYN, int userId, int boardId) {
+        BoardApiService service = RetrofitClient.getService(BoardApiService.class);
+        Call<JsonObject> call = service.updateScrap(scrapYN, userId, boardId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Log.d("HomeFragment", "Board scrap status updated successfully");
+                } else {
+                    Log.e("HomeFragment", "Server error occurred while updating board scrap status");
                 }
             }
             @Override

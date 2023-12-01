@@ -110,57 +110,61 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             commentViewHolder.thumbsUpNumber.setText(String.valueOf(commentData.getThumbsUpNumber()));;
             commentViewHolder.thumbsDownNumber.setText(String.valueOf(commentData.getThumbsDownNumber()));;
 
-            // 프로필 사진을 눌렀을 경우
-//            commentViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Context context = v.getContext();
-//                    if (context instanceof AppCompatActivity) {
-//                        CustomDialog customDialog = CustomDialog.newInstance(commentData.getNickname(), commentData.getProfileImageId());
-//                        customDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "customDialog");
-//                    }
-//                }
-//            });
+            // 댓글 좋아요 상태 설정
+            boolean isLiked = commentData.isLiked();
+            commentViewHolder.imageThumbsUp.setColorFilter(isLiked ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+            commentViewHolder.thumbsUpNumber.setText(String.valueOf(commentData.getThumbsUpNumber()));
 
-            // 댓글 좋아요 버튼을 눌렀을 경우
+            // 댓글 좋아요 버튼 클릭 리스너
             commentViewHolder.imageThumbsUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int adapterPosition = commentViewHolder.getAdapterPosition();
-                    CommentData currentData = commentDataList.get(adapterPosition);
-
-                    boolean isClicked = currentData.isThumbsUpClicked();
-                    currentData.setThumbsUpClicked(!isClicked);
-
-                    if (!isClicked) {
-                        commentViewHolder.imageThumbsUp.setColorFilter(Color.parseColor("#94DEF7"));
-                        commentData.setThumbsUpNumber(commentData.getThumbsUpNumber() + 1);
+                    // 상태 변경
+                    commentData.setLiked(!commentData.isLiked());
+                    if (commentData.isLiked()) {
+                        commentData.incrementLikeCount();
                     } else {
-                        commentViewHolder.imageThumbsUp.setColorFilter(Color.parseColor("#A4A4A4"));
-                        commentData.setThumbsUpNumber(commentData.getThumbsUpNumber() - 1);
+                        commentData.decrementLikeCount();
                     }
-                    commentViewHolder.thumbsUpNumber.setText(String.valueOf(currentData.getThumbsUpNumber()));
+                    // 좋아요 상태가 변경되었는지 확인
+                    if (!commentData.getInitialIsThumbsUpClicked().equals(commentData.getIsThumbsUpClicked())) {
+                        commentData.setLikeStatusChanged(true);
+                    } else {
+                        commentData.setLikeStatusChanged(false);
+                    }
+
+                    // UI 업데이트
+                    commentViewHolder.imageThumbsUp.setColorFilter(commentData.isLiked() ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+                    commentViewHolder.thumbsUpNumber.setText(String.valueOf(commentData.getThumbsUpNumber()));
                 }
             });
 
-            // 댓글 싫어요 버튼을 눌렀을 경우
+            // 댓글 싫어요 상태 설정
+            boolean isHated = commentData.isHated();
+            commentViewHolder.imageThumbsDown.setColorFilter(isHated ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+            commentViewHolder.thumbsDownNumber.setText(String.valueOf(commentData.getThumbsDownNumber()));
+
+            // 댓글 싫어요 버튼 클릭 리스너
             commentViewHolder.imageThumbsDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int adapterPosition = commentViewHolder.getAdapterPosition();
-                    CommentData currentData = commentDataList.get(adapterPosition);
-
-                    boolean isClicked = currentData.isThumbsDownClicked();
-                    currentData.setThumbsDownClicked(!isClicked);
-
-                    if (!isClicked) {
-                        commentViewHolder.imageThumbsDown.setColorFilter(Color.parseColor("#94DEF7"));
-                        commentData.setThumbsDownNumber(commentData.getThumbsDownNumber() + 1);
+                    // 상태 변경
+                    commentData.setHated(!commentData.isHated());
+                    if (commentData.isHated()) {
+                        commentData.incrementHateCount();
                     } else {
-                        commentViewHolder.imageThumbsDown.setColorFilter(Color.parseColor("#A4A4A4"));
-                        commentData.setThumbsDownNumber(commentData.getThumbsDownNumber() - 1);
+                        commentData.decrementHateCount();
                     }
-                    commentViewHolder.thumbsDownNumber.setText(String.valueOf(currentData.getThumbsDownNumber()));
+                    // 싫어요 상태가 변경되었는지 확인
+                    if (!commentData.getInitialIsThumbsDownClicked().equals(commentData.getIsThumbsDownClicked())) {
+                        commentData.setHateStatusChanged(true);
+                    } else {
+                        commentData.setHateStatusChanged(false);
+                    }
+
+                    // UI 업데이트
+                    commentViewHolder.imageThumbsDown.setColorFilter(commentData.isHated() ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+                    commentViewHolder.thumbsDownNumber.setText(String.valueOf(commentData.getThumbsDownNumber()));
                 }
             });
 
@@ -217,57 +221,61 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             replyViewHolder.thumbsUpNumber.setText(String.valueOf(commentData.getThumbsUpNumber()));;
             replyViewHolder.thumbsDownNumber.setText(String.valueOf(commentData.getThumbsDownNumber()));;
 
-            // 프로필 사진을 눌렀을 경우
-//            replyViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Context context = v.getContext();
-//                    if (context instanceof AppCompatActivity) {
-//                        CustomDialog customDialog = CustomDialog.newInstance(commentData.getNickname(), commentData.getProfileImageId());
-//                        customDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "customDialog");
-//                    }
-//                }
-//            });
+            // 대댓글 좋아요 상태 설정
+            boolean isLiked = commentData.isLiked();
+            replyViewHolder.imageThumbsUp.setColorFilter(isLiked ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+            replyViewHolder.thumbsUpNumber.setText(String.valueOf(commentData.getThumbsUpNumber()));
 
-            // 대댓글 좋아요 버튼을 눌렀을 경우
+            // 대댓글 좋아요 버튼 클릭 리스너
             replyViewHolder.imageThumbsUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int adapterPosition = replyViewHolder.getAdapterPosition();
-                    CommentData currentData = commentDataList.get(adapterPosition);
-
-                    boolean isClicked = currentData.isThumbsUpClicked();
-                    currentData.setThumbsUpClicked(!isClicked);
-
-                    if (!isClicked) {
-                        replyViewHolder.imageThumbsUp.setColorFilter(Color.parseColor("#94DEF7"));
-                        commentData.setThumbsUpNumber(commentData.getThumbsUpNumber() + 1);
+                    // 상태 변경
+                    commentData.setLiked(!commentData.isLiked());
+                    if (commentData.isLiked()) {
+                        commentData.incrementLikeCount();
                     } else {
-                        replyViewHolder.imageThumbsUp.setColorFilter(Color.parseColor("#A4A4A4"));
-                        commentData.setThumbsUpNumber(commentData.getThumbsUpNumber() - 1);
+                        commentData.decrementLikeCount();
                     }
-                    replyViewHolder.thumbsUpNumber.setText(String.valueOf(currentData.getThumbsUpNumber()));
+                    // 좋아요 상태가 변경되었는지 확인
+                    if (!commentData.getInitialIsThumbsUpClicked().equals(commentData.getIsThumbsUpClicked())) {
+                        commentData.setLikeStatusChanged(true);
+                    } else {
+                        commentData.setLikeStatusChanged(false);
+                    }
+
+                    // UI 업데이트
+                    replyViewHolder.imageThumbsUp.setColorFilter(commentData.isLiked() ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+                    replyViewHolder.thumbsUpNumber.setText(String.valueOf(commentData.getThumbsUpNumber()));
                 }
             });
 
-            // 대댓글 싫어요 버튼을 눌렀을 경우
+            // 대댓글 싫어요 상태 설정
+            boolean isHated = commentData.isHated();
+            replyViewHolder.imageThumbsDown.setColorFilter(isHated ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+            replyViewHolder.thumbsDownNumber.setText(String.valueOf(commentData.getThumbsDownNumber()));
+
+            // 대댓글 싫어요 버튼 클릭 리스너
             replyViewHolder.imageThumbsDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int adapterPosition = replyViewHolder.getAdapterPosition();
-                    CommentData currentData = commentDataList.get(adapterPosition);
-
-                    boolean isClicked = currentData.isThumbsDownClicked();
-                    currentData.setThumbsDownClicked(!isClicked);
-
-                    if (!isClicked) {
-                        replyViewHolder.imageThumbsDown.setColorFilter(Color.parseColor("#94DEF7"));
-                        commentData.setThumbsDownNumber(commentData.getThumbsDownNumber() + 1);
+                    // 상태 변경
+                    commentData.setHated(!commentData.isHated());
+                    if (commentData.isHated()) {
+                        commentData.incrementHateCount();
                     } else {
-                        replyViewHolder.imageThumbsDown.setColorFilter(Color.parseColor("#A4A4A4"));
-                        commentData.setThumbsDownNumber(commentData.getThumbsDownNumber() - 1);
+                        commentData.decrementHateCount();
                     }
-                    replyViewHolder.thumbsDownNumber.setText(String.valueOf(currentData.getThumbsDownNumber()));
+                    // 싫어요 상태가 변경되었는지 확인
+                    if (!commentData.getInitialIsThumbsDownClicked().equals(commentData.getIsThumbsDownClicked())) {
+                        commentData.setHateStatusChanged(true);
+                    } else {
+                        commentData.setHateStatusChanged(false);
+                    }
+
+                    // UI 업데이트
+                    replyViewHolder.imageThumbsDown.setColorFilter(commentData.isHated() ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+                    replyViewHolder.thumbsDownNumber.setText(String.valueOf(commentData.getThumbsDownNumber()));
                 }
             });
 

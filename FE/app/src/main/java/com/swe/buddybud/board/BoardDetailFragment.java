@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,8 +41,11 @@ import retrofit2.Response;
 public class BoardDetailFragment extends Fragment {
     private boolean isLiked;
     private int likeCount;
+    private boolean isScrap;
+    private int scrapCount;
     private boolean isTranslated = false;
     private boolean initialIsLiked;
+    private boolean initialIsScrap;
     private int boardId;
     JsonObject boardDetails = null;
     public int getBoardId() {
@@ -54,6 +58,14 @@ public class BoardDetailFragment extends Fragment {
 
     public boolean isLikeStatusChanged() {
         return initialIsLiked != isLiked;
+    }
+
+    public boolean getIsScrap() {
+        return isScrap;
+    }
+
+    public boolean isScrapStatusChanged() {
+        return initialIsScrap != isScrap;
     }
 
     public BoardDetailFragment () {
@@ -111,12 +123,24 @@ public class BoardDetailFragment extends Fragment {
                     initialIsLiked = "Y".equals(boardDetails.get("like_yn").getAsString());
                     boardId = boardDetails.get("post_no").getAsInt();
 
+                    // 초기 스크랩 상태 설정
+                    isScrap = "Y".equals(boardDetails.get("scrap_yn").getAsString());
+                    scrapCount = boardDetails.get("scrap_num").getAsInt();
+                    initialIsScrap = "Y".equals(boardDetails.get("scrap_yn").getAsString());
+
                     if (isLiked) {
                         thumbsUpImageView.setColorFilter(Color.parseColor("#94DEF7"));
                     } else {
                         thumbsUpImageView.setColorFilter(Color.parseColor("#A4A4A4"));
                     }
                     thumbsUpNumberTextView.setText(String.valueOf(likeCount));
+
+                    if (isScrap) {
+                        scrapImageView.setColorFilter(Color.parseColor("#94DEF7"));
+                    } else {
+                        scrapImageView.setColorFilter(Color.parseColor("#A4A4A4"));
+                    }
+                    scrapNumberTextView.setText(String.valueOf(scrapCount));
                 } else {
                     Log.d("FeedDetail", "Server error");
                 }
@@ -141,6 +165,23 @@ public class BoardDetailFragment extends Fragment {
                 // UI 업데이트
                 thumbsUpImageView.setColorFilter(isLiked ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
                 thumbsUpNumberTextView.setText(String.valueOf(likeCount));
+
+            }
+        });
+
+        ImageView scrapImageView = rootView.findViewById(R.id.imageScrap);
+        TextView scrapNumberTextView = rootView.findViewById(R.id.feedScrapNumber);
+        // 스크랩 버튼 클릭 리스너 설정
+        scrapImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 좋아요 상태 변경
+                isScrap = !isScrap;
+                scrapCount = isScrap ? scrapCount + 1 : scrapCount - 1;
+
+                // UI 업데이트
+                scrapImageView.setColorFilter(isScrap ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+                scrapNumberTextView.setText(String.valueOf(scrapCount));
 
             }
         });
@@ -189,6 +230,15 @@ public class BoardDetailFragment extends Fragment {
             }
         });
 
+        ImageView imageLink = rootView.findViewById(R.id.imageLink);
+        // 링크 아이콘을 눌렀을 경우
+        imageLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Network Connection Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         ImageView iconBack = rootView.findViewById(R.id.iconBack);
         iconBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,6 +246,10 @@ public class BoardDetailFragment extends Fragment {
                 // 좋아요 상태가 변경된 경우 확인
                 if ("Y".equals(boardDetails.get("like_yn").getAsString()) != isLiked) {
                     updateLikeStatusOnServer();
+                }
+                // 스크랩 상태가 변경된 경우 확인
+                if ("Y".equals(boardDetails.get("scrap_yn").getAsString()) != isScrap) {
+                    updateScrapStatusOnServer();
                 }
 
                 // 이전 Fragment로 돌아가기
@@ -222,6 +276,29 @@ public class BoardDetailFragment extends Fragment {
                     Log.d("FeedDetailActivity", "Board like status updated successfully");
                 } else {
                     Log.e("FeedDetailActivity", "Server error occurred while updating board like status");
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("FeedDetailActivity", "Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    private void updateScrapStatusOnServer() {
+        String scrapYN = isScrap ? "Y" : "N";
+        int userId = LoginData.getLoginUserNo();
+        int boardId = boardDetails.get("post_no").getAsInt();
+
+        BoardApiService service = RetrofitClient.getService(BoardApiService.class);
+        Call<JsonObject> call = service.updateScrap(scrapYN, userId, boardId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Log.d("FeedDetailActivity", "Board scrap status updated successfully");
+                } else {
+                    Log.e("FeedDetailActivity", "Server error occurred while updating board scrap status");
                 }
             }
             @Override

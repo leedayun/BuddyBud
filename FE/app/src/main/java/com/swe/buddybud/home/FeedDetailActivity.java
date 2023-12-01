@@ -51,6 +51,7 @@ public class FeedDetailActivity extends AppCompatActivity {
     private int replyToCommentId = -1;
     private String replyToNickname = null;
     JsonObject boardDetails;
+    JsonObject commentObject;
 
     // 대댓글 모드 활성화 메서드
     public void enableReplyMode(int commentId, String nickname) {
@@ -232,6 +233,8 @@ public class FeedDetailActivity extends AppCompatActivity {
                     // 상태 업데이트 API 호출
                     updateLikeStatusOnServer();
                 }
+                updateAllCommentLikeStatusOnServer();
+                updateAllCommentHateStatusOnServer();
                 finish();
             }
         });
@@ -243,8 +246,75 @@ public class FeedDetailActivity extends AppCompatActivity {
             // 상태 업데이트 API 호출
             updateLikeStatusOnServer();
         }
+        updateAllCommentLikeStatusOnServer();
+        updateAllCommentHateStatusOnServer();
         // 기본 뒤로가기 동작 수행
         super.onBackPressed();
+    }
+
+    private void updateAllCommentLikeStatusOnServer() {
+        for (CommentData comment : commentDataList) {
+            if (comment.isLikeStatusChanged()) {
+                updateCommentLikeStatusOnServer(comment);
+            }
+        }
+    }
+
+    private void updateAllCommentHateStatusOnServer() {
+        for (CommentData comment : commentDataList) {
+            if (comment.isHateStatusChanged()) {
+                updateCommentHateStatusOnServer(comment);
+            }
+        }
+    }
+
+    private void updateCommentLikeStatusOnServer(CommentData comment) {
+        String likeYN = comment.isLiked() ? "Y" : "N";
+        int userId = LoginData.getLoginUserNo();
+        int commentId = comment.getCommentId();
+
+        BoardApiService service = RetrofitClient.getService(BoardApiService.class);
+        Call<JsonObject> call = service.updateCommentLike(likeYN, userId, commentId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Log.d("FeedDetailActivity", "Comment like status updated successfully");
+                } else {
+                    Log.e("FeedDetailActivity", "Server error occurred while updating comment like status");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("FeedDetailActivity", "Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    private void updateCommentHateStatusOnServer(CommentData comment) {
+        String hateYN = comment.isHated() ? "Y" : "N";
+        int userId = LoginData.getLoginUserNo();
+        int commentId = comment.getCommentId();
+
+        BoardApiService service = RetrofitClient.getService(BoardApiService.class);
+        Log.d("test", hateYN);
+        Call<JsonObject> call = service.updateCommentHate(hateYN, userId, commentId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Log.d("FeedDetailActivity", "Comment hate status updated successfully");
+                } else {
+                    Log.e("FeedDetailActivity", "Server error occurred while updating comment hate status");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("FeedDetailActivity", "Network error: " + t.getMessage());
+            }
+        });
     }
 
     private void updateLikeStatusOnServer() {
@@ -296,7 +366,7 @@ public class FeedDetailActivity extends AppCompatActivity {
                     // 댓글 데이터 추출 및 변환
                     JsonArray commentsJsonArray = boardDetails.getAsJsonArray("comments");
                     for (JsonElement commentElement : commentsJsonArray) {
-                        JsonObject commentObject = commentElement.getAsJsonObject();
+                        commentObject = commentElement.getAsJsonObject();
 
                         CommentData commentData = new CommentData(
                                 commentObject.get("comment_no").getAsInt(),
@@ -304,10 +374,12 @@ public class FeedDetailActivity extends AppCompatActivity {
                                 commentObject.get("user_id").getAsString(),
                                 commentObject.get("created_at").getAsString(),
                                 commentObject.get("content").getAsString(),
-                                0, // thumbsUpNumber
-                                0, // thumbsDownNumber
+                                commentObject.get("comment_like_num").getAsInt(), // thumbsUpNumber
+                                commentObject.get("comment_hate_num").getAsInt(), // thumbsDownNumber
                                 commentObject.get("parent_comment_no").getAsInt(), // replyToCommentId
-                                commentObject.get("parent_comment_user_id").getAsString()  // replyToNickname
+                                commentObject.get("parent_comment_user_id").getAsString(),  // replyToNickname
+                                commentObject.get("comment_like_yn").getAsString(),
+                                commentObject.get("comment_hate_yn").getAsString()
                         );
                         commentDataList.add(commentData);
                     }
