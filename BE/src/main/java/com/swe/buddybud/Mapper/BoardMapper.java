@@ -22,6 +22,10 @@ public interface BoardMapper {
 
     void insertComment(Map<String, String> fields);
 
+    int getLastInsertId();
+
+    void updateParentCommentNo(Integer seq);
+
     void deleteBoardLike(Integer boardId, Integer userId);
 
     void insertBoardLike(Integer boardId, Integer userId);

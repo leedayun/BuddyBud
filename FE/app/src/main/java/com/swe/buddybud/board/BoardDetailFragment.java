@@ -1,5 +1,6 @@
 package com.swe.buddybud.board;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.swe.buddybud.home.CommentAdapter;
 import com.swe.buddybud.home.CommentData;
 import com.swe.buddybud.home.FeedDetailActivity;
 import com.swe.buddybud.home.RecycleViewDecoration;
+import com.swe.buddybud.home.Translator;
 import com.swe.buddybud.user.LoginData;
 
 import java.util.ArrayList;
@@ -36,6 +38,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BoardDetailFragment extends Fragment {
+    private boolean isLiked;
+    private int likeCount;
+    private boolean isTranslated = false;
+    private boolean initialIsLiked;
+    private int boardId;
+    JsonObject boardDetails = null;
+    public int getBoardId() {
+        return boardId;
+    }
+
+    public boolean getIsLiked() {
+        return isLiked;
+    }
+
+    public boolean isLikeStatusChanged() {
+        return initialIsLiked != isLiked;
+    }
 
     public BoardDetailFragment () {
     }
@@ -63,7 +82,7 @@ public class BoardDetailFragment extends Fragment {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()) {
-                    JsonObject boardDetails = response.body();
+                    boardDetails = response.body();
 
                     Log.d("test", boardDetails.get("title").getAsString());
                     CircleImageView profileImageView = rootView.findViewById(R.id.feedProfileImage);
@@ -79,14 +98,25 @@ public class BoardDetailFragment extends Fragment {
 
                     //임시
                     profileImageView.setImageResource(R.drawable.logo_profile);
-                    nicknameTextView.setText("temp_nickname");
-
+                    nicknameTextView.setText(boardDetails.get("post_user_id").getAsString());
                     dateTextView.setText(boardDetails.get("created_at").getAsString());
                     titleTextView.setText(boardDetails.get("title").getAsString());
                     contentTextView.setText(boardDetails.get("content").getAsString());
                     thumbsUpNumberTextView.setText(String.valueOf(boardDetails.get("like_num").getAsInt()));
                     scrapNumberTextView.setText(String.valueOf(boardDetails.get("scrap_num").getAsInt()));
 
+                    // 초기 좋아요 상태 설정
+                    isLiked = "Y".equals(boardDetails.get("like_yn").getAsString());
+                    likeCount = boardDetails.get("like_num").getAsInt();
+                    initialIsLiked = "Y".equals(boardDetails.get("like_yn").getAsString());
+                    boardId = boardDetails.get("post_no").getAsInt();
+
+                    if (isLiked) {
+                        thumbsUpImageView.setColorFilter(Color.parseColor("#94DEF7"));
+                    } else {
+                        thumbsUpImageView.setColorFilter(Color.parseColor("#A4A4A4"));
+                    }
+                    thumbsUpNumberTextView.setText(String.valueOf(likeCount));
                 } else {
                     Log.d("FeedDetail", "Server error");
                 }
@@ -98,9 +128,109 @@ public class BoardDetailFragment extends Fragment {
             }
         });
 
+        ImageView thumbsUpImageView = rootView.findViewById(R.id.imageThumbsUp);
+        TextView thumbsUpNumberTextView = rootView.findViewById(R.id.feedThumbsUpNumber);
+        // 좋아요 버튼 클릭 리스너 설정
+        thumbsUpImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 좋아요 상태 변경
+                isLiked = !isLiked;
+                likeCount = isLiked ? likeCount + 1 : likeCount - 1;
+
+                // UI 업데이트
+                thumbsUpImageView.setColorFilter(isLiked ? Color.parseColor("#94DEF7") : Color.parseColor("#A4A4A4"));
+                thumbsUpNumberTextView.setText(String.valueOf(likeCount));
+
+            }
+        });
+
+        TextView titleTextView = rootView.findViewById(R.id.feedTitle);
+        TextView contentTextView = rootView.findViewById(R.id.feedContent);
+        ImageView translationImageView = rootView.findViewById(R.id.imageTranslation);
+        // 번역 버튼을 눌렀을 경우
+        translationImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isTranslated = !isTranslated;
+
+                if (isTranslated) {
+                    Translator translator = new Translator();
+                    translator.detectAndTranslate(boardDetails.get("title").getAsString(), new Translator.TranslationCallback() {
+                        @Override
+                        public void onTranslationDone(String translatedText) {
+                            // 번역된 텍스트 처리
+                            titleTextView.setText(translatedText);
+                        }
+                        @Override
+                        public void onTranslationError(Exception e) {
+                            // 에러 처리
+                            Log.e("Translation", "Error during translation", e);
+                        }
+                    });
+                    translator.detectAndTranslate(boardDetails.get("content").getAsString(), new Translator.TranslationCallback() {
+                        @Override
+                        public void onTranslationDone(String translatedText) {
+                            // 번역된 텍스트 처리
+                            contentTextView.setText(translatedText);
+                        }
+                        @Override
+                        public void onTranslationError(Exception e) {
+                            // 에러 처리
+                            Log.e("Translation", "Error during translation", e);
+                        }
+                    });
+                    translationImageView.setColorFilter(Color.parseColor("#94DEF7"));
+                } else {
+                    titleTextView.setText(boardDetails.get("title").getAsString());
+                    contentTextView.setText(boardDetails.get("content").getAsString());
+                    translationImageView.setColorFilter(Color.parseColor("#A4A4A4"));
+                }
+            }
+        });
+
+        ImageView iconBack = rootView.findViewById(R.id.iconBack);
+        iconBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 좋아요 상태가 변경된 경우 확인
+                if ("Y".equals(boardDetails.get("like_yn").getAsString()) != isLiked) {
+                    updateLikeStatusOnServer();
+                }
+
+                // 이전 Fragment로 돌아가기
+                if (getFragmentManager() != null) {
+                    getFragmentManager().popBackStack();
+                }
+            }
+        });
 
         return rootView;
     }
+
+    private void updateLikeStatusOnServer() {
+        String likeYN = isLiked ? "Y" : "N";
+        int userId = LoginData.getLoginUserNo();
+        int boardId = boardDetails.get("post_no").getAsInt();
+
+        BoardApiService service = RetrofitClient.getService(BoardApiService.class);
+        Call<JsonObject> call = service.updateBoardLike(likeYN, userId, boardId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Log.d("FeedDetailActivity", "Board like status updated successfully");
+                } else {
+                    Log.e("FeedDetailActivity", "Server error occurred while updating board like status");
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("FeedDetailActivity", "Network error: " + t.getMessage());
+            }
+        });
+    }
+
 
 //    @Override
 //    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

@@ -80,18 +80,6 @@ public class DataManager {
         return comments.size();
     }
 
-    // 피드 좋아요 관리
-    public void updateThumbsUp(int feedId, boolean isThumbsUp) {
-        for (FeedData feed : feedList) {
-            if (feed.getId() == feedId) {
-                feed.setThumbsUpClicked(isThumbsUp);
-                int currentThumbsUp = feed.getThumbsUpNumber();
-                feed.setThumbsUpNumber(isThumbsUp ? currentThumbsUp + 1 : currentThumbsUp - 1);
-                break;
-            }
-        }
-    }
-
     // 피드 댓글 달았을 경우
     public void updateFeedData(FeedData updatedFeed) {
         for (int i = 0; i < feedList.size(); i++) {

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.swe.buddybud.R;
 import com.swe.buddybud.board.BoardApiData;
 import com.swe.buddybud.board.BoardApiService;
@@ -73,8 +74,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String searchText = editTextSearch.getText().toString();
-                List<FeedData> filteredFeeds = DataManager.getInstance().filterFeeds(searchText);
-                adapter.setDataList(filteredFeeds);
+
+                List<FeedData> filteredList = new ArrayList<>();
+                if (searchText != null && !searchText.isEmpty()) {
+                    for (FeedData feed : dataList) {
+                        if (feed.getTitle().toLowerCase().contains(searchText.toLowerCase()) || feed.getContent().toLowerCase().contains(searchText.toLowerCase()) ) {
+                            filteredList.add(feed);
+                        }
+                    }
+                    adapter.setDataList(filteredList);
+                } else {
+                    adapter.setDataList(dataList);
+                }
                 adapter.notifyDataSetChanged();
 
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -121,14 +132,17 @@ public class HomeFragment extends Fragment {
                         // 각 게시물 정보를 FeedData 객체로 변환
                         FeedData feedData = new FeedData(
                                 Integer.parseInt(boardItem.get("post_no")),
-                                R.drawable.logo_profile, // 프로필 이미지 임시 값
-                                "temp_nickname", // 닉네임 임시 값
+                                R.drawable.logo_profile,
+                                boardItem.get("post_user_id"),
+                                Integer.parseInt(boardItem.get("post_user_no")),
                                 boardItem.get("created_at"),
                                 boardItem.get("title"),
                                 boardItem.get("content"),
                                 Integer.parseInt(boardItem.get("like_num")),
                                 Integer.parseInt(boardItem.get("comment_num")),
-                                null  // 추가 필요한 필드
+                                boardItem.get("like_yn"),
+                                boardItem.get("comment_yn"),
+                                null
                         );
                         dataList.add(feedData); // 리스트에 추가
                     }
@@ -145,6 +159,44 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Map<String, String>>> call, Throwable t) {
                 Log.d("error", "network error: " + t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        updateAllLikesBeforeLeaving();
+    }
+
+    private void updateAllLikesBeforeLeaving() {
+        // 여기서 dataList는 좋아요 상태가 포함된 FeedData 객체의 리스트입니다.
+        for (FeedData data : dataList) {
+            // 좋아요 상태가 변경된 경우 확인
+            if (!data.getInitialIsThumbsUpClicked().equals(data.getIsThumbsUpClicked())) {
+                String likeYN = data.getIsThumbsUpClicked();
+                int userId = LoginData.getLoginUserNo();
+                int boardId = data.getId();
+                updateLikeStatus(likeYN, userId, boardId);
+            }
+        }
+    }
+
+    private void updateLikeStatus(String likeYN, int userId, int boardId) {
+        BoardApiService service = RetrofitClient.getService(BoardApiService.class);
+        Call<JsonObject> call = service.updateBoardLike(likeYN, userId, boardId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Log.d("HomeFragment", "Board like status updated successfully");
+                } else {
+                    Log.e("HomeFragment", "Server error occurred while updating board like status");
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("HomeFragment", "Network error: " + t.getMessage());
             }
         });
     }
