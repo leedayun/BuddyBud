@@ -123,7 +123,6 @@ public class WillowFragment extends Fragment implements TextWatcher, View.OnClic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(incomingWillows.size()>1)  seeAllText.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -188,6 +187,7 @@ public class WillowFragment extends Fragment implements TextWatcher, View.OnClic
                     incomingWillowItems.clear();
                     if(!incomingExpanded && incomingWillows.size()>1) {
                         incomingWillowItems.add(incomingWillows.get(0));
+                        seeAllText.setVisibility(View.VISIBLE);
                     } else {
                         for(IncomingWillowData willow:incomingWillows) {
                             incomingWillowItems.add(willow);
@@ -200,6 +200,7 @@ public class WillowFragment extends Fragment implements TextWatcher, View.OnClic
                         emptyIncomingText.setVisibility(View.GONE);
                         totalEmptyImageView.setVisibility(View.INVISIBLE);
                     }
+
                     incomingWillowAdapter.notifyDataSetChanged();
 
                     return;
