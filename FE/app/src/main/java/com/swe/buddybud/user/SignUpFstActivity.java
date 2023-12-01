@@ -33,17 +33,8 @@ public class SignUpFstActivity extends AppCompatActivity {
         EditText editTextEmail = findViewById(R.id.editTextEmail);
         EditText editTextPassword = findViewById(R.id.editTextPassword);
         EditText editTextSchool = findViewById(R.id.editTextSchool);
-        EditText editTextProfilePicture = findViewById(R.id.editTextProfilePicture);
         Button btnNext = findViewById(R.id.buttonNext);
         UserApiService userApiService = RetrofitClient.getService(UserApiService.class);
-        
-        // 프로필 사진 업로드
-        editTextProfilePicture.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-        });
 
         // Next 버튼 클릭 시 : SignUpSndActivity
         btnNext.setOnClickListener(v -> {
@@ -122,13 +113,11 @@ public class SignUpFstActivity extends AppCompatActivity {
         EditText editTextEmail = findViewById(R.id.editTextEmail);
         EditText editTextPassword = findViewById(R.id.editTextPassword);
         EditText editTextSchool = findViewById(R.id.editTextSchool);
-        EditText editTextStudentIdCard = findViewById(R.id.editTextProfilePicture);
         Button btnNext = findViewById(R.id.buttonNext);
 
         editTextEmail.setEnabled(bool);
         editTextPassword.setEnabled(bool);
         editTextSchool.setEnabled(bool);
-        editTextStudentIdCard.setEnabled(bool);
         btnNext.setEnabled(bool);
     }
 
@@ -140,10 +129,8 @@ public class SignUpFstActivity extends AppCompatActivity {
             selectedImageUri = data.getData();
 
             // 선택한 이미지 파일 이름을 EditText에 표시
-            EditText editTextStudentIdCard = findViewById(R.id.editTextProfilePicture);
             String imageName = getRealPathFromURI(selectedImageUri);
             String[] imageNameArray = imageName.split("/");
-            editTextStudentIdCard.setText(imageNameArray[imageNameArray.length - 1]);
         }
     }
 

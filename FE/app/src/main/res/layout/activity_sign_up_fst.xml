@@ -108,23 +108,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
-    <EditText
-        android:id="@+id/editTextProfilePicture"
-        android:layout_width="267dp"
-        android:layout_height="74dp"
-        android:background="@drawable/edittext_shadow"
-        android:drawableRight="@drawable/icon_upload"
-        android:ems="10"
-        android:focusable="false"
-        android:fontFamily="@font/noto_sans"
-        android:hint="Profile Picture"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:textColorHint="#A4A4A4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSchool" />
-
     <Button
         android:id="@+id/buttonNext"
         android:layout_width="108dp"
@@ -136,7 +119,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextProfilePicture" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextSchool" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
