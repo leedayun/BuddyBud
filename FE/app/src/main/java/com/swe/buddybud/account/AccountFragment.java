@@ -26,27 +26,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AccountFragment extends Fragment {
-
+public class AccountFragment extends Fragment implements PostScrapAdapter.OnScrapItemClickListener {
     private RecyclerView postsRecyclerView, scrapsRecyclerView;
 
     public AccountFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        // 사용자 정보가 변경되었을 수 있으므로 TextView 업데이트
-        String userid = LoginData.getLoginUserId();
-        TextView user_id_textview = getView().findViewById(R.id.user_name);
-        user_id_textview.setText(userid);
-
-        // RecyclerView 데이터 다시 불러오기
-        String usernum = String.valueOf(LoginData.getLoginUserNo());
-        loadPosts(usernum);
-        loadScraps(usernum);
     }
 
     @Override
@@ -60,53 +44,67 @@ public class AccountFragment extends Fragment {
         postsRecyclerView = view.findViewById(R.id.posts_recycler_view);
         scrapsRecyclerView = view.findViewById(R.id.scraps_recycler_view);
 
-        // toggle button
+        setupRecyclerView(postsRecyclerView, new ArrayList<>()); // Initialize with empty list
+        setupRecyclerView(scrapsRecyclerView, new ArrayList<>()); // Initialize with empty list
+
         ImageButton myPostsButton = view.findViewById(R.id.my_posts_button);
         ImageButton myScrapsButton = view.findViewById(R.id.my_scraps_button);
 
-        // load data from server api
+        myPostsButton.setOnClickListener(v -> {
+            postsRecyclerView.setVisibility(View.VISIBLE);
+            scrapsRecyclerView.setVisibility(View.GONE);
+        });
+
+        myScrapsButton.setOnClickListener(v -> {
+            postsRecyclerView.setVisibility(View.GONE);
+            scrapsRecyclerView.setVisibility(View.VISIBLE);
+        });
+
+        ImageView profileImageView = view.findViewById(R.id.profile_image);
+        profileImageView.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), AccountEditActivity.class);
+            startActivity(intent);
+        });
+
         String usernum = String.valueOf(LoginData.getLoginUserNo());
         loadPosts(usernum);
         loadScraps(usernum);
 
-        // set user's profile image
-        ImageView profileImageView = view.findViewById(R.id.profile_image);
-
-        // 유저 프로파일 이미지 클릭하면 계정 설정 창으로 넘어가게 만드는 클릭 리스너
-        profileImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AccountEditActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // 내 포스트 보이게 만드는 포스트 버튼 클릭 리스너
-        myPostsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postsRecyclerView.setVisibility(View.VISIBLE);
-                scrapsRecyclerView.setVisibility(View.GONE);
-            }
-        });
-
-        // 내 스크랩 보이게 만드는 스크랩 버튼 클릭 리스너
-        myScrapsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postsRecyclerView.setVisibility(View.GONE);
-                scrapsRecyclerView.setVisibility(View.VISIBLE);
-            }
-        });
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String userid = LoginData.getLoginUserId();
+        TextView user_id_textview = getView().findViewById(R.id.user_name);
+        user_id_textview.setText(userid);
+
+        String usernum = String.valueOf(LoginData.getLoginUserNo());
+        loadPosts(usernum);
+        loadScraps(usernum);
+    }
+
+    @Override
+    public void onScrapClick(PostScrapData scrapData) {
+        // Handle the click event here
+        Intent intent = new Intent(getActivity(), ScrapDetailActivity.class);
+        intent.putExtra("scrap_id", scrapData.getId());
+        intent.putExtra("user_id", scrapData.getUserid());
+        intent.putExtra("date", scrapData.getDate());
+        intent.putExtra("title", scrapData.getTitle());
+        intent.putExtra("content", scrapData.getContent());
+        intent.putExtra("thumbs_up_num", scrapData.getThumbsUpNumber());
+        intent.putExtra("comment_num", scrapData.getCommentNumber());
+        startActivity(intent);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView, List<PostScrapData> data) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        PostScrapAdapter adapter = new PostScrapAdapter(data);
+        PostScrapAdapter adapter = new PostScrapAdapter(data, this); // 'this' refers to the fragment implementing the listener
         recyclerView.setAdapter(adapter);
     }
+
 
     private void loadPosts(String usernum) {
         AccountApiService accountApiService = RetrofitClient.getService(AccountApiService.class);
@@ -201,11 +199,10 @@ public class AccountFragment extends Fragment {
         for (ScrapData scrapData : scrapDataList) {
             int scrapId = Integer.parseInt(scrapData.getScrapNum()); // Convert scrap number to int.
             int thumbsUpNumber = Integer.parseInt(scrapData.getLikeNum()); // Convert like number to int.
-
             PostScrapData postScrapData = new PostScrapData(
                     scrapId, // id
                     0, // profileImageId, assuming you don't have this info in the API response
-                    userid, // userid, assuming you will get it from somewhere else or set a default value
+                    scrapData.getUserId(), // userid of who wrote this post
                     scrapData.getCreatedAt(), // date
                     scrapData.getTitle(), // title
                     scrapData.getContent(), // content

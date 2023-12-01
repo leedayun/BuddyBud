@@ -43,11 +43,11 @@ public class AccountEditActivity extends AppCompatActivity {
         languageSpinner = findViewById(R.id.spinnerLanguage);
 
         // Language 스피너 설정
-        String[] languageArray = getResources().getStringArray(R.array.Language);
+        String[] languageArray = getResources().getStringArray(R.array.AccountLanguage);
         setSpinner(languageSpinner, languageArray, LoginData.getLoginUserLang());
 
         // Gender 스피너 설정
-        String[] genderArray = getResources().getStringArray(R.array.Gender);
+        String[] genderArray = getResources().getStringArray(R.array.AccountGender);
         setSpinner(genderSpinner, genderArray, LoginData.getLoginUserGender());
 
         Button doneButton = findViewById(R.id.buttonDone);
