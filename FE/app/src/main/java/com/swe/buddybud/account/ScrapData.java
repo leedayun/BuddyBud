@@ -31,6 +31,12 @@ public class ScrapData {
     @SerializedName("last_modified_at")
     private String lastModifiedAt;
 
+    @SerializedName("post_user_no")
+    private String post_user_no;
+
+    @SerializedName("post_user_id")
+    private String post_user_id;
+
     // Constructor
     public ScrapData(String scrapYn, String likeNum, String createdAt, String title,
                      String likeYn, String scrapNum, String postNo, String content, String lastModifiedAt) {
@@ -55,6 +61,7 @@ public class ScrapData {
     public String getPostNo() { return postNo; }
     public String getContent() { return content; }
     public String getLastModifiedAt() { return lastModifiedAt; }
+    public String getUserId() { return post_user_id; }
 
     // Setters
     public void setScrapYn(String scrapYn) { this.scrapYn = scrapYn; }

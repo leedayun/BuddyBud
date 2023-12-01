@@ -81,6 +81,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_below="@id/toggle_buttons"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:layout_marginTop="20dp"/>
 
 </RelativeLayout>
