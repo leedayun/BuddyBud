@@ -22,6 +22,8 @@
             CAST(A.seq AS CHAR) AS post_no,
             A.title,
             A.content,
+            M_USER.id AS post_user_id,
+            CAST(M_USER.seq AS CHAR) AS post_user_no,
             CASE
                 WHEN EXISTS (
                     SELECT
@@ -47,6 +49,7 @@
             DATE_FORMAT(A.last_modified_at, '%Y/%m/%d %H:%i:%s') AS last_modified_at
         FROM
             B_POST A
+                INNER JOIN M_USER ON A.user_no = M_USER.seq
         WHERE
             A.user_no = #{userId}
             and A.state = 'Y'
@@ -60,6 +63,8 @@
             CAST(A.seq AS CHAR) AS post_no,
             A.title,
             A.content,
+            M_USER.id AS post_user_id,
+            CAST(M_USER.seq AS CHAR) AS post_user_no,
             CASE
                 WHEN EXISTS (
                     SELECT
@@ -106,6 +111,7 @@
         FROM
             B_POST A
                 INNER JOIN B_SCRAP B ON A.seq = B.post_no
+                INNER JOIN M_USER ON A.user_no = M_USER.seq
         WHERE
             B.user_no = #{userId}
         ORDER BY
