@@ -25,6 +25,15 @@ public interface BoardApiService {
     @PUT("/board/boardLike/{likeYN}/{userId}/{boardId}")
     Call<JsonObject> updateBoardLike(@Path("likeYN") String likeYN, @Path("userId") Integer userId, @Path("boardId") Integer boardId);
 
+    @PUT("/board/commentLike/{likeYN}/{userId}/{commentId}")
+    Call<JsonObject> updateCommentLike(@Path("likeYN") String likeYN, @Path("userId") int userId, @Path("commentId") int commentId);
+
+    @PUT("/board/commentHate/{hateYN}/{userId}/{commentId}")
+    Call<JsonObject> updateCommentHate(@Path("hateYN") String hateYN, @Path("userId") int userId, @Path("commentId") int commentId);
+
+    @PUT("/board/scrap/{scrapYN}/{userId}/{boardId}")
+    Call<JsonObject> updateScrap(@Path("scrapYN") String scrapYN, @Path("userId") Integer userId, @Path("boardId") Integer boardId);
+
     @POST("/board/comment")
     Call<JsonObject> insertComment(@Body RequestBody requestBody);
 

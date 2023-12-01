@@ -60,6 +60,10 @@ public class ContentActivity extends AppCompatActivity {
                     if (boardDetailFragment.isLikeStatusChanged()) {
                         updateLikeStatus(boardDetailFragment.getBoardId(), boardDetailFragment.getIsLiked());
                     }
+                    // 스크랩 상태가 변경되었는지 확인
+                    if (boardDetailFragment.isScrapStatusChanged()) {
+                        updateScrapStatus(boardDetailFragment.getBoardId(), boardDetailFragment.getIsScrap());
+                    }
                     // 백스택에서 제거
                     getSupportFragmentManager().popBackStack();
                 }
@@ -91,5 +95,49 @@ public class ContentActivity extends AppCompatActivity {
                 Log.e("ContentActivity", "Network error: " + t.getMessage());
             }
         });
+    }
+
+    // 스크랩 상태 업데이트 API 호출
+    private void updateScrapStatus(int boardId, boolean isScrap) {
+        String scrapYN = isScrap ? "Y" : "N";
+        int userId = LoginData.getLoginUserNo();
+
+        BoardApiService service = RetrofitClient.getService(BoardApiService.class);
+        Call<JsonObject> call = service.updateScrap(scrapYN, userId, boardId);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()) {
+                    Log.d("ContentActivity", "Board scrap status updated successfully");
+                } else {
+                    Log.e("ContentActivity", "Server error occurred while updating board scrap status");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("ContentActivity", "Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.mainFrameLayout);
+        if (currentFragment instanceof BoardDetailFragment) {
+            BoardDetailFragment boardDetailFragment = (BoardDetailFragment) currentFragment;
+            // 좋아요 상태가 변경되었는지 확인
+            if (boardDetailFragment.isLikeStatusChanged()) {
+                updateLikeStatus(boardDetailFragment.getBoardId(), boardDetailFragment.getIsLiked());
+            }
+            // 스크랩 상태가 변경되었는지 확인
+            if (boardDetailFragment.isScrapStatusChanged()) {
+                updateScrapStatus(boardDetailFragment.getBoardId(), boardDetailFragment.getIsScrap());
+            }
+            // 백스택에서 제거
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

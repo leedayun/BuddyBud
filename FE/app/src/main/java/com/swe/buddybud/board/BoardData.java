@@ -19,6 +19,8 @@ public class BoardData implements Serializable {
     private boolean isTranslated;
     private String initialIsThumbsUpClicked;
     private int initialThumbsUpNumber;
+    private String initialIsScrapClicked;
+    private int initialScrapNumber;
     public BoardData(int id, int profileImageId, String nickname, String date, String title, String content,
                      String isThumbsUpClicked, String isScrapClicked, int thumbsUpNumber, int scrapNumber) {
         this.id = id;
@@ -34,6 +36,8 @@ public class BoardData implements Serializable {
         this.isTranslated = false;
         this.initialIsThumbsUpClicked = isThumbsUpClicked;
         this.initialThumbsUpNumber = thumbsUpNumber;
+        this.initialIsScrapClicked = isScrapClicked;
+        this.initialScrapNumber = scrapNumber;
     }
     public int getId() {
         return id;
@@ -123,7 +127,7 @@ public class BoardData implements Serializable {
         isScrapClicked = isScrapClicked;
     }
 
-    // 아래 코드는 좋아요 / 댓글 관련 코드
+    // 아래 코드는 좋아요 / 스크랩 관련 코드
     // 좋아요 상태를 boolean으로 반환
     public boolean isLiked() {
         return "Y".equals(this.isThumbsUpClicked);
@@ -154,4 +158,28 @@ public class BoardData implements Serializable {
     public String getIsThumbsUpClicked() {
         return isThumbsUpClicked;
     }
+
+    public boolean isScrap() {
+        return "Y".equals(this.isScrapClicked);
+    }
+
+    // 좋아요 상태를 설정
+    public void setScrap(boolean isScrap) {
+        this.isScrapClicked = isScrap ? "Y" : "N";
+    }
+
+    // 좋아요 수 변경
+    public void incrementScrapCount() {
+        this.scrapNumber++;
+    }
+
+    public void decrementScrapCount() {
+        this.scrapNumber--;
+    }
+
+    public String getIsScrapClicked() {return isScrapClicked;}
+
+    public String getInitialIsScrapClicked() {return initialIsScrapClicked;}
+
+    public int getInitialScrapNumber() {return initialScrapNumber;}
 }
