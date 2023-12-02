@@ -1,6 +1,7 @@
 package com.swe.buddybud.willow;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.swe.buddybud.R;
+import com.swe.buddybud.home.Translator;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -51,11 +53,25 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View view) {
                     if(message.getText()==null || message.getText().length()<1) return;
+                    Translator translator = new Translator();
+                    translator.detectAndTranslate(message.getText().toString(), new Translator.TranslationCallback() {
+                        @Override
+                        public void onTranslationDone(String translatedText) {
+                            message.setText(translatedText);
+                            translateBtn.setVisibility(View.GONE);
+                        }
+                        @Override
+                        public void onTranslationError(Exception e) {
+                            Log.e("Translation", "Error during translation", e);
+                        }
+                    });
+
                     /*
                         TODO : Translation API
                         implementation "com.deepl.api:deepl-java:1.4.0"
+                        message.setText(translatedString);
                      */
-                    message.setText(translatedString);
+
                 }
             });
         }
