@@ -9,9 +9,9 @@ BuddyBud is a mobile application that facilitates communication between internat
 <br/><br/>
 
 ## Role & Responsibility
-| 테 | 이 | 블 | 채 | 워 | 주 | 세 | 요 |
+| 이다윤 | 안정혁 | 유재준 | 유욱철 | 이장훈 | 최진우 | 황승준 |
 |-|-|-|-|-|-|-|-|
-|1|2|3|4|5|6|7|8|
+|팀장, 기획 및 디자인, 문서작성|프론트 개발|프론트 개발|프론트 개발|기획 및 디자인, 문서작성|백엔드 개발, 프론트 개발|백엔드 개발, 프론트 개발|
 <br/><br/>
 
 ## Requirements
