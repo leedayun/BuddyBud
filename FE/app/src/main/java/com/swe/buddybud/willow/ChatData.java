@@ -2,6 +2,8 @@ package com.swe.buddybud.willow;
 
 import android.net.Uri;
 
+import androidx.annotation.Nullable;
+
 import java.time.LocalDateTime;
 
 public class ChatData {
@@ -10,9 +12,8 @@ public class ChatData {
     private String name;
     private int imgResId;
     private Uri imageURI;
-    private String translatedString;
 
-    public ChatData(LocalDateTime timestamp, String message, String name, int imgResId, Uri imageURI, String translatedString) {
+    public ChatData(LocalDateTime timestamp, String message, String name, int imgResId, Uri imageURI) {
         this.timestamp = timestamp;
         if(imageURI!=null) {
             this.message = "";
@@ -24,7 +25,6 @@ public class ChatData {
         }
         this.name = name;
         this.imgResId = imgResId;
-        this.translatedString = translatedString;
     }
 
     public LocalDateTime getTimestamp() {
@@ -44,7 +44,13 @@ public class ChatData {
     public Uri getImageURI() {
         return imageURI;
     }
-    public String getTranslatedString() {
-        return translatedString;
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj instanceof ChatData){
+            return this.getMessage() == ((ChatData) obj).getMessage() && this.getTimestamp() == ((ChatData) obj).getTimestamp();
+        }
+        else return false;
+
     }
 }

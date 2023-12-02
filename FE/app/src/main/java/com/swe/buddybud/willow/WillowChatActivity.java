@@ -110,7 +110,7 @@ public class WillowChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(selectedImageUris.size() > 1) {
                     for(Uri imageUri : selectedImageUris){
-                        mData.add(new ChatData(LocalDateTime.now(), "","user1",R.drawable.profile, imageUri, ""));
+                        mData.add(new ChatData(LocalDateTime.now(), "","user1",R.drawable.profile, imageUri));
                     }
                     selectedImageUris.clear();
                     imageUploadAdapter.notifyDataSetChanged();
@@ -236,7 +236,7 @@ public class WillowChatActivity extends AppCompatActivity {
     }
 
     private void getData(int willow_no){
-        mData.clear();
+
         //fetch mData
         Call<List<WillowApiData>> call = willowApiService.getAllChat(willow_no,opponentNo);
         call.enqueue(new Callback<List<WillowApiData>>() {
@@ -244,7 +244,7 @@ public class WillowChatActivity extends AppCompatActivity {
             public void onResponse(Call<List<WillowApiData>> call, Response<List<WillowApiData>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<WillowApiData> userResponse = response.body();
-
+                    //ArrayList<ChatData> newData = new ArrayList<>();
                     for(WillowApiData res : userResponse){
                         Resources resources = getResources();
                         int resourceId = R.drawable.profile;
@@ -252,15 +252,17 @@ public class WillowChatActivity extends AppCompatActivity {
                             int opp_profile = resources.getIdentifier(opponentID.toLowerCase(), "drawable", getPackageName());
                             if (opp_profile > 0) resourceId = opp_profile;
                         }
-                        mData.add(new ChatData(
+                        ChatData dat = new ChatData(
                                 LocalDateTime.parse(res.getCreated_at(), DateTimeFormatter.ISO_LOCAL_DATE_TIME),
                                 res.getContent(),
                                 LoginData.getLoginUserNo() == res.getSender_no() ? LoginData.getLoginUserId() : opponentID,
                                 resourceId,
-                                null,
-                                ""));
+                                null);
+                        if(!mData.contains(dat)){
+                            mData.add(dat);
+                            chatAdapter.notifyItemInserted(mData.size()-1);
+                        }
                     }
-                    chatAdapter.notifyDataSetChanged();
                     return;
                 }
                 else {
