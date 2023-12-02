@@ -1,7 +1,7 @@
 # BuddyBud : SKKU International Community Application
 
 ## Project Description
-BuddyBud is a mobile application that facilitates communication between international students and korean students.
+BuddyBud is a mobile application Bridging International & Local Campus Friendships.
 <br/><br/>
 
 ## Project Duration
@@ -9,9 +9,36 @@ BuddyBud is a mobile application that facilitates communication between internat
 <br/><br/>
 
 ## Role & Responsibility
-
+![Roles](misc/Roles.JPG)
 <br/><br/>
 
+## UI & Features
+### Login/Register
+Users can enter their school to access the school community. It's a semi-anonymous community where nicknames and profile pictures are public.
+
+<img src="misc/splash.jpg" width="300"> <img src="misc/login.jpg" width="300"> <img src="misc/register_1.jpg" width="300">
+
+
+### Feed
+In the feed, users can freely post their daily life updates or questions, and with the ability to translate posts and comments, communication is possible without language barriers.
+
+<img src="misc/feed_main.jpg" width="200">  <img src="misc/feed_translate.jpg" width="200">  <img src="misc/feed_detail.jpg" width="200">  <img src="misc/feed_post.jpg" width="200">
+
+### Board
+In the board section, the system automatically crawls and posts various club/event promotional articles from the school's official announcement board and 'Everytime', the largest college student community in Korea. Users can scrap or recommend the posts they find useful.
+
+<img src="misc/board_main.jpg" width="300"> <img src="misc/board_datail.jpg" width="300">
+
+### Willow
+Willow is a word created by combining 'willow', the logo of the BuddyBud app, and the concept of 'Follow'. Users can send Willow requests to others they wish to connect with, and upon mutual consent, can become friends and send one-on-one chats.
+
+<img src="misc/willow_main.jpg" width="200"> <img src="misc/willow_chat.jpg" width="200"> <img src="misc/willow_request.jpg" width="200"> <img src="misc/sent_willow.jpg" width="200">
+
+### My Page
+In the 'My Page' section, users can view their own posts and the posts they have scrapped, and can also edit their profile as needed.
+
+<img src="misc/account_home.jpg" width="300"> <img src="misc/account_scrap.jpg" width="300"> <img src="misc/account_edit.jpg" width="300"> 
+ 
 ## Requirements
 ### Environment Settings
 - Java Development Kit (JDK) 17
