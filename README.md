@@ -16,7 +16,7 @@ BuddyBud is a mobile application Bridging International & Local Campus Friendshi
 ### Login/Register
 Users can enter their school to access the school community. It's a semi-anonymous community where nicknames and profile pictures are public.
 
-<img src="misc/splash.jpg" width="300"> <img src="misc/login.jpg" width="300"> <img src="misc/register_1.jpg" width="300">
+<img src="misc/splash.jpg" width="250"> <img src="misc/login.jpg" width="250"> <img src="misc/register_1.jpg" width="250">
 
 
 ### Feed
@@ -27,7 +27,7 @@ In the feed, users can freely post their daily life updates or questions, and wi
 ### Board
 In the board section, the system automatically crawls and posts various club/event promotional articles from the school's official announcement board and 'Everytime', the largest college student community in Korea. Users can scrap or recommend the posts they find useful.
 
-<img src="misc/board_main.jpg" width="300"> <img src="misc/board_datail.jpg" width="300">
+<img src="misc/board_main.jpg" width="250"> <img src="misc/board_datail.jpg" width="250">
 
 ### Willow
 Willow is a word created by combining 'willow', the logo of the BuddyBud app, and the concept of 'Follow'. Users can send Willow requests to others they wish to connect with, and upon mutual consent, can become friends and send one-on-one chats.
@@ -37,7 +37,7 @@ Willow is a word created by combining 'willow', the logo of the BuddyBud app, an
 ### My Page
 In the 'My Page' section, users can view their own posts and the posts they have scrapped, and can also edit their profile as needed.
 
-<img src="misc/account_home.jpg" width="300"> <img src="misc/account_scrap.jpg" width="300"> <img src="misc/account_edit.jpg" width="300"> 
+<img src="misc/account_home.jpg" width="250"> <img src="misc/account_scrap.jpg" width="250"> <img src="misc/account_edit.jpg" width="250"> 
  
 ## Requirements
 ### Environment Settings
