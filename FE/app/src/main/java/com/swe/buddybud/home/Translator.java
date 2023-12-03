@@ -2,6 +2,9 @@ package com.swe.buddybud.home;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.swe.buddybud.user.LoginData;
+
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -20,6 +23,16 @@ public class Translator {
         void onTranslationError(Exception e);
     }
 
+    public String getUserLang() {
+        String userLang = LoginData.getLoginUserLang();
+        Log.e("logtemp","UserLang = "+userLang);
+        if(userLang.equals("English")) return "en";
+        if(userLang.equals("Korean")) return "ko";
+        if(userLang.equals("Japanese")) return "ja";
+        if(userLang.equals("Chinese")) return "zh-CH";
+        return "en";
+    }
+
     public void detectAndTranslate(final String sourceText, final TranslationCallback callback) {
         new AsyncTask<Void, Void, String>() {
             private Exception exception;
@@ -28,12 +41,13 @@ public class Translator {
             protected String doInBackground(Void... voids) {
                 try {
                     // 1. 언어 감지
+                    String userLang = getUserLang();
                     String detectedLanguage = detectLanguage(sourceText);
-                    if (!"en".equals(detectedLanguage)) {
+                    if (!userLang.equals(detectedLanguage)) {
                         // 2. 번역
-                        return translate(sourceText, detectedLanguage, "en");
+                        return translate(sourceText, detectedLanguage, userLang);
                     } else {
-                        return sourceText; // 이미 영어인 경우 번역하지 않음
+                        return sourceText; // 이미 해당 언어인 경우 번역하지 않음
                     }
                 } catch (Exception e) {
                     this.exception = e;

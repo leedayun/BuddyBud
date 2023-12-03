@@ -29,7 +29,6 @@ public class BoardController {
             }
             jsonArray.add(jsonObject);
         }
-        System.out.println(jsonArray.toString());
 
         return jsonArray.toString();
     }
@@ -49,8 +48,6 @@ public class BoardController {
         for (Map.Entry<String, String> entry : result.entrySet()) {
             jsonObject.addProperty(entry.getKey(), entry.getValue());
         }
-
-        System.out.println(jsonObject.toString());
         return jsonObject.toString();
     }
 
@@ -119,13 +116,10 @@ public class BoardController {
         String result = "failed";
 
         try {
-            System.out.println("like say hi1");
             if (likeYN.equals("Y")) {
-                System.out.println("like say hi2");
                 boardService.insertBoardLike(boardId, userId);
                 result = "insert success";
             } else if (likeYN.equals("N")) {
-                System.out.println("like say hi3");
                 boardService.deleteBoardLike(boardId, userId);
                 result = "delete success";
             }
@@ -174,17 +168,14 @@ public class BoardController {
 
         try {
             if (hateYN.equals("Y")) {
-                System.out.println("say hi1");
                 boardService.insertCommentLike(tableType, commentId, userId);
                 result = "insert success";
             } else if (hateYN.equals("N")) {
-                System.out.println("say hi2");
                 boardService.deleteCommentLike(tableType, commentId, userId);
                 result = "delete success";
             }
         }
         catch (Exception e) {
-            System.out.println("say hi3");
             result = "request failed";
         }
 
@@ -200,19 +191,15 @@ public class BoardController {
         String result = "failed";
 
         try {
-            System.out.println("say hi1");
             if (scrapYN.equals("Y")) {
-                System.out.println("say hi2");
                 boardService.insertScrap(boardId, userId);
                 result = "insert success";
             } else if (scrapYN.equals("N")) {
-                System.out.println("say hi3");
                 boardService.deleteScrap(boardId, userId);
                 result = "delete success";
             }
         }
         catch (Exception e) {
-            System.out.println("say hi1");
             e.printStackTrace();
             result = "request failed";
         }

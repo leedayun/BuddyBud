@@ -1,6 +1,8 @@
 package com.swe.buddybud.willow;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.swe.buddybud.R;
+import com.swe.buddybud.home.Translator;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,7 +40,9 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView sendTime;
         ImageButton translateBtn;
         ImageView image;
+        boolean translated = false;
         String translatedString;
+        String originalString;
 
         ReceivingViewHolder(View v) {
             super(v);
@@ -51,11 +56,32 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View view) {
                     if(message.getText()==null || message.getText().length()<1) return;
-                    /*
-                        TODO : Translation API
-                        implementation "com.deepl.api:deepl-java:1.4.0"
-                     */
-                    message.setText(translatedString);
+                    if(translated){
+                        message.setText(originalString);
+                        translateBtn.setColorFilter(Color.parseColor("#A4A4A4"));
+                    } else {
+                        if(translatedString!=null && translatedString.length()>0) {
+                            translateBtn.setColorFilter(Color.parseColor("#94DEF7"));
+                            message.setText(translatedString);
+                        } else {
+                            Translator translator = new Translator();
+                            translator.detectAndTranslate(message.getText().toString(), new Translator.TranslationCallback() {
+                                @Override
+                                public void onTranslationDone(String translatedText) {
+                                    translatedString = translatedText;
+                                    message.setText(translatedString);
+                                    translateBtn.setColorFilter(Color.parseColor("#94DEF7"));
+                                }
+                                @Override
+                                public void onTranslationError(Exception e) {
+                                    Log.e("Translation", "Error during translation", e);
+                                }
+                            });
+                        }
+                    }
+                    translated = !translated;
+
+
                 }
             });
         }
@@ -110,7 +136,7 @@ public class WillowChat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             else {
                 ((ReceivingViewHolder) holder).message.setText(mData.get(position).getMessage());
-                ((ReceivingViewHolder) holder).translatedString = mData.get(position).getTranslatedString();
+                ((ReceivingViewHolder) holder).originalString = mData.get(position).getMessage();
             }
             ((ReceivingViewHolder) holder).name.setText(mData.get(position).getName());
             ((ReceivingViewHolder) holder).sendTime.setText(mData.get(position).getTimestamp().format(DateTimeFormatter.ofPattern("HH:mm")));
