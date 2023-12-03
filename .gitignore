@@ -1,5 +1,5 @@
 ################## FE #####################
-/FE/app/src/main/java/com/swe/buddybud/common/ServerConfig.java
+#/FE/app/src/main/java/com/swe/buddybud/common/ServerConfig.java
 /FE/*.iml
 /FE/local.properties
 /FE/.idea/caches
@@ -18,7 +18,7 @@
 /FE/app/.cxx/
 
 ################## BE #####################
-/BE/src/main/resources/application.properties
+#/BE/src/main/resources/application.properties
 
 .DS_Store
 /BE/local.properties
