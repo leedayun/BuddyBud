@@ -47,7 +47,7 @@ In the 'My Page' section, users can view their own posts and the posts they have
 - MySQL 8.0.35
 - Frontend : com.swe.buddybud.common.ServerConfig
 - Backend : application.properties
-- ![Database Schema]()
+- [Database Schema](https://github.com/leedayun/BuddyBud/blob/main/misc/buddybud_231130042918.sql)
 
 ### Installation
 ```
